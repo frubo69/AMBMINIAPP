@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>AMBAR</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --gold:#C9A96E;--gold2:#E8C98A;--gold3:#F5E0B0;
+  --bg:#07070E;--bg2:#0C0C18;--bg3:#111120;
+  --card:#121224;--card2:#161628;
+  --border:rgba(201,169,110,.16);--border2:rgba(255,255,255,.06);
+  --text:#EDE9E0;--sub:#9896AA;--muted:#54526A;
+  --red:#E05555;--green:#4CAF7D;
+  --r:16px;--r2:12px;--r3:10px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;height:100%;overflow:hidden}
+button,input{font-family:'Outfit',sans-serif;outline:none}
+img{display:block}
+
+/* ── PAGES ── */
+.page{position:fixed;inset:0;bottom:calc(60px + var(--safe-bottom));overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;opacity:1;transition:opacity .2s,transform .2s}
+.page.hidden{opacity:0;pointer-events:none;transform:translateY(8px)}
+
+/* ── HEADER ── */
+.hdr{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(7,7,14,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:-2px}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.cart-pill{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:7px 13px;position:relative;cursor:pointer;transition:.15s}
+.cart-pill:active{transform:scale(.93)}
+.cart-txt{font-size:13px;font-weight:600;color:var(--gold2)}
+.cart-dot{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;border-radius:50%;width:18px;height:18px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
+.lang-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:.15s}
+.lang-btn:active{transform:scale(.85)}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;background:rgba(7,7,14,.97);border-top:1px solid var(--border);padding-bottom:var(--safe-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;gap:3px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:.15s}
+.nb.on{color:var(--gold)}
+.nb i{font-size:20px;line-height:1}
+.nb span{font-size:9px;letter-spacing:.5px;font-weight:500}
+
+/* ── CHIPS ── */
+.chips{display:flex;gap:7px;padding:12px 14px 6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;transition:.15s}
+.chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
+
+/* ── SECTION HEADING ── */
+.sec-h{padding:14px 14px 10px;font-family:'Cormorant Garamond',serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sec-h::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
+
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 12px 16px}
+@media(min-width:460px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.pcard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.pcard:active{transform:scale(.97)}
+.pimg-box{height:148px;background:linear-gradient(155deg,#0E0E1E,#090916);display:flex;align-items:center;justify-content:center;padding:10px;position:relative;overflow:hidden}
+.pimg{max-height:128px;max-width:90%;object-fit:contain;filter:drop-shadow(0 6px 20px rgba(0,0,0,.7))}
+.pbadge{position:absolute;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:6px;font-weight:700}
+.pbadge.oos{left:8px;top:8px;background:rgba(0,0,0,.7);border:1px solid var(--border2);color:var(--muted)}
+.pbadge.isnew{right:8px;top:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E}
+.pinfo{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
+.pcat{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600}
+.pname{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;line-height:1.2}
+.pdesc{font-size:10px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
+.pprice{font-size:16px;font-weight:700;color:var(--gold2)}
+.pprice small{font-size:9px;color:var(--muted);font-weight:400}
+.add-btn{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#07070E;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.13s}
+.add-btn:active{transform:scale(.75)}
+.add-btn:disabled{background:var(--card2);color:var(--muted);cursor:not-allowed}
+.qctrl{display:flex;align-items:center;gap:5px}
+.qb{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--gold);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s}
+.qb:active{transform:scale(.75)}
+.qn{font-size:13px;font-weight:700;min-width:20px;text-align:center;color:var(--gold2)}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:54px;margin-bottom:14px;opacity:.3}
+
+/* ── CART ITEMS ── */
+.ci{display:flex;align-items:center;gap:11px;padding:13px 16px;border-bottom:1px solid var(--border2)}
+.ci-img{width:50px;height:60px;object-fit:contain;background:var(--card);border-radius:10px;padding:5px;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-price{font-size:12px;color:var(--gold);font-weight:600;margin-top:2px}
+
+/* ── TIP ── */
+.tip-wrap{padding:14px 16px;border-top:1px solid var(--border2)}
+.tip-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.tip-row{display:flex;flex-wrap:wrap;gap:7px}
+.tip-chip{padding:8px 14px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--sub);font-size:12px;font-weight:500;cursor:pointer;transition:.15s}
+.tip-chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
+.tip-input{width:100%;margin-top:10px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r3);padding:11px 14px;color:var(--text);font-size:14px;display:none;transition:.2s}
+.tip-input:focus{border-color:var(--gold)}
+
+/* ── CART FOOTER ── */
+.cart-foot{padding:14px 16px;background:var(--bg2);border-top:1px solid var(--border)}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.total-lbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.total-val{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold2);font-weight:600}
+.btn-main{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));color:#07070E;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:.15s}
+.btn-main:active{transform:scale(.98);opacity:.9}
+.btn-main:disabled{opacity:.3;cursor:not-allowed}
+.btn-outline{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--sub);border-radius:14px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:.15s}
+.btn-outline:active{border-color:var(--gold);color:var(--gold)}
+
+/* ── CHECKOUT ── */
+.co-body{padding:14px 16px}
+.co-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.co-head{padding:13px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border2)}
+.co-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.co-num.done{background:var(--green)}
+.co-title{font-size:14px;font-weight:600}
+.co-inner{padding:14px 15px}
+.flabel{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-weight:600}
+.finput{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r3);padding:12px 14px;color:var(--text);font-size:14px;transition:.2s}
+.finput:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,.07)}
+.finput::placeholder{color:var(--muted)}
+.finput.err{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(224,85,85,.07)!important}
+.ferr{font-size:11px;color:var(--red);margin-top:5px;display:none}
+.ferr.on{display:block}
+
+/* Location button */
+.loc-btn{display:flex;align-items:center;gap:10px;width:100%;background:rgba(201,169,110,.07);border:1.5px solid rgba(201,169,110,.2);border-radius:var(--r2);padding:13px 15px;cursor:pointer;color:var(--gold);font-size:13px;font-weight:600;transition:.2s}
+.loc-btn:active{transform:scale(.97)}
+.loc-btn .li{font-size:22px}
+.loc-state{margin-top:8px;font-size:12px;padding:9px 12px;border-radius:9px;display:none}
+.loc-state.ok{display:block;background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
+.loc-state.fail{display:block;background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18)}
+.office-badge{margin-top:7px;display:none;font-size:11px;color:var(--sub);background:var(--bg3);padding:8px 12px;border-radius:8px;line-height:1.5}
+.office-badge.on{display:block}
+
+/* Summary */
+.sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin:0 16px 14px}
+.sum-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold2);margin-bottom:10px}
+.sum-line{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:5px}
+.sum-div{height:1px;background:var(--border2);margin:8px 0}
+.sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--gold2)}
+.co-foot{padding:0 16px 16px}
+
+/* ── ORDER CARDS ── */
+.ocard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:14px;margin:0 14px 10px}
+.ocard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.o-id{font-size:12px;font-weight:700;color:var(--gold2)}
+.o-date{font-size:10px;color:var(--muted);margin-top:2px}
+.o-status{font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px}
+.sp{background:rgba(201,169,110,.1);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
+.sc{background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
+.sd{background:rgba(76,175,125,.15);color:var(--green);border:1px solid rgba(76,175,125,.25)}
+.sx{background:rgba(224,85,85,.1);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+.o-items{font-size:12px;color:var(--sub);line-height:1.75;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px}
+.o-total{font-size:14px;font-weight:700;color:var(--gold2);margin-top:6px}
+
+/* ── PROFILE ── */
+.profile-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin:14px}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;font-family:'Cormorant Garamond',serif;color:#07070E;font-weight:700}
+.profile-name{text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2)}
+.profile-stat{display:flex;gap:0;border-top:1px solid var(--border2);margin-top:14px}
+.ps{flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2)}
+.ps:last-child{border-right:none}
+.ps-n{font-size:20px;font-weight:700;color:var(--gold2)}
+.ps-l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(68px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:999;transition:transform .28s cubic-bezier(.34,1.06,.64,1);pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--green);color:#90e8b8}
+.toast.err{border-color:var(--red);color:#f0a0a0}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ CATALOG PAGE ═══════════ -->
+<div id="pg-catalog" class="page">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
+    <div class="hdr-right">
+      <div class="cart-pill" onclick="go('cart')">
+        🛒 <span class="cart-txt" id="hdr-tot">0 AED</span>
+        <span class="cart-dot" id="hdr-dot">0</span>
+      </div>
+      <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
+    </div>
+  </div>
+  <div class="chips" id="cat-chips"></div>
+  <div class="sec-h" id="sh-catalog">Каталог</div>
+  <div class="grid" id="p-grid"></div>
+</div>
+
+<!-- ═══════════ CART PAGE ═══════════ -->
+<div id="pg-cart" class="page hidden">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-cart">Корзина</div></div>
+    <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <div id="cart-list"></div>
+  <div id="tip-section" style="display:none">
+    <div class="tip-wrap">
+      <div class="tip-label" id="tip-lbl">ЧАЕВЫЕ</div>
+      <div class="tip-row" id="tip-row"></div>
+      <input class="tip-input" id="tip-input" type="number" min="0">
+    </div>
+  </div>
+  <div id="cart-foot" style="display:none">
+    <div class="cart-foot">
+      <div class="total-row">
+        <span class="total-lbl" id="tot-lbl">ИТОГО</span>
+        <span class="total-val"><span id="tot-n">0</span> AED</span>
+      </div>
+      <button class="btn-main" id="co-btn" onclick="go('checkout')">Оформить заказ →</button>
+      <button class="btn-outline" id="clear-btn" onclick="clearCart()">🗑 Очистить корзину</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CHECKOUT PAGE ═══════════ -->
+<div id="pg-checkout" class="page hidden">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-co">Оформление</div></div>
+    <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <div class="co-body">
+
+    <!-- Step 1: Location -->
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-num" id="n1">1</div>
+        <div class="co-title" id="ct1">Геолокация</div>
+      </div>
+      <div class="co-inner">
+        <button class="loc-btn" onclick="grabLocation()" id="loc-btn">
+          <span class="li">📍</span>
+          <span id="loc-btn-txt">Нажмите чтобы определить местоположение</span>
+        </button>
+        <div class="loc-state" id="loc-state"></div>
+        <div class="office-badge" id="office-badge"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Address -->
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-num" id="n2">2</div>
+        <div class="co-title" id="ct2">Адрес доставки</div>
+      </div>
+      <div class="co-inner">
+        <label class="flabel" id="addr-lbl">УЛИЦА, ДОМ, КВАРТИРА / ОФИС</label>
+        <input class="finput" id="addr-in" type="text" placeholder="ул. Ленина, д. 5, кв. 12" oninput="clearErr('addr')">
+        <div class="ferr" id="addr-err"></div>
+      </div>
+    </div>
+
+    <!-- Step 3: Phone -->
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-num" id="n3">3</div>
+        <div class="co-title" id="ct3">Номер телефона</div>
+      </div>
+      <div class="co-inner">
+        <label class="flabel" id="phone-lbl">ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ</label>
+        <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="79001234567" oninput="clearErr('phone')">
+        <div class="ferr" id="phone-err"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Summary -->
+  <div class="sum-card" id="sum-card">
+    <div class="sum-title" id="sum-title">Ваш заказ</div>
+    <div id="sum-items"></div>
+    <div class="sum-div"></div>
+    <div class="sum-line" id="sum-tip-row" style="display:none">
+      <span id="sum-tip-lbl">Чаевые</span><span id="sum-tip-val">0 AED</span>
+    </div>
+    <div class="sum-total">
+      <span id="sum-tot-lbl">Итого</span>
+      <span id="sum-tot-val">0 AED</span>
+    </div>
+  </div>
+
+  <div class="co-foot">
+    <button class="btn-main" id="place-btn" onclick="placeOrder()">✅ Подтвердить заказ</button>
+  </div>
+</div>
+
+<!-- ═══════════ ORDERS PAGE ═══════════ -->
+<div id="pg-orders" class="page hidden">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-ord">История</div></div>
+    <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <div class="sec-h" id="sh-orders">Мои заказы</div>
+  <div id="orders-list"></div>
+</div>
+
+<!-- ═══════════ PROFILE PAGE ═══════════ -->
+<div id="pg-profile" class="page hidden">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-prof">Профиль</div></div>
+    <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <div class="profile-card">
+    <div class="profile-avatar" id="prof-av">A</div>
+    <div class="profile-name" id="prof-name">—</div>
+    <div class="profile-stat">
+      <div class="ps"><div class="ps-n" id="stat-total">0</div><div class="ps-l" id="stat-lbl1">ЗАКАЗОВ</div></div>
+      <div class="ps"><div class="ps-n" id="stat-active">0</div><div class="ps-l" id="stat-lbl2">АКТИВНЫХ</div></div>
+      <div class="ps"><div class="ps-n" id="stat-spent">0</div><div class="ps-l" id="stat-lbl3">AED</div></div>
+    </div>
+  </div>
+  <div style="padding:0 14px 14px">
+    <div class="sec-h" id="sh-active">Активные заказы</div>
+    <div id="active-list"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="nb on" id="nb-catalog" onclick="go('catalog')">
+    <i>🍾</i><span id="nbl-cat">Каталог</span>
+  </button>
+  <button class="nb" id="nb-cart" onclick="go('cart')">
+    <i>🛒</i><span id="nbl-cart">Корзина</span>
+  </button>
+  <button class="nb" id="nb-checkout" onclick="go('checkout');buildSummary()">
+    <i>📋</i><span id="nbl-co">Заказ</span>
+  </button>
+  <button class="nb" id="nb-orders" onclick="go('orders')">
+    <i>📦</i><span id="nbl-ord">История</span>
+  </button>
+  <button class="nb" id="nb-profile" onclick="go('profile');buildProfile()">
+    <i>👤</i><span id="nbl-prof">Профиль</span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// OFFICES + HAVERSINE ROUTING
+// ══════════════════════════════════════
+const OFFICES=[
+  {id:"office_central", name:"Ambar — Центр",   lat:55.7558, lon:37.6173},
+  {id:"office_north",   name:"Ambar — Север",   lat:55.8200, lon:37.5900},
+  {id:"office_south",   name:"Ambar — Юг",      lat:55.6900, lon:37.6400},
+];
+
+function haversine(a,b,c,d){
+  const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180;
+  const e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;
+  return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));
+}
+
+function nearestOffice(lat,lon){
+  return OFFICES.reduce((best,o)=>{
+    const d=haversine(lat,lon,o.lat,o.lon);
+    return(!best||d<best._d)?{...o,_d:d}:best;
+  },null);
+}
+
+// ══════════════════════════════════════
+// PRODUCTS
+// ══════════════════════════════════════
+const P=[
+  {id:"p1",  cat:"Коньяк",      catE:"Cognac",    name:"Hennessy VS",          price:280, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Hennessy_V.S_cognac.jpg/220px-Hennessy_V.S_cognac.jpg",
+   dRu:"Классический французский коньяк, ноты ванили и дуба",
+   dEn:"Classic French cognac with vanilla and oak notes"},
+  {id:"p2",  cat:"Коньяк",      catE:"Cognac",    name:"Hennessy VSOP",        price:380, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hennessy_VSOP.jpg/220px-Hennessy_VSOP.jpg",
+   dRu:"Выдержанный коньяк с богатым фруктовым характером",
+   dEn:"Aged cognac with rich fruity character"},
+  {id:"p3",  cat:"Коньяк",      catE:"Cognac",    name:"Hennessy XO",          price:880, stock:true,  isNew:true,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Hennessy_V.S_cognac.jpg/220px-Hennessy_V.S_cognac.jpg",
+   dRu:"Легендарный XO — роскошь в каждой капле",
+   dEn:"Legendary XO — luxury in every drop"},
+  {id:"p4",  cat:"Виски",       catE:"Whisky",    name:"Johnnie Walker Black", price:230, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/JohnnieWalkerBlackLabel12Year.jpg/220px-JohnnieWalkerBlackLabel12Year.jpg",
+   dRu:"Дымный шотландский виски 12 лет выдержки",
+   dEn:"Smoky Scotch whisky aged 12 years"},
+  {id:"p5",  cat:"Виски",       catE:"Whisky",    name:"Johnnie Walker Blue",  price:720, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Johnnie_Walker_Blue_Label.jpg/220px-Johnnie_Walker_Blue_Label.jpg",
+   dRu:"Редкий купаж — вершина коллекции",
+   dEn:"Rare blend — the pinnacle of the range"},
+  {id:"p6",  cat:"Виски",       catE:"Whisky",    name:"Jack Daniel's",        price:200, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Jack_Daniel%27s_bottle_2015.jpg/220px-Jack_Daniel%27s_bottle_2015.jpg",
+   dRu:"Легендарный теннессийский виски",
+   dEn:"Legendary Tennessee whiskey"},
+  {id:"p7",  cat:"Водка",       catE:"Vodka",     name:"Grey Goose",           price:260, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Grey_Goose_vodka.jpg/220px-Grey_Goose_vodka.jpg",
+   dRu:"Премиальная водка из французской пшеницы",
+   dEn:"Premium French wheat vodka"},
+  {id:"p8",  cat:"Водка",       catE:"Vodka",     name:"Belvedere",            price:290, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Belvedere_Vodka.jpg/220px-Belvedere_Vodka.jpg",
+   dRu:"Польская водка высшего класса из ржи",
+   dEn:"Ultra-premium Polish rye vodka"},
+  {id:"p9",  cat:"Шампанское",  catE:"Champagne", name:"Moët & Chandon Brut",  price:320, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Moet_et_Chandon.jpg/220px-Moet_et_Chandon.jpg",
+   dRu:"Изысканное французское шампанское",
+   dEn:"Iconic French champagne"},
+  {id:"p10", cat:"Шампанское",  catE:"Champagne", name:"Dom Pérignon",         price:1200,stock:true,  isNew:true,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Dom_Perignon.jpg/220px-Dom_Perignon.jpg",
+   dRu:"Легендарный миллезимный шампань",
+   dEn:"The legendary vintage prestige cuvée"},
+  {id:"p11", cat:"Текила",      catE:"Tequila",   name:"Don Julio Blanco",     price:350, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Don_Julio_Blanco.jpg/220px-Don_Julio_Blanco.jpg",
+   dRu:"100% голубая агава, Мексика",
+   dEn:"100% blue agave premium tequila"},
+  {id:"p12", cat:"Ром",         catE:"Rum",       name:"Bacardi Blanca",       price:150, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bacardi_Carta_Blanca.jpg/220px-Bacardi_Carta_Blanca.jpg",
+   dRu:"Классический белый ром, Куба",
+   dEn:"Classic Cuban white rum"},
+  {id:"p13", cat:"Джин",        catE:"Gin",       name:"Bombay Sapphire",      price:210, stock:true,  isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/BombaySapphire.jpg/220px-BombaySapphire.jpg",
+   dRu:"Английский джин с 10 ботаническими",
+   dEn:"English gin with 10 botanicals"},
+  {id:"p14", cat:"Ликёр",       catE:"Liqueur",   name:"Malibu Coconut",       price:140, stock:false, isNew:false,
+   img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Malibu_Rum.jpg/220px-Malibu_Rum.jpg",
+   dRu:"Кокосовый ликёр на основе рома",
+   dEn:"Coconut flavoured rum liqueur"},
+];
+
+const TIP_OPTS=[0,50,100,200,500];
+
+// ══════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════
+const TX={
+ru:{
+  catalog:"Каталог",cart:"Корзина",co:"Заказ",orders:"История",profile:"Профиль",
+  all:"Все",total:"ИТОГО",tip:"ЧАЕВЫЕ",noTip:"Без чаевых",customTip:"✏️ Своя",
+  coBtn:"Оформить заказ →",clearCart:"🗑 Очистить корзину",
+  ct1:"Геолокация",ct2:"Адрес доставки",ct3:"Номер телефона",
+  locBtn:"📍 Нажмите для определения местоположения",
+  locGetting:"⏳ Определяем...",
+  locOk:"✅ Местоположение определено",
+  locFail:"⚠️ Не удалось получить геолокацию. Продолжите без неё.",
+  officeLabel:"🏢 Ближайший офис:",
+  addrLbl:"УЛИЦА, ДОМ, КВАРТИРА / ОФИС",
+  addrPh:"ул. Ленина, д. 5, кв. 12",
+  addrErr:"❌ Адрес слишком короткий — минимум 10 символов",
+  phoneLbl:"ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ",
+  phonePh:"79001234567",
+  phoneErr:"❌ Введите корректный номер телефона (10–15 цифр, только цифры)",
+  sumTitle:"Ваш заказ",tipLbl:"Чаевые",totLbl:"Итого",
+  placeBtn:"✅ Подтвердить заказ",
+  noOrders:"Заказов пока нет",noActive:"Нет активных заказов",
+  stP:"🟡 Ожидает",stC:"🟢 Принят",stD:"✅ Доставлен",stX:"❌ Отменён",
+  added:"Добавлено в корзину",emptyCart:"Корзина пуста — добавьте товары из каталога",
+  placed:"✅ Заказ оформлен! Ожидайте звонка.",
+  activeOrders:"Активные заказы",oos:"НЕТ",
+  statOrders:"ЗАКАЗОВ",statActive:"АКТИВНЫХ",statSpent:"ПОТРАЧЕНО",
+},
+en:{
+  catalog:"Catalog",cart:"Cart",co:"Order",orders:"History",profile:"Profile",
+  all:"All",total:"TOTAL",tip:"TIP",noTip:"No tip",customTip:"✏️ Custom",
+  coBtn:"Checkout →",clearCart:"🗑 Clear cart",
+  ct1:"Geolocation",ct2:"Delivery address",ct3:"Phone number",
+  locBtn:"📍 Tap to share location",
+  locGetting:"⏳ Getting location...",
+  locOk:"✅ Location received",
+  locFail:"⚠️ Could not get location. Continue without it.",
+  officeLabel:"🏢 Nearest office:",
+  addrLbl:"STREET, BUILDING, APARTMENT",
+  addrPh:"123 Example St, Apt 12",
+  addrErr:"❌ Address too short — minimum 10 characters",
+  phoneLbl:"DIGITS ONLY, 10–15 DIGITS",
+  phonePh:"79001234567",
+  phoneErr:"❌ Enter a valid phone number (10–15 digits, numbers only)",
+  sumTitle:"Your order",tipLbl:"Tip",totLbl:"Total",
+  placeBtn:"✅ Confirm order",
+  noOrders:"No orders yet",noActive:"No active orders",
+  stP:"🟡 Pending",stC:"🟢 Confirmed",stD:"✅ Delivered",stX:"❌ Cancelled",
+  added:"Added to cart",emptyCart:"Cart is empty — add items from the catalog",
+  placed:"✅ Order placed! Our operator will call you.",
+  activeOrders:"Active orders",oos:"N/A",
+  statOrders:"ORDERS",statActive:"ACTIVE",statSpent:"SPENT AED",
+},
+};
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let lang="ru", cart={}, catF="all", tip=0, locInfo=null;
+let orders=JSON.parse(localStorage.getItem("ambar_orders")||"[]");
+const tg=window.Telegram?.WebApp||null;
+
+// ══════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════
+window.addEventListener("DOMContentLoaded",()=>{
+  if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor("#07070E");tg.setBackgroundColor&&tg.setBackgroundColor("#07070E");}
+  buildChips();renderGrid();buildTips();renderOrders();applyLang();
+});
+
+// ══════════════════════════════════════
+// LANG
+// ══════════════════════════════════════
+function t(k){return TX[lang][k]||TX.ru[k]||k;}
+function flipLang(){
+  lang=lang==="ru"?"en":"ru";
+  document.querySelectorAll(".lang-btn").forEach(b=>b.textContent=lang==="ru"?"🇷🇺":"🇬🇧");
+  applyLang();buildChips();renderGrid();buildTips();renderOrders();renderCart();buildSummary();buildProfile();
+}
+function applyLang(){
+  const f=lang==="ru"?"🇷🇺":"🇬🇧";
+  document.querySelectorAll(".lang-btn").forEach(b=>b.textContent=f);
+  set("sh-catalog",t("catalog")); set("ls-cart",t("cart")); set("ls-co",t("co"));
+  set("ls-ord",t("orders")); set("ls-prof",t("profile"));
+  set("sh-orders",t("orders")); set("sh-active",t("activeOrders"));
+  set("nbl-cat",t("catalog")); set("nbl-cart",t("cart")); set("nbl-co",t("co"));
+  set("nbl-ord",t("orders")); set("nbl-prof",t("profile"));
+  set("tot-lbl",t("total")); set("co-btn",t("coBtn")); set("clear-btn",t("clearCart"));
+  set("ct1",t("ct1")); set("ct2",t("ct2")); set("ct3",t("ct3"));
+  set("loc-btn-txt",t("locBtn"));
+  set("addr-lbl",t("addrLbl")); el("addr-in").placeholder=t("addrPh");
+  set("phone-lbl",t("phoneLbl")); el("phone-in").placeholder=t("phonePh");
+  set("sum-title",t("sumTitle")); set("sum-tip-lbl",t("tipLbl")); set("sum-tot-lbl",t("totLbl"));
+  set("place-btn",t("placeBtn")); set("tip-lbl",t("tip"));
+  el("tip-input").placeholder=lang==="ru"?"Введите сумму...":"Enter amount...";
+}
+function el(id){return document.getElementById(id);}
+function set(id,v){const e=el(id);if(e)e.textContent=v;}
+
+// ══════════════════════════════════════
+// PAGES
+// ══════════════════════════════════════
+let curPg="catalog";
+const PAGES=["catalog","cart","checkout","orders","profile"];
+function go(p){
+  PAGES.forEach(id=>{
+    el("pg-"+id)?.classList.toggle("hidden",id!==p);
+    el("nb-"+id)?.classList.toggle("on",id===p);
+  });
+  curPg=p;
+  if(p==="cart")renderCart();
+  if(p==="orders")renderOrders();
+  if(p==="checkout")buildSummary();
+  if(p==="profile")buildProfile();
+}
+
+// ══════════════════════════════════════
+// CATEGORY CHIPS
+// ══════════════════════════════════════
+function buildChips(){
+  const cats=["all",...new Set(P.map(p=>lang==="ru"?p.cat:p.catE))];
+  el("cat-chips").innerHTML=cats.map(c=>{
+    const lbl=c==="all"?t("all"):c;
+    return`<button class="chip${c===catF?" on":""}" onclick="setCat('${c}',this)">${lbl}</button>`;
+  }).join("");
+}
+function setCat(c,btn){
+  catF=c;
+  document.querySelectorAll(".chip").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  renderGrid();
+}
+
+// ══════════════════════════════════════
+// GRID
+// ══════════════════════════════════════
+function renderGrid(){
+  const list=catF==="all"?P:P.filter(p=>(lang==="ru"?p.cat:p.catE)===catF);
+  el("p-grid").innerHTML=list.map(p=>{
+    const qty=cart[p.id]||0;
+    return`<div class="pcard">
+      <div class="pimg-box">
+        ${!p.stock?`<span class="pbadge oos">${t("oos")}</span>`:""}
+        ${p.isNew?`<span class="pbadge isnew">NEW</span>`:""}
+        <img class="pimg" src="${p.img}" alt="${p.name}"
+          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
+      </div>
+      <div class="pinfo">
+        <div class="pcat">${lang==="ru"?p.cat:p.catE}</div>
+        <div class="pname">${p.name}</div>
+        <div class="pdesc">${lang==="ru"?p.dRu:p.dEn}</div>
+        <div class="pfoot">
+          <div class="pprice">${p.price}<small> AED</small></div>
+          <div id="ctrl-${p.id}">${ctrlHTML(p,qty)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function ctrlHTML(p,qty){
+  if(qty===0) return`<button class="add-btn"${!p.stock?" disabled":""} onclick="addItem('${p.id}')">+</button>`;
+  return`<div class="qctrl">
+    <button class="qb" onclick="chgQty('${p.id}',-1)">−</button>
+    <span class="qn">${qty}</span>
+    <button class="qb" onclick="chgQty('${p.id}',1)">+</button>
+  </div>`;
+}
+
+function addItem(id){
+  const p=P.find(x=>x.id===id); if(!p||!p.stock) return;
+  cart[id]=1; syncCtrl(id); updHdr();
+  showToast(t("added")+": "+p.name,"ok");
+}
+
+function chgQty(id,d){
+  const nq=(cart[id]||0)+d;
+  if(nq<=0) delete cart[id]; else cart[id]=nq;
+  syncCtrl(id); updHdr();
+  if(curPg==="cart") renderCart();
+}
+
+function syncCtrl(id){
+  const e=el("ctrl-"+id); if(!e) return;
+  const p=P.find(x=>x.id===id);
+  e.innerHTML=ctrlHTML(p,cart[id]||0);
+}
+
+function cartSubtotal(){
+  return Object.entries(cart).reduce((s,[id,qty])=>{
+    const p=P.find(x=>x.id===id); return s+(p?p.price*qty:0);
+  },0);
+}
+
+function updHdr(){
+  const cnt=Object.values(cart).reduce((a,b)=>a+b,0);
+  const tot=cartSubtotal();
+  el("hdr-tot").textContent=tot>0?tot+" AED":"0 AED";
+  const dot=el("hdr-dot"); dot.textContent=cnt; dot.style.display=cnt>0?"flex":"none";
+}
+
+// ══════════════════════════════════════
+// CART
+// ══════════════════════════════════════
+function renderCart(){
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  const foot=el("cart-foot"), tipSec=el("tip-section");
+  if(!entries.length){
+    el("cart-list").innerHTML=`<div class="empty"><div class="empty-icon">🛒</div><div>${t("emptyCart")}</div></div>`;
+    foot.style.display="none"; tipSec.style.display="none"; return;
+  }
+  el("cart-list").innerHTML=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id); if(!p) return"";
+    return`<div class="ci">
+      <img class="ci-img" src="${p.img}" alt="${p.name}"
+        onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 52 62%22><text y=%2248%22 font-size=%2240%22>🍾</text></svg>'">
+      <div class="ci-info"><div class="ci-name">${p.name}</div><div class="ci-price">${p.price*qty} AED</div></div>
+      <div class="qctrl">
+        <button class="qb" onclick="chgQty('${id}',-1)">−</button>
+        <span class="qn">${qty}</span>
+        <button class="qb" onclick="chgQty('${id}',1)">+</button>
+      </div>
+    </div>`;
+  }).join("");
+  el("tot-n").textContent=cartSubtotal()+tip;
+  foot.style.display="block"; tipSec.style.display="block";
+}
+
+function clearCart(){
+  cart={}; tip=0; updHdr(); renderCart(); buildTips();
+}
+
+// ══════════════════════════════════════
+// TIPS
+// ══════════════════════════════════════
+function buildTips(){
+  el("tip-row").innerHTML=TIP_OPTS.map((v,i)=>{
+    const isLast=i===TIP_OPTS.length-1;
+    const lbl=isLast?t("customTip"):(v===0?t("noTip"):`${v} AED`);
+    return`<button class="tip-chip${v===tip&&!isLast?" on":""}" onclick="pickTip(${v},${isLast},this)">${lbl}</button>`;
+  }).join("");
+  el("tip-input").placeholder=lang==="ru"?"Введите сумму...":"Enter amount...";
+}
+
+function pickTip(v,isCustom,btn){
+  document.querySelectorAll(".tip-chip").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  const inp=el("tip-input");
+  if(isCustom){
+    inp.style.display="block"; inp.focus();
+    inp.oninput=()=>{tip=Math.max(0,parseInt(inp.value)||0); updCartTot();};
+  } else {
+    inp.style.display="none"; tip=v; updCartTot();
+  }
+}
+
+function updCartTot(){
+  el("tot-n").textContent=cartSubtotal()+tip;
+  buildSummary();
+}
+
+// ══════════════════════════════════════
+// LOCATION (GPS)
+// ══════════════════════════════════════
+function grabLocation(){
+  const btn=el("loc-btn"), stat=el("loc-state"), ob=el("office-badge");
+  btn.style.opacity="0.6";
+  el("loc-btn-txt").textContent=t("locGetting");
+  stat.className="loc-state"; ob.className="office-badge";
+
+  if(!navigator.geolocation){
+    locInfo=null; btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
+    stat.className="loc-state fail"; stat.textContent=t("locFail"); return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const {latitude:lat,longitude:lon}=pos.coords;
+      const off=nearestOffice(lat,lon);
+      locInfo={lat,lon,office_id:off.id,office_name:off.name,dist_km:off._d.toFixed(1)};
+      btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
+      stat.className="loc-state ok"; stat.textContent=t("locOk");
+      ob.className="office-badge on";
+      ob.innerHTML=`${t("officeLabel")} <strong>${off.name}</strong> · ${off._d.toFixed(1)} km`;
+      el("n1").className="co-num done"; el("n1").textContent="✓";
+    },
+    ()=>{
+      locInfo=null; btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
+      stat.className="loc-state fail"; stat.textContent=t("locFail");
+    },
+    {timeout:10000,maximumAge:60000,enableHighAccuracy:true}
+  );
+}
+
+function clearErr(field){
+  el(field+"-in").classList.remove("err");
+  el(field+"-err").classList.remove("on");
+}
+
+// ══════════════════════════════════════
+// SUMMARY
+// ══════════════════════════════════════
+function buildSummary(){
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  const sub=cartSubtotal();
+  el("sum-items").innerHTML=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id);
+    return p?`<div class="sum-line"><span>${p.name} ×${qty}</span><span>${p.price*qty} AED</span></div>`:"";
+  }).join("");
+  const tr=el("sum-tip-row");
+  if(tip>0){tr.style.display="flex"; el("sum-tip-val").textContent=tip+" AED";}
+  else tr.style.display="none";
+  el("sum-tot-val").textContent=(sub+tip)+" AED";
+}
+
+// ══════════════════════════════════════
+// PLACE ORDER
+// ══════════════════════════════════════
+function placeOrder(){
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  if(!entries.length){showToast(t("emptyCart"),"err");return;}
+
+  // Validate address
+  const addr=el("addr-in").value.trim();
+  if(addr.length<10){
+    el("addr-in").classList.add("err");
+    el("addr-err").textContent=t("addrErr");
+    el("addr-err").classList.add("on");
+    el("addr-in").focus(); go("checkout"); return;
+  }
+
+  // Validate phone — digits only, 10-15 chars
+  const rawPhone=el("phone-in").value.trim();
+  const digits=rawPhone.replace(/\D/g,"");
+  if(digits.length<10||digits.length>15||!/^\+?\d+$/.test(rawPhone)){
+    el("phone-in").classList.add("err");
+    el("phone-err").textContent=t("phoneErr");
+    el("phone-err").classList.add("on");
+    el("phone-in").focus(); go("checkout"); return;
+  }
+
+  const items=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id);
+    return{id,name:p.name,price:p.price,qty,line_total:p.price*qty};
+  });
+  const sub=cartSubtotal(), total=sub+tip;
+  const oid="AMB"+Date.now().toString().slice(-7);
+
+  const payload={
+    action:"order", order_id:oid,
+    items, subtotal:sub, tip, total, currency:"AED",
+    phone:digits, address:addr,
+    location: locInfo ? {lat:locInfo.lat,lon:locInfo.lon} : {lat:0,lon:0},
+    office_id: locInfo?.office_id || "office_central",
+    office_name: locInfo?.office_name || "Ambar",
+    lang,
+  };
+
+  // Store locally
+  orders.unshift({order_id:oid,items,total,address:addr,status:"pending",timestamp:new Date().toISOString()});
+  localStorage.setItem("ambar_orders",JSON.stringify(orders.slice(0,50)));
+
+  if(tg?.sendData){
+    tg.sendData(JSON.stringify(payload));
+  } else {
+    console.log("ORDER PAYLOAD:",JSON.stringify(payload,null,2));
+  }
+
+  // Reset
+  cart={}; tip=0; locInfo=null;
+  el("addr-in").value=""; el("phone-in").value="";
+  el("loc-state").className="loc-state"; el("office-badge").className="office-badge";
+  el("n1").className="co-num"; el("n1").textContent="1";
+  updHdr(); buildTips();
+  showToast(t("placed"),"ok");
+  setTimeout(()=>go("orders"),1400);
+}
+
+// ══════════════════════════════════════
+// ORDERS
+// ══════════════════════════════════════
+function renderOrders(){
+  if(!orders.length){
+    el("orders-list").innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div>${t("noOrders")}</div></div>`;
+    return;
+  }
+  const cls={pending:"sp",confirmed:"sc",delivered:"sd",declined:"sx"};
+  const lbl={pending:()=>t("stP"),confirmed:()=>t("stC"),delivered:()=>t("stD"),declined:()=>t("stX")};
+  el("orders-list").innerHTML=orders.map(o=>{
+    const ts=o.timestamp?o.timestamp.slice(0,16).replace("T"," "):"";
+    const sc=cls[o.status]||"sp", sl=(lbl[o.status]||lbl.pending)();
+    return`<div class="ocard">
+      <div class="ocard-top">
+        <div><div class="o-id">#${o.order_id}</div><div class="o-date">${ts}</div></div>
+        <span class="o-status ${sc}">${sl}</span>
+      </div>
+      <div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(" · ")}</div>
+      <div class="o-total">${o.total} AED</div>
+    </div>`;
+  }).join("");
+}
+
+// ══════════════════════════════════════
+// PROFILE
+// ══════════════════════════════════════
+function buildProfile(){
+  const name=tg?.initDataUnsafe?.user?.first_name||"Guest";
+  const av=name[0]?.toUpperCase()||"A";
+  el("prof-av").textContent=av; el("prof-name").textContent=name;
+
+  const active=orders.filter(o=>["pending","confirmed"].includes(o.status));
+  const spent=orders.filter(o=>o.status==="delivered").reduce((s,o)=>s+o.total,0);
+  el("stat-total").textContent=orders.length;
+  el("stat-active").textContent=active.length;
+  el("stat-spent").textContent=spent;
+  el("stat-lbl1").textContent=t("statOrders");
+  el("stat-lbl2").textContent=t("statActive");
+  el("stat-lbl3").textContent=t("statSpent");
+
+  if(!active.length){
+    el("active-list").innerHTML=`<div class="empty" style="padding:20px 0"><div>${t("noActive")}</div></div>`;
+    return;
+  }
+  const cls={pending:"sp",confirmed:"sc"};
+  const lbl={pending:()=>t("stP"),confirmed:()=>t("stC")};
+  el("active-list").innerHTML=active.map(o=>{
+    const sc=cls[o.status]||"sp", sl=(lbl[o.status]||lbl.pending)();
+    return`<div class="ocard">
+      <div class="ocard-top">
+        <div><div class="o-id">#${o.order_id}</div></div>
+        <span class="o-status ${sc}">${sl}</span>
+      </div>
+      <div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(" · ")}</div>
+      <div class="o-total">${o.total} AED</div>
+    </div>`;
+  }).join("");
+}
+
+// ══════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════
+let toastTimer;
+function showToast(msg,type=""){
+  const e=el("toast");
+  e.textContent=msg; e.className="toast "+(type||""); e.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>e.classList.remove("show"),2800);
+}
+</script>
+</body>
+</html>

@@ -334,7 +334,8 @@ img{display:block}
         <input class="finput" id="addr-name-in" type="text" placeholder="Дом / Офис / JVC...">
 
         <label class="flabel" style="margin-top:14px" id="lbl-addr-comment">КОММЕНТАРИЙ ДЛЯ КУРЬЕРА</label>
-        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="Домофон 47, 3 этаж, квартира справа..." style="resize:none;height:76px;padding-top:10px"></textarea>
+        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="Например: проедьте чуть дальше шлагбаума, я встречу вас там...
+For example: drive a bit past the barrier, I will meet you there..." style="resize:none;height:76px;padding-top:10px"></textarea>
 
         <button class="btn-main" style="margin-top:14px" onclick="saveNewAddress()" id="save-addr-btn">💾 Сохранить адрес</button>
       </div>
@@ -646,13 +647,11 @@ function applyLang(){
   el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
   el('man-street').placeholder=lang==='ru'?'JVC Bloom Tower / Jumeirah St':'JVC Bloom Tower / Jumeirah St';
   el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
-  set('lbl-addr-comment',lang==='ru'
-  ? 'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА'
-  : 'COMMENT FOR COURIER'
-);
-el('addr-comment-in').placeholder = lang==='ru'
-  ? 'Например: проедьте чуть дальше шлагбаума, я встречу вас там...'
-  : 'For example: drive a bit past the barrier, I will meet you there...';
+  set('lbl-addr-comment',lang==='ru'?'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА':'COMMENT FOR COURIER');
+  el('addr-comment-in').placeholder = lang==='ru'
+    ? 'Например: проедьте чуть дальше шлагбаума, я встречу вас там...'
+    : 'For example: drive a bit past the barrier, I will meet you there...';
+  set('sum-title',t('sumTitle'));set('sum-tip-lbl',t('tipLbl'));set('sum-tot-lbl',t('totLbl'));
   set('place-btn',t('placeBtn'));set('tip-lbl',t('tip'));set('co-addr-title',t('coAddrTitle'));
   el('tip-input').placeholder=lang==='ru'?'Введите сумму...':'Enter amount...';
   set('mtl-gps','GPS');set('mtl-manual',lang==='ru'?'Вручную':'Manual');

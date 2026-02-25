@@ -665,7 +665,7 @@ function go(p){
   curPg=p;
   if(p==='cart'){renderCart();updateCartAddrBar();}
   if(p==='orders')renderOrders();
-  if(p==='address'){renderSavedCards();buildTypeChips('gps');buildAreaChips();buildTypeChips('man');}
+  if(p==='address'){renderSavedCards();buildAreaChips();buildTypeChips('man'); /* GPS uses label+comment only */}
   if(p==='profile')buildProfile();
   if(p==='checkout')buildSummary();
 }
@@ -784,7 +784,12 @@ function switchMethod(m){
     el('mpanel-'+id)?.classList.toggle('show',id===m);
   });
   if(m==='manual'){buildAreaChips();buildTypeChips('man');}
-  if(m==='gps'){buildTypeChips('gps');}
+  if(m==='gps'){
+    // GPS-only flow: do not show address type/street fields.
+    const ge=el('gps-extra'); if(ge) ge.style.display='none';
+    const gf=el('tfields-gps'); if(gf) gf.innerHTML='';
+    selTypeGps=null;
+  }
   const ae=el('addr-form-err');if(ae){ae.classList.remove('on');ae.textContent='';}
 }
 

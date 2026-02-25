@@ -333,6 +333,9 @@ img{display:block}
         <label class="flabel" style="margin-top:14px" id="lbl-addr-name">НАЗВАНИЕ АДРЕСА</label>
         <input class="finput" id="addr-name-in" type="text" placeholder="Дом / Офис / JVC...">
 
+        <label class="flabel" style="margin-top:14px" id="lbl-addr-comment">КОММЕНТАРИЙ ДЛЯ КУРЬЕРА</label>
+        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="Домофон 47, 3 этаж, квартира справа..." style="resize:none;height:76px;padding-top:10px"></textarea>
+
         <button class="btn-main" style="margin-top:14px" onclick="saveNewAddress()" id="save-addr-btn">💾 Сохранить адрес</button>
       </div>
     </div>
@@ -387,13 +390,6 @@ img{display:block}
         <label class="flabel" id="phone-lbl">ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ</label>
         <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="971501234567" oninput="this.classList.remove('err');el('phone-err').classList.remove('on')">
         <div class="ferr" id="phone-err"></div>
-      </div>
-    </div>
-    <div class="co-card">
-      <div class="co-head"><div class="co-num">3</div><div class="co-title" id="ct3">Комментарий</div></div>
-      <div class="co-inner">
-        <label class="flabel" id="comment-lbl">ДОМОФОН, ЭТАЖ, ОРИЕНТИР — НЕОБЯЗАТЕЛЬНО</label>
-        <textarea class="finput" id="comment-in" rows="3" placeholder="Домофон 47, 3 этаж, квартира справа" style="resize:none;height:80px;padding-top:10px"></textarea>
       </div>
     </div>
   </div>
@@ -548,7 +544,7 @@ ru:{
   addrFormErr:'❌ Заполните обязательные поля',areaErr:'❌ Выберите район',
   noSaved:'Нет сохранённых адресов — добавьте первый!',
   activeAddrLabel:'АКТИВНЫЙ',
-  ct2:'Номер телефона',ct3:'Комментарий к заказу',phoneLbl:'ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ',phoneErr:'❌ Введите корректный номер (10–15 цифр)',
+  ct2:'Номер телефона',phoneLbl:'ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ',phoneErr:'❌ Введите корректный номер (10–15 цифр)',
   sumTitle:'Ваш заказ',tipLbl:'Чаевые',totLbl:'Итого',placeBtn:'✅ Подтвердить заказ',
   coAddrTitle:'Адрес доставки',
   noOrders:'Заказов пока нет',noActive:'Нет активных заказов',
@@ -644,10 +640,12 @@ function applyLang(){
   set('gps-lbl',t('gpsBtn'));
   set('lbl-addr-name',t('lblAddrName'));set('save-addr-btn',t('saveAddrBtn'));
   set('cab-label',t('cabLabel'));set('cab-change',t('cabChange'));
-  set('ct2',t('ct2'));set('ct3',t('ct3'));set('comment-lbl',t('comment-lbl'));set('phone-lbl',t('phoneLbl'));
+  set('ct2',t('ct2'));set('phone-lbl',t('phoneLbl'));
   el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
   el('man-street').placeholder=lang==='ru'?'JVC Bloom Tower / Jumeirah St':'JVC Bloom Tower / Jumeirah St';
   el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
+  set('lbl-addr-comment',lang==='ru'?'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА':'COMMENT FOR COURIER');
+  el('addr-comment-in').placeholder=lang==='ru'?'Домофон 47, 3 этаж, квартира справа...':'Intercom 47, 3rd floor, apt on the right...';
   set('sum-title',t('sumTitle'));set('sum-tip-lbl',t('tipLbl'));set('sum-tot-lbl',t('totLbl'));
   set('place-btn',t('placeBtn'));set('tip-lbl',t('tip'));set('co-addr-title',t('coAddrTitle'));
   el('tip-input').placeholder=lang==='ru'?'Введите сумму...':'Enter amount...';
@@ -895,6 +893,7 @@ function saveNewAddress(){
   const sel=curMethod==='gps'?selTypeGps:selTypeMan;
   const tp=types.find(x=>x.id===sel);
 
+  const comment=(el('addr-comment-in')?.value||'').trim();
   const newAddr={
     label:label||tp?.lbl||addrStr,
     address:addrStr,
@@ -903,6 +902,7 @@ function saveNewAddress(){
     lon:locInfo?.lon||0,
     office_id:locInfo?.office_id||'office_central',
     office_name:locInfo?.office_name||OFFICES[0].name,
+    comment:comment,
   };
 
   const arr=getSaved();
@@ -924,7 +924,7 @@ function resetAddrForm(){
   el('gps-status').className='gps-status';
   el('gps-extra').style.display='none';
   el('opill').className='opill';
-  el('addr-name-in').value='';
+  el('addr-name-in').value='';el('addr-comment-in').value='';
   el('man-street').value='';
   el('tfields-gps').innerHTML='';el('tfields-man').innerHTML='';
   el('addr-form-err').classList.remove('on');el('addr-form-err').textContent='';
@@ -1090,8 +1090,7 @@ function placeOrder(){
   const sub=cartSub(),total=sub+tip,oid='AMB'+Date.now().toString().slice(-7);
   const payload={
     action:'order',order_id:oid,items,subtotal:sub,tip,total,currency:'AED',
-    phone:digits,address:addr.address,address_label:addr.label,
-    comment:el('comment-in').value.trim(),
+    phone:digits,address:addr.address,address_label:addr.label,comment:addr.comment||'',
     location:{lat:addr.lat||0,lon:addr.lon||0},
     office_id:addr.office_id||'office_central',
     office_name:addr.office_name||OFFICES[0].name,lang,
@@ -1103,7 +1102,7 @@ function placeOrder(){
   if(tg?.sendData)tg.sendData(JSON.stringify(payload));
   else console.log('ORDER:',JSON.stringify(payload,null,2));
 
-  cart={};tip=0;el('phone-in').value='';el('comment-in').value='';el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
+  cart={};tip=0;el('phone-in').value='';el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
   updHdr();buildTips();showToast(t('placed'),'ok');
   setTimeout(()=>go('orders'),1400);
 }

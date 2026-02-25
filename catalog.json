@@ -8,7 +8,7 @@
     "price": 280,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.27.jpeg",
     "desc": "Шведская водка с чистым, мягким вкусом и лёгкими зерновыми нотами.",
     "descE": "Swedish vodka with a clean, smooth profile and subtle grain notes."
   },
@@ -21,7 +21,7 @@
     "price": 230,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.40.jpeg",
     "desc": "Классическая водка в русском стиле: мягкая, нейтральная и очень универсальная.",
     "descE": "Classic Russian-style vodka: smooth, neutral and highly versatile."
   },

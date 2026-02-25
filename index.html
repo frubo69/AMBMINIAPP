@@ -334,8 +334,7 @@ img{display:block}
         <input class="finput" id="addr-name-in" type="text" placeholder="Дом / Офис / JVC...">
 
         <label class="flabel" style="margin-top:14px" id="lbl-addr-comment">КОММЕНТАРИЙ ДЛЯ КУРЬЕРА</label>
-        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="Например: проедьте чуть дальше шлагбаума, я встречу вас там...
-For example: drive a bit past the barrier, I will meet you there..." style="resize:none;height:76px;padding-top:10px"></textarea>
+        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="" style="resize:none;height:76px;padding-top:10px"></textarea>
 
         <button class="btn-main" style="margin-top:14px" onclick="saveNewAddress()" id="save-addr-btn">💾 Сохранить адрес</button>
       </div>
@@ -538,8 +537,7 @@ ru:{
   shSaved:'Сохранённые адреса',addFormTitle:'➕ Добавить адрес',
   lblArea:'РАЙОН / ЗОНА',lblStreet:'УЛИЦА / ЗДАНИЕ',lblTypeGps:'ТИП АДРЕСА',lblTypeMan:'ТИП АДРЕСА',
   gpsBtn:'📍 Поделиться геолокацией',gpsBtnLoading:'⏳ Определяем...',
-  gpsOk:'✅ Геолокация получена — введите название адреса',gpsFail:'⚠️ Не удалось получить геолокацию',
-  addrLabelReq:'❌ Введите название адреса',
+  gpsOk:'✅ Геолокация получена — выберите тип',gpsFail:'⚠️ Не удалось получить геолокацию',
   lblAddrName:'НАЗВАНИЕ АДРЕСА',saveAddrBtn:'💾 Сохранить адрес',
   addrSaved:'Адрес сохранён ✓',addrDeleted:'Адрес удалён',addrSelected:'Адрес выбран',
   nearOffice:'Ближайший офис',
@@ -570,8 +568,7 @@ en:{
   shSaved:'Saved addresses',addFormTitle:'➕ Add address',
   lblArea:'AREA / ZONE',lblStreet:'STREET / BUILDING',lblTypeGps:'ADDRESS TYPE',lblTypeMan:'ADDRESS TYPE',
   gpsBtn:'📍 Share my location',gpsBtnLoading:'⏳ Getting location...',
-  gpsOk:'✅ Location received — enter address label',gpsFail:'⚠️ Could not get location',
-  addrLabelReq:'❌ Enter address label',
+  gpsOk:'✅ Location received — select type',gpsFail:'⚠️ Could not get location',
   lblAddrName:'ADDRESS LABEL',saveAddrBtn:'💾 Save address',
   addrSaved:'Address saved ✓',addrDeleted:'Address removed',addrSelected:'Address selected',
   nearOffice:'Nearest office',
@@ -649,8 +646,8 @@ function applyLang(){
   el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
   set('lbl-addr-comment',lang==='ru'?'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА':'COMMENT FOR COURIER');
   el('addr-comment-in').placeholder = lang==='ru'
-    ? 'Например: проедьте чуть дальше шлагбаума, я встречу вас там...'
-    : 'For example: drive a bit past the barrier, I will meet you there...';
+ ? 'Например: проедьте чуть дальше шлагбаума, я встречу вас там...'
+ : 'For example: drive a bit past the barrier, I will meet you there...';
   set('sum-title',t('sumTitle'));set('sum-tip-lbl',t('tipLbl'));set('sum-tot-lbl',t('totLbl'));
   set('place-btn',t('placeBtn'));set('tip-lbl',t('tip'));set('co-addr-title',t('coAddrTitle'));
   el('tip-input').placeholder=lang==='ru'?'Введите сумму...':'Enter amount...';
@@ -668,7 +665,7 @@ function go(p){
   curPg=p;
   if(p==='cart'){renderCart();updateCartAddrBar();}
   if(p==='orders')renderOrders();
-  if(p==='address'){renderSavedCards();buildAreaChips();buildTypeChips('man'); /* GPS uses label+comment only */}
+  if(p==='address'){renderSavedCards();buildTypeChips('gps');buildAreaChips();buildTypeChips('man');}
   if(p==='profile')buildProfile();
   if(p==='checkout')buildSummary();
 }
@@ -787,12 +784,7 @@ function switchMethod(m){
     el('mpanel-'+id)?.classList.toggle('show',id===m);
   });
   if(m==='manual'){buildAreaChips();buildTypeChips('man');}
-  if(m==='gps'){
-    // GPS-only flow: do not show address type/street fields.
-    const ge=el('gps-extra'); if(ge) ge.style.display='none';
-    const gf=el('tfields-gps'); if(gf) gf.innerHTML='';
-    selTypeGps=null;
-  }
+  if(m==='gps'){buildTypeChips('gps');}
   const ae=el('addr-form-err');if(ae){ae.classList.remove('on');ae.textContent='';}
 }
 
@@ -853,12 +845,8 @@ function grabGPS(){
     locInfo={lat,lon,office_id:off.id,office_name:off.name};
     btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));
     stat.className='gps-status ok';stat.textContent=t('gpsOk');
-    // GPS-simple flow: do NOT ask for type/street/extra fields.
-    // User only needs to enter a Label (mandatory) + optional Comment.
-    selTypeGps=null;
-    el('gps-extra').style.display='none';
-    el('tfields-gps').innerHTML='';
-    showPill(off.name);
+    el('gps-extra').style.display='block';
+    buildTypeChips('gps');showPill(off.name);
   },()=>fail(),{timeout:10000,maximumAge:60000,enableHighAccuracy:true});
   function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
 }
@@ -899,34 +887,23 @@ function saveNewAddress(){
     ae.textContent=t('gpsFail');ae.classList.add('on');return;
   }
 
+  const addrStr=buildAddrStr(curMethod==='gps'?'gps':'man');
+  if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
+
   const label=(el('addr-name-in')?.value||'').trim();
-  if(!label){ae.textContent=t('addrLabelReq');ae.classList.add('on');return;}
+  const types=TYPES[lang];
+  const sel=curMethod==='gps'?selTypeGps:selTypeMan;
+  const tp=types.find(x=>x.id===sel);
 
   const comment=(el('addr-comment-in')?.value||'').trim();
-
-  // Build address string
-  let addrStr='';
-  let typeIcon='📍';
-  if(curMethod==='gps'){
-    const lat=Number(locInfo?.lat||0);
-    const lon=Number(locInfo?.lon||0);
-    addrStr=`📍 GPS: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-  } else {
-    addrStr=buildAddrStr('man');
-    if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
-    const types=TYPES[lang];
-    const tp=types.find(x=>x.id===selTypeMan);
-    typeIcon=tp?.icon||'📍';
-  }
-
   const newAddr={
-    label:label,
+    label:label||tp?.lbl||addrStr,
     address:addrStr,
-    typeIcon:typeIcon,
-    lat:curMethod==='gps'?(locInfo?.lat||0):0,
-    lon:curMethod==='gps'?(locInfo?.lon||0):0,
-    office_id:curMethod==='gps'?(locInfo?.office_id||'office_central'):'office_central',
-    office_name:curMethod==='gps'?(locInfo?.office_name||OFFICES[0].name):OFFICES[0].name,
+    typeIcon:tp?.icon||'📍',
+    lat:locInfo?.lat||0,
+    lon:locInfo?.lon||0,
+    office_id:locInfo?.office_id||'office_central',
+    office_name:locInfo?.office_name||OFFICES[0].name,
     comment:comment,
   };
 

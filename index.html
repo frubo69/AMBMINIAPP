@@ -21,13 +21,9 @@
 html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;height:100%;overflow:hidden}
 button,input{font-family:'Outfit',sans-serif;outline:none}
 img{display:block}
-
-/* ── PAGES ── */
 .page{position:fixed;inset:0;bottom:calc(60px + var(--safe-bottom));overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;opacity:1;transition:opacity .2s,transform .2s}
 .page.hidden{opacity:0;pointer-events:none;transform:translateY(8px)}
-
-/* ── HEADER ── */
-.hdr{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(7,7,14,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(7,7,14,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .logo-sub{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:-2px}
 .hdr-right{display:flex;gap:8px;align-items:center}
@@ -38,27 +34,43 @@ img{display:block}
 .lang-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:.15s}
 .lang-btn:active{transform:scale(.85)}
 
-/* ── BOTTOM NAV ── */
+/* Active address pill on catalog */
+.addr-pill{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:50px;padding:6px 12px;cursor:pointer;transition:.15s;max-width:200px}
+.addr-pill:active{border-color:var(--gold)}
+.addr-pill-txt{font-size:11px;font-weight:500;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.addr-pill-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* Address selector modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-sheet{width:100%;background:var(--bg2);border-radius:20px 20px 0 0;padding:0 0 calc(16px + var(--safe-bottom));max-height:70vh;overflow-y:auto;transform:translateY(60px);transition:transform .25s cubic-bezier(.34,1,.64,1)}
+.modal-overlay.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold2);padding:0 16px 12px;border-bottom:1px solid var(--border2)}
+.modal-addr-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border2);cursor:pointer;transition:.15s}
+.modal-addr-item:active{background:rgba(255,255,255,.03)}
+.modal-addr-item.active{background:rgba(201,169,110,.06)}
+.mai-icon{font-size:22px;flex-shrink:0}
+.mai-info{flex:1;min-width:0}
+.mai-label{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mai-addr{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mai-check{color:var(--gold);font-size:18px;flex-shrink:0}
+.modal-add-btn{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;color:var(--gold);font-size:13px;font-weight:600}
+
 .bnav{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;background:rgba(7,7,14,.97);border-top:1px solid var(--border);padding-bottom:var(--safe-bottom)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;gap:3px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:.15s}
 .nb.on{color:var(--gold)}
 .nb i{font-size:20px;line-height:1}
 .nb span{font-size:9px;letter-spacing:.5px;font-weight:500}
 
-/* ── CHIPS ── */
-.chips{display:flex;gap:7px;padding:12px 14px 6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.chips{display:flex;gap:7px;padding:8px 14px 6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .chips::-webkit-scrollbar{display:none}
 .chip{white-space:nowrap;padding:7px 14px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;transition:.15s}
 .chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
-
-/* ── SECTION HEADING ── */
-.sec-h{padding:14px 14px 10px;font-family:'Cormorant Garamond',serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sec-h{padding:10px 14px 8px;font-family:'Cormorant Garamond',serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .sec-h::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
-
-/* ── GRID ── */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 12px 16px}
 @media(min-width:460px){.grid{grid-template-columns:repeat(3,1fr)}}
-
 .pcard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.15s}
 .pcard:active{transform:scale(.97)}
 .pimg-box{height:148px;background:linear-gradient(155deg,#0E0E1E,#090916);display:flex;align-items:center;justify-content:center;padding:10px;position:relative;overflow:hidden}
@@ -80,19 +92,13 @@ img{display:block}
 .qb{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--gold);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s}
 .qb:active{transform:scale(.75)}
 .qn{font-size:13px;font-weight:700;min-width:20px;text-align:center;color:var(--gold2)}
-
-/* ── EMPTY STATE ── */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-icon{font-size:54px;margin-bottom:14px;opacity:.3}
-
-/* ── CART ITEMS ── */
 .ci{display:flex;align-items:center;gap:11px;padding:13px 16px;border-bottom:1px solid var(--border2)}
 .ci-img{width:50px;height:60px;object-fit:contain;background:var(--card);border-radius:10px;padding:5px;flex-shrink:0}
 .ci-info{flex:1;min-width:0}
 .ci-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ci-price{font-size:12px;color:var(--gold);font-weight:600;margin-top:2px}
-
-/* ── TIP ── */
 .tip-wrap{padding:14px 16px;border-top:1px solid var(--border2)}
 .tip-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
 .tip-row{display:flex;flex-wrap:wrap;gap:7px}
@@ -100,8 +106,6 @@ img{display:block}
 .tip-chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
 .tip-input{width:100%;margin-top:10px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r3);padding:11px 14px;color:var(--text);font-size:14px;display:none;transition:.2s}
 .tip-input:focus{border-color:var(--gold)}
-
-/* ── CART FOOTER ── */
 .cart-foot{padding:14px 16px;background:var(--bg2);border-top:1px solid var(--border)}
 .total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .total-lbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -112,82 +116,132 @@ img{display:block}
 .btn-outline{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--sub);border-radius:14px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:.15s}
 .btn-outline:active{border-color:var(--gold);color:var(--gold)}
 
-/* ── CHECKOUT ── */
-.co-body{padding:14px 16px}
-.co-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
-.co-head{padding:13px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border2)}
-.co-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.co-num.done{background:var(--green)}
-.co-title{font-size:14px;font-weight:600}
-.co-inner{padding:14px 15px}
+/* Cart active address banner */
+.cart-addr-bar{margin:12px 16px 0;background:var(--card);border:1px solid var(--border2);border-radius:var(--r2);padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.cart-addr-bar:active{border-color:var(--gold)}
+.cab-icon{font-size:18px;flex-shrink:0}
+.cab-info{flex:1;min-width:0}
+.cab-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.cab-addr{font-size:13px;font-weight:600;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cab-change{font-size:11px;color:var(--gold);font-weight:600;flex-shrink:0}
+
+/* ADDRESS PAGE */
+.addr-page-body{padding:14px 16px}
+.addr-form-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.addr-form-head{padding:13px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border2)}
+.addr-form-title{font-size:14px;font-weight:600}
+.addr-form-body{padding:14px 15px}
 .flabel{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-weight:600}
 .finput{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r3);padding:12px 14px;color:var(--text);font-size:14px;transition:.2s}
 .finput:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,.07)}
 .finput::placeholder{color:var(--muted)}
-.finput.err{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(224,85,85,.07)!important}
-.ferr{font-size:11px;color:var(--red);margin-top:5px;display:none}
+.finput.err{border-color:var(--red)!important}
+.ferr{font-size:11px;color:var(--red);margin-top:6px;display:none}
 .ferr.on{display:block}
 
-/* Location button */
-.loc-btn{display:flex;align-items:center;gap:10px;width:100%;background:rgba(201,169,110,.07);border:1.5px solid rgba(201,169,110,.2);border-radius:var(--r2);padding:13px 15px;cursor:pointer;color:var(--gold);font-size:13px;font-weight:600;transition:.2s}
-.loc-btn:active{transform:scale(.97)}
-.loc-btn .li{font-size:22px}
-.loc-state{margin-top:8px;font-size:12px;padding:9px 12px;border-radius:9px;display:none}
-.loc-state.ok{display:block;background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
-.loc-state.fail{display:block;background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18)}
-.office-badge{margin-top:7px;display:none;font-size:11px;color:var(--sub);background:var(--bg3);padding:8px 12px;border-radius:8px;line-height:1.5}
-.office-badge.on{display:block}
+/* Method tabs */
+.mtabs{display:flex;gap:8px;margin-bottom:14px}
+.mtab{flex:1;padding:10px 6px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r2);cursor:pointer;color:var(--muted);font-size:11px;font-weight:600;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s}
+.mtab i{font-size:20px}
+.mtab.on{border-color:var(--gold);background:rgba(201,169,110,.08);color:var(--gold)}
+.mtab:active{transform:scale(.95)}
+.mpanel{display:none}
+.mpanel.show{display:block}
+.gps-btn{display:flex;align-items:center;gap:10px;width:100%;background:rgba(201,169,110,.07);border:1.5px solid rgba(201,169,110,.25);border-radius:var(--r2);padding:14px 15px;cursor:pointer;color:var(--gold);font-size:13px;font-weight:600;transition:.2s;margin-bottom:10px}
+.gps-btn:active{transform:scale(.97)}
+.gps-status{font-size:12px;padding:9px 12px;border-radius:9px;display:none;margin-bottom:10px}
+.gps-status.ok{display:block;background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
+.gps-status.fail{display:block;background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18)}
+.type-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.type-chip{padding:8px 13px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--sub);font-size:12px;cursor:pointer;transition:.15s}
+.type-chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:600}
+.frow{display:flex;gap:8px;margin-bottom:10px}
+.frow>div{flex:1;min-width:0}
+.opill{font-size:11px;font-weight:600;color:var(--gold);background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);padding:8px 12px;border-radius:8px;margin-top:10px;display:none}
+.opill.on{display:block}
 
-/* Summary */
+/* Saved addr cards */
+.saved-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r2);padding:13px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;position:relative}
+.saved-card.active-addr{border-color:var(--gold);background:rgba(201,169,110,.04)}
+.sc-icon{font-size:22px;flex-shrink:0}
+.sc-info{flex:1;min-width:0}
+.sc-label{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-addr{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-office{font-size:10px;color:var(--gold);margin-top:3px}
+.sc-actions{display:flex;gap:6px;flex-shrink:0}
+.sc-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:.15s}
+.sc-btn:active{transform:scale(.85)}
+.sc-btn.del{border-color:rgba(224,85,85,.3);background:rgba(224,85,85,.08);color:var(--red)}
+.sc-btn.sel{border-color:rgba(201,169,110,.3);background:rgba(201,169,110,.08);color:var(--gold)}
+.active-badge{position:absolute;top:-6px;right:10px;font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 7px;border-radius:50px;background:var(--gold);color:#07070E}
+
+/* Confirm modal */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+.confirm-overlay.show{opacity:1;pointer-events:all}
+.confirm-box{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:320px}
+.confirm-icon{font-size:36px;text-align:center;margin-bottom:12px}
+.confirm-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold2);text-align:center;margin-bottom:8px}
+.confirm-msg{font-size:13px;color:var(--sub);text-align:center;line-height:1.5;margin-bottom:20px}
+.confirm-btns{display:flex;gap:10px}
+.confirm-btns button{flex:1;padding:12px;border-radius:var(--r3);border:none;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.confirm-yes{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E}
+.confirm-no{background:var(--bg3);border:1px solid var(--border)!important;color:var(--sub)}
+
+/* Orders */
+.co-body{padding:14px 16px}
+.co-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.co-head{padding:13px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border2)}
+.co-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.co-title{font-size:14px;font-weight:600}
+.co-inner{padding:14px 15px}
 .sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin:0 16px 14px}
 .sum-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold2);margin-bottom:10px}
 .sum-line{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:5px}
 .sum-div{height:1px;background:var(--border2);margin:8px 0}
 .sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--gold2)}
 .co-foot{padding:0 16px 16px}
-
-/* ── ORDER CARDS ── */
 .ocard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:14px;margin:0 14px 10px}
 .ocard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .o-id{font-size:12px;font-weight:700;color:var(--gold2)}
 .o-date{font-size:10px;color:var(--muted);margin-top:2px}
 .o-status{font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px}
 .sp{background:rgba(201,169,110,.1);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
-.sc{background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
+.sc2{background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
 .sd{background:rgba(76,175,125,.15);color:var(--green);border:1px solid rgba(76,175,125,.25)}
 .sx{background:rgba(224,85,85,.1);color:var(--red);border:1px solid rgba(224,85,85,.2)}
 .o-items{font-size:12px;color:var(--sub);line-height:1.75;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px}
 .o-total{font-size:14px;font-weight:700;color:var(--gold2);margin-top:6px}
-
-/* ── PROFILE ── */
 .profile-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin:14px}
 .profile-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;font-family:'Cormorant Garamond',serif;color:#07070E;font-weight:700}
 .profile-name{text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2)}
-.profile-stat{display:flex;gap:0;border-top:1px solid var(--border2);margin-top:14px}
+.profile-stat{display:flex;border-top:1px solid var(--border2);margin-top:14px}
 .ps{flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2)}
 .ps:last-child{border-right:none}
 .ps-n{font-size:20px;font-weight:700;color:var(--gold2)}
 .ps-l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:calc(68px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:999;transition:transform .28s cubic-bezier(.34,1.06,.64,1);pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+/* Toast */
+.toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:500;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+.toast.show{opacity:1;visibility:visible}
 .toast.ok{border-color:var(--green);color:#90e8b8}
 .toast.err{border-color:var(--red);color:#f0a0a0}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ CATALOG PAGE ═══════════ -->
+<!-- ═══ CATALOG ═══ -->
 <div id="pg-catalog" class="page">
   <div class="hdr">
     <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
     <div class="hdr-right">
-      <div class="cart-pill" onclick="go('cart')">
-        🛒 <span class="cart-txt" id="hdr-tot">0 AED</span>
-        <span class="cart-dot" id="hdr-dot">0</span>
-      </div>
+      <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
       <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
+    </div>
+  </div>
+  <!-- Active address selector -->
+  <div style="padding:8px 14px 0">
+    <div class="addr-pill" onclick="openAddrModal()" id="addr-pill">
+      <span class="addr-pill-dot" id="addr-pill-dot" style="background:var(--muted)"></span>
+      <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес доставки</span>
     </div>
   </div>
   <div class="chips" id="cat-chips"></div>
@@ -195,11 +249,20 @@ img{display:block}
   <div class="grid" id="p-grid"></div>
 </div>
 
-<!-- ═══════════ CART PAGE ═══════════ -->
+<!-- ═══ CART ═══ -->
 <div id="pg-cart" class="page hidden">
   <div class="hdr">
     <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-cart">Корзина</div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <!-- Active addr banner -->
+  <div class="cart-addr-bar" onclick="openAddrModal()" id="cab">
+    <span class="cab-icon">📍</span>
+    <div class="cab-info">
+      <div class="cab-label" id="cab-label">АДРЕС ДОСТАВКИ</div>
+      <div class="cab-addr" id="cab-addr">Не выбран — нажмите чтобы добавить</div>
+    </div>
+    <span class="cab-change" id="cab-change">Изменить</span>
   </div>
   <div id="cart-list"></div>
   <div id="tip-section" style="display:none">
@@ -211,88 +274,72 @@ img{display:block}
   </div>
   <div id="cart-foot" style="display:none">
     <div class="cart-foot">
-      <div class="total-row">
-        <span class="total-lbl" id="tot-lbl">ИТОГО</span>
-        <span class="total-val"><span id="tot-n">0</span> AED</span>
-      </div>
-      <button class="btn-main" id="co-btn" onclick="go('checkout')">Оформить заказ →</button>
+      <div class="total-row"><span class="total-lbl" id="tot-lbl">ИТОГО</span><span class="total-val"><span id="tot-n">0</span> AED</span></div>
+      <button class="btn-main" id="co-btn" onclick="tryOrder()">Оформить заказ →</button>
       <button class="btn-outline" id="clear-btn" onclick="clearCart()">🗑 Очистить корзину</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ CHECKOUT PAGE ═══════════ -->
-<div id="pg-checkout" class="page hidden">
+<!-- ═══ ADDRESS PAGE ═══ -->
+<div id="pg-address" class="page hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-co">Оформление</div></div>
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-addr">Адреса</div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
-  <div class="co-body">
+  <div class="addr-page-body">
+    <!-- Saved addresses list -->
+    <div class="sec-h" id="sh-saved-addr">Сохранённые адреса</div>
+    <div id="saved-cards"></div>
 
-    <!-- Step 1: Location -->
-    <div class="co-card">
-      <div class="co-head">
-        <div class="co-num" id="n1">1</div>
-        <div class="co-title" id="ct1">Геолокация</div>
+    <!-- Add new address form -->
+    <div class="addr-form-card">
+      <div class="addr-form-head">
+        <span class="addr-form-title" id="add-form-title">➕ Добавить адрес</span>
       </div>
-      <div class="co-inner">
-        <button class="loc-btn" onclick="grabLocation()" id="loc-btn">
-          <span class="li">📍</span>
-          <span id="loc-btn-txt">Нажмите чтобы определить местоположение</span>
-        </button>
-        <div class="loc-state" id="loc-state"></div>
-        <div class="office-badge" id="office-badge"></div>
+      <div class="addr-form-body">
+        <!-- Method tabs -->
+        <div class="mtabs">
+          <button class="mtab on" id="mtab-gps" onclick="switchMethod('gps')"><i>📍</i><span id="mtl-gps">GPS</span></button>
+          <button class="mtab" id="mtab-manual" onclick="switchMethod('manual')"><i>✏️</i><span id="mtl-manual">Вручную</span></button>
+        </div>
+
+        <!-- GPS panel -->
+        <div class="mpanel show" id="mpanel-gps">
+          <button class="gps-btn" onclick="grabGPS()" id="gps-btn"><span style="font-size:22px">📍</span><span id="gps-lbl">Поделиться геолокацией</span></button>
+          <div class="gps-status" id="gps-status"></div>
+          <div id="gps-extra" style="display:none">
+            <label class="flabel" id="lbl-type-gps">ТИП АДРЕСА</label>
+            <div class="type-chips" id="tchips-gps"></div>
+            <div id="tfields-gps"></div>
+          </div>
+        </div>
+
+        <!-- Manual panel -->
+        <div class="mpanel" id="mpanel-manual">
+          <label class="flabel" id="lbl-area">РАЙОН / ЗОНА</label>
+          <div class="type-chips" id="area-chips" style="margin-bottom:12px"></div>
+          <label class="flabel" id="lbl-street">УЛИЦА / ЗДАНИЕ</label>
+          <input class="finput" id="man-street" type="text" style="margin-bottom:12px" placeholder="JVC Bloom Tower / Jumeirah St">
+          <label class="flabel" id="lbl-type-man">ТИП АДРЕСА</label>
+          <div class="type-chips" id="tchips-man"></div>
+          <div id="tfields-man"></div>
+        </div>
+
+        <div class="opill" id="opill"></div>
+        <div class="ferr" id="addr-form-err"></div>
+
+        <!-- Name label -->
+        <label class="flabel" style="margin-top:14px" id="lbl-addr-name">НАЗВАНИЕ АДРЕСА</label>
+        <input class="finput" id="addr-name-in" type="text" placeholder="Дом / Офис / JVC...">
+
+        <button class="btn-main" style="margin-top:14px" onclick="saveNewAddress()" id="save-addr-btn">💾 Сохранить адрес</button>
       </div>
     </div>
-
-    <!-- Step 2: Address -->
-    <div class="co-card">
-      <div class="co-head">
-        <div class="co-num" id="n2">2</div>
-        <div class="co-title" id="ct2">Адрес доставки</div>
-      </div>
-      <div class="co-inner">
-        <label class="flabel" id="addr-lbl">УЛИЦА, ДОМ, КВАРТИРА / ОФИС</label>
-        <input class="finput" id="addr-in" type="text" placeholder="ул. Ленина, д. 5, кв. 12" oninput="clearErr('addr')">
-        <div class="ferr" id="addr-err"></div>
-      </div>
-    </div>
-
-    <!-- Step 3: Phone -->
-    <div class="co-card">
-      <div class="co-head">
-        <div class="co-num" id="n3">3</div>
-        <div class="co-title" id="ct3">Номер телефона</div>
-      </div>
-      <div class="co-inner">
-        <label class="flabel" id="phone-lbl">ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ</label>
-        <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="79001234567" oninput="clearErr('phone')">
-        <div class="ferr" id="phone-err"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Summary -->
-  <div class="sum-card" id="sum-card">
-    <div class="sum-title" id="sum-title">Ваш заказ</div>
-    <div id="sum-items"></div>
-    <div class="sum-div"></div>
-    <div class="sum-line" id="sum-tip-row" style="display:none">
-      <span id="sum-tip-lbl">Чаевые</span><span id="sum-tip-val">0 AED</span>
-    </div>
-    <div class="sum-total">
-      <span id="sum-tot-lbl">Итого</span>
-      <span id="sum-tot-val">0 AED</span>
-    </div>
-  </div>
-
-  <div class="co-foot">
-    <button class="btn-main" id="place-btn" onclick="placeOrder()">✅ Подтвердить заказ</button>
   </div>
 </div>
 
-<!-- ═══════════ ORDERS PAGE ═══════════ -->
+<!-- ═══ ORDERS ═══ -->
 <div id="pg-orders" class="page hidden">
   <div class="hdr">
     <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-ord">История</div></div>
@@ -302,7 +349,7 @@ img{display:block}
   <div id="orders-list"></div>
 </div>
 
-<!-- ═══════════ PROFILE PAGE ═══════════ -->
+<!-- ═══ PROFILE ═══ -->
 <div id="pg-profile" class="page hidden">
   <div class="hdr">
     <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-prof">Профиль</div></div>
@@ -323,523 +370,772 @@ img{display:block}
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
-<div class="bnav">
-  <button class="nb on" id="nb-catalog" onclick="go('catalog')">
-    <i>🍾</i><span id="nbl-cat">Каталог</span>
-  </button>
-  <button class="nb" id="nb-cart" onclick="go('cart')">
-    <i>🛒</i><span id="nbl-cart">Корзина</span>
-  </button>
-  <button class="nb" id="nb-checkout" onclick="go('checkout');buildSummary()">
-    <i>📋</i><span id="nbl-co">Заказ</span>
-  </button>
-  <button class="nb" id="nb-orders" onclick="go('orders')">
-    <i>📦</i><span id="nbl-ord">История</span>
-  </button>
-  <button class="nb" id="nb-profile" onclick="go('profile');buildProfile()">
-    <i>👤</i><span id="nbl-prof">Профиль</span>
-  </button>
+<!-- CHECKOUT (hidden, used by placeOrder) -->
+<div id="pg-checkout" class="page hidden">
+  <div class="hdr">
+    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-co">Оформление</div></div>
+    <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
+  </div>
+  <div class="co-body">
+    <div class="co-card">
+      <div class="co-head"><div class="co-num">1</div><div class="co-title" id="co-addr-title">Адрес доставки</div></div>
+      <div class="co-inner" id="co-addr-preview" style="font-size:13px;color:var(--sub);line-height:1.6"></div>
+    </div>
+    <div class="co-card">
+      <div class="co-head"><div class="co-num">2</div><div class="co-title" id="ct2">Номер телефона</div></div>
+      <div class="co-inner">
+        <label class="flabel" id="phone-lbl">ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ</label>
+        <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="971501234567" oninput="this.classList.remove('err');el('phone-err').classList.remove('on')">
+        <div class="ferr" id="phone-err"></div>
+      </div>
+    </div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-title" id="sum-title">Ваш заказ</div>
+    <div id="sum-items"></div>
+    <div class="sum-div"></div>
+    <div class="sum-line" id="sum-tip-row" style="display:none"><span id="sum-tip-lbl">Чаевые</span><span id="sum-tip-val">0 AED</span></div>
+    <div class="sum-total"><span id="sum-tot-lbl">Итого</span><span id="sum-tot-val">0 AED</span></div>
+  </div>
+  <div class="co-foot"><button class="btn-main" id="place-btn" onclick="placeOrder()">✅ Подтвердить заказ</button></div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- NAV -->
+<div class="bnav">
+  <button class="nb on" id="nb-catalog" onclick="go('catalog')"><i>🍾</i><span id="nbl-cat">Каталог</span></button>
+  <button class="nb" id="nb-cart" onclick="go('cart')"><i>🛒</i><span id="nbl-cart">Корзина</span></button>
+  <button class="nb" id="nb-address" onclick="go('address')"><i>📍</i><span id="nbl-addr">Адреса</span></button>
+  <button class="nb" id="nb-orders" onclick="go('orders')"><i>📦</i><span id="nbl-ord">История</span></button>
+  <button class="nb" id="nb-profile" onclick="go('profile');buildProfile()"><i>👤</i><span id="nbl-prof">Профиль</span></button>
+</div>
+
+<!-- Address selector modal -->
+<div class="modal-overlay" id="addr-modal" onclick="closeAddrModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Адрес доставки</div>
+    <div id="modal-addr-list"></div>
+    <div class="modal-add-btn" onclick="closeAddrModal();go('address')">
+      <span style="font-size:20px">➕</span><span id="modal-add-lbl">Добавить новый адрес</span>
+    </div>
+  </div>
+</div>
+
+<!-- Location mismatch confirm -->
+<div class="confirm-overlay" id="loc-confirm">
+  <div class="confirm-box">
+    <div class="confirm-icon">📍</div>
+    <div class="confirm-title" id="lc-title">Вы там?</div>
+    <div class="confirm-msg" id="lc-msg">Похоже, вы находитесь далеко от выбранного адреса. Оформить заказ туда?</div>
+    <div class="confirm-btns">
+      <button class="confirm-yes" onclick="confirmLocYes()" id="lc-yes">Да, заказать</button>
+      <button class="confirm-no" onclick="confirmLocNo()" id="lc-no">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toasts (two elements to avoid stuck animation) -->
+<div class="toast" id="toast0"></div>
+<div class="toast" id="toast1"></div>
 
 <script>
-// ══════════════════════════════════════
-// OFFICES + HAVERSINE ROUTING
-// ══════════════════════════════════════
+// ── OFFICES ───────────────────────────────────────────────────────────────────
 const OFFICES=[
-  {id:"office_central", name:"Ambar — Центр",   lat:55.7558, lon:37.6173},
-  {id:"office_north",   name:"Ambar — Север",   lat:55.8200, lon:37.5900},
-  {id:"office_south",   name:"Ambar — Юг",      lat:55.6900, lon:37.6400},
+  {id:'office_central',name:'Ambar Central',lat:25.0969,lon:55.1587},
+  {id:'office_north',  name:'Ambar North',  lat:25.0474,lon:55.2386},
 ];
+const AREAS={
+  ru:[
+    {lbl:'Центр / Downtown',   office:'office_central'},
+    {lbl:'Дейра / Бур-Дубай', office:'office_central'},
+    {lbl:'Марина / JBR',       office:'office_north'},
+    {lbl:'JLT / Jumeirah',     office:'office_north'},
+    {lbl:'Бизнес Бэй',         office:'office_central'},
+    {lbl:'JVC / JVT',          office:'office_north'},
+    {lbl:'Другой район',       office:'office_central'},
+  ],
+  en:[
+    {lbl:'Downtown / DIFC',   office:'office_central'},
+    {lbl:'Deira / Bur Dubai', office:'office_central'},
+    {lbl:'Marina / JBR',      office:'office_north'},
+    {lbl:'JLT / Jumeirah',    office:'office_north'},
+    {lbl:'Business Bay',      office:'office_central'},
+    {lbl:'JVC / JVT',         office:'office_north'},
+    {lbl:'Other area',        office:'office_central'},
+  ],
+};
+const TYPES={
+  ru:[
+    {id:'home',  icon:'🏠',lbl:'Дом / Вилла',fields:[
+      {k:'villa',   l:'ВИЛЛА / ДОМ',       p:'Вилла 54  или  Mimosa Cluster, Villa 63',req:true},
+      {k:'street',  l:'УЛИЦА / ОРИЕНТИР',   p:'Jumeirah St, рядом с парком',            req:false},
+    ]},
+    {id:'apt',   icon:'🏢',lbl:'Квартира',fields:[
+      {k:'complex', l:'ЖК / ЗДАНИЕ',        p:'Marina Heights',                         req:true},
+      {k:'apt',     l:'НОМЕР КВАРТИРЫ',     p:'702',                                    req:true},
+      {k:'floor',   l:'ЭТАЖ',              p:'7',                                      req:false},
+      {k:'entrance',l:'ПОДЪЕЗД / ВХОД',    p:'B',                                      req:false},
+    ]},
+    {id:'office',icon:'💼',lbl:'Офис',fields:[
+      {k:'building',l:'БЦ / ЗДАНИЕ',        p:'DIFC Gate Building',                     req:true},
+      {k:'floor',   l:'ЭТАЖ',              p:'12',                                     req:false},
+      {k:'room',    l:'ОФИС',              p:'305',                                    req:false},
+    ]},
+    {id:'other', icon:'📌',lbl:'Другое',fields:[
+      {k:'details', l:'ОПИСАНИЕ / ОРИЕНТИР',p:'Любые детали...',                        req:true},
+    ]},
+  ],
+  en:[
+    {id:'home',  icon:'🏠',lbl:'House / Villa',fields:[
+      {k:'villa',   l:'VILLA / HOUSE',      p:'Villa 54  or  Mimosa Cluster, Villa 63', req:true},
+      {k:'street',  l:'STREET / LANDMARK',  p:'Jumeirah St, near the park',             req:false},
+    ]},
+    {id:'apt',   icon:'🏢',lbl:'Apartment',fields:[
+      {k:'complex', l:'BUILDING / COMPLEX', p:'Marina Heights',                         req:true},
+      {k:'apt',     l:'APARTMENT NO.',      p:'702',                                    req:true},
+      {k:'floor',   l:'FLOOR',             p:'7',                                      req:false},
+      {k:'entrance',l:'ENTRANCE / GATE',   p:'B',                                      req:false},
+    ]},
+    {id:'office',icon:'💼',lbl:'Office',fields:[
+      {k:'building',l:'BUILDING / TOWER',   p:'DIFC Gate Building',                     req:true},
+      {k:'floor',   l:'FLOOR',             p:'12',                                     req:false},
+      {k:'room',    l:'OFFICE / UNIT',     p:'305',                                    req:false},
+    ]},
+    {id:'other', icon:'📌',lbl:'Other',fields:[
+      {k:'details', l:'DESCRIPTION',        p:'Any details, landmarks...',              req:true},
+    ]},
+  ],
+};
 
-function haversine(a,b,c,d){
-  const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180;
-  const e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;
-  return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));
+function hav(a,b,c,d){const R=6371,dl=(c-a)*Math.PI/180,dm=(d-b)*Math.PI/180,e=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dm/2)**2;return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
+function nearestOffice(lat,lon){return OFFICES.reduce((b,o)=>{const d=hav(lat,lon,o.lat,o.lon);return(!b||d<b._d)?{...o,_d:d}:b;},null);}
+
+// ── CATALOG ───────────────────────────────────────────────────────────────────
+let P=[];
+async function loadCatalog(){
+  try{
+    const r=await fetch('https://nakhundov02.github.io/ambarwebpage/catalog.json?t='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    P=await r.json();
+  }catch(e){console.warn('Catalog failed:',e);}
+  buildChips();renderGrid();
 }
-
-function nearestOffice(lat,lon){
-  return OFFICES.reduce((best,o)=>{
-    const d=haversine(lat,lon,o.lat,o.lon);
-    return(!best||d<best._d)?{...o,_d:d}:best;
-  },null);
-}
-
-// ══════════════════════════════════════
-// PRODUCTS
-// ══════════════════════════════════════
-const P=[];
-
 const TIP_OPTS=[0,50,100,200,500];
 
-// ══════════════════════════════════════
-// TRANSLATIONS
-// ══════════════════════════════════════
+// ── TRANSLATIONS ──────────────────────────────────────────────────────────────
 const TX={
 ru:{
-  catalog:"Каталог",cart:"Корзина",co:"Заказ",orders:"История",profile:"Профиль",
-  all:"Все",total:"ИТОГО",tip:"ЧАЕВЫЕ",noTip:"Без чаевых",customTip:"✏️ Своя",
-  coBtn:"Оформить заказ →",clearCart:"🗑 Очистить корзину",
-  ct1:"Геолокация",ct2:"Адрес доставки",ct3:"Номер телефона",
-  locBtn:"📍 Нажмите для определения местоположения",
-  locGetting:"⏳ Определяем...",
-  locOk:"✅ Местоположение определено",
-  locFail:"⚠️ Не удалось получить геолокацию. Продолжите без неё.",
-  officeLabel:"🏢 Ближайший офис:",
-  addrLbl:"УЛИЦА, ДОМ, КВАРТИРА / ОФИС",
-  addrPh:"ул. Ленина, д. 5, кв. 12",
-  addrErr:"❌ Адрес слишком короткий — минимум 10 символов",
-  phoneLbl:"ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ",
-  phonePh:"79001234567",
-  phoneErr:"❌ Введите корректный номер телефона (10–15 цифр, только цифры)",
-  sumTitle:"Ваш заказ",tipLbl:"Чаевые",totLbl:"Итого",
-  placeBtn:"✅ Подтвердить заказ",
-  noOrders:"Заказов пока нет",noActive:"Нет активных заказов",
-  stP:"🟡 Ожидает",stC:"🟢 Принят",stD:"✅ Доставлен",stX:"❌ Отменён",
-  added:"Добавлено в корзину",emptyCart:"Корзина пуста — добавьте товары из каталога",
-  placed:"✅ Заказ оформлен! Ожидайте звонка.",
-  activeOrders:"Активные заказы",oos:"НЕТ",
-  statOrders:"ЗАКАЗОВ",statActive:"АКТИВНЫХ",statSpent:"ПОТРАЧЕНО",
+  catalog:'Каталог',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
+  all:'Все',total:'ИТОГО',tip:'ЧАЕВЫЕ',noTip:'Без чаевых',customTip:'✏️ Своя',
+  coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',
+  addrPill:'Добавьте адрес доставки',addrPillChange:'Изменить',
+  modalTitle:'Адрес доставки',modalAdd:'Добавить новый адрес',
+  cabLabel:'АДРЕС ДОСТАВКИ',cabNoAddr:'Не выбран — нажмите чтобы добавить',cabChange:'Изменить',
+  shSaved:'Сохранённые адреса',addFormTitle:'➕ Добавить адрес',
+  lblArea:'РАЙОН / ЗОНА',lblStreet:'УЛИЦА / ЗДАНИЕ',lblTypeGps:'ТИП АДРЕСА',lblTypeMan:'ТИП АДРЕСА',
+  gpsBtn:'📍 Поделиться геолокацией',gpsBtnLoading:'⏳ Определяем...',
+  gpsOk:'✅ Геолокация получена — выберите тип',gpsFail:'⚠️ Не удалось получить геолокацию',
+  lblAddrName:'НАЗВАНИЕ АДРЕСА',saveAddrBtn:'💾 Сохранить адрес',
+  addrSaved:'Адрес сохранён ✓',addrDeleted:'Адрес удалён',addrSelected:'Адрес выбран',
+  nearOffice:'Ближайший офис',
+  addrFormErr:'❌ Заполните обязательные поля',areaErr:'❌ Выберите район',
+  noSaved:'Нет сохранённых адресов — добавьте первый!',
+  activeAddrLabel:'АКТИВНЫЙ',
+  ct2:'Номер телефона',phoneLbl:'ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ',phoneErr:'❌ Введите корректный номер (10–15 цифр)',
+  sumTitle:'Ваш заказ',tipLbl:'Чаевые',totLbl:'Итого',placeBtn:'✅ Подтвердить заказ',
+  coAddrTitle:'Адрес доставки',
+  noOrders:'Заказов пока нет',noActive:'Нет активных заказов',
+  stP:'🟡 Ожидает',stC:'🟢 Принят',stD:'✅ Доставлен',stX:'❌ Отменён',
+  added:'Добавлено',emptyCart:'Корзина пуста',
+  placed:'✅ Заказ оформлен! Ожидайте звонка.',
+  activeOrders:'Активные заказы',oos:'НЕТ',
+  statOrders:'ЗАКАЗОВ',statActive:'АКТИВНЫХ',statSpent:'ПОТРАЧЕНО',
+  noAddrWarning:'Сначала добавьте адрес доставки',
+  lcTitle:'Вы там?',
+  lcMsg:'Похоже, вы сейчас далеко от выбранного адреса. Всё равно оформить заказ туда?',
+  lcYes:'Да, оформить',lcNo:'Отмена',
 },
 en:{
-  catalog:"Catalog",cart:"Cart",co:"Order",orders:"History",profile:"Profile",
-  all:"All",total:"TOTAL",tip:"TIP",noTip:"No tip",customTip:"✏️ Custom",
-  coBtn:"Checkout →",clearCart:"🗑 Clear cart",
-  ct1:"Geolocation",ct2:"Delivery address",ct3:"Phone number",
-  locBtn:"📍 Tap to share location",
-  locGetting:"⏳ Getting location...",
-  locOk:"✅ Location received",
-  locFail:"⚠️ Could not get location. Continue without it.",
-  officeLabel:"🏢 Nearest office:",
-  addrLbl:"STREET, BUILDING, APARTMENT",
-  addrPh:"123 Example St, Apt 12",
-  addrErr:"❌ Address too short — minimum 10 characters",
-  phoneLbl:"DIGITS ONLY, 10–15 DIGITS",
-  phonePh:"79001234567",
-  phoneErr:"❌ Enter a valid phone number (10–15 digits, numbers only)",
-  sumTitle:"Your order",tipLbl:"Tip",totLbl:"Total",
-  placeBtn:"✅ Confirm order",
-  noOrders:"No orders yet",noActive:"No active orders",
-  stP:"🟡 Pending",stC:"🟢 Confirmed",stD:"✅ Delivered",stX:"❌ Cancelled",
-  added:"Added to cart",emptyCart:"Cart is empty — add items from the catalog",
-  placed:"✅ Order placed! Our operator will call you.",
-  activeOrders:"Active orders",oos:"N/A",
-  statOrders:"ORDERS",statActive:"ACTIVE",statSpent:"SPENT AED",
+  catalog:'Catalog',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
+  all:'All',total:'TOTAL',tip:'TIP',noTip:'No tip',customTip:'✏️ Custom',
+  coBtn:'Checkout →',clearCart:'🗑 Clear cart',
+  addrPill:'Add delivery address',addrPillChange:'Change',
+  modalTitle:'Delivery address',modalAdd:'Add new address',
+  cabLabel:'DELIVERY ADDRESS',cabNoAddr:'Not set — tap to add',cabChange:'Change',
+  shSaved:'Saved addresses',addFormTitle:'➕ Add address',
+  lblArea:'AREA / ZONE',lblStreet:'STREET / BUILDING',lblTypeGps:'ADDRESS TYPE',lblTypeMan:'ADDRESS TYPE',
+  gpsBtn:'📍 Share my location',gpsBtnLoading:'⏳ Getting location...',
+  gpsOk:'✅ Location received — select type',gpsFail:'⚠️ Could not get location',
+  lblAddrName:'ADDRESS LABEL',saveAddrBtn:'💾 Save address',
+  addrSaved:'Address saved ✓',addrDeleted:'Address removed',addrSelected:'Address selected',
+  nearOffice:'Nearest office',
+  addrFormErr:'❌ Fill in required fields',areaErr:'❌ Select an area',
+  noSaved:'No saved addresses — add your first one!',
+  activeAddrLabel:'ACTIVE',
+  ct2:'Phone Number',phoneLbl:'DIGITS ONLY, 10–15 DIGITS',phoneErr:'❌ Enter a valid phone (10–15 digits)',
+  sumTitle:'Your order',tipLbl:'Tip',totLbl:'Total',placeBtn:'✅ Confirm order',
+  coAddrTitle:'Delivery address',
+  noOrders:'No orders yet',noActive:'No active orders',
+  stP:'🟡 Pending',stC:'🟢 Confirmed',stD:'✅ Delivered',stX:'❌ Cancelled',
+  added:'Added',emptyCart:'Cart is empty',
+  placed:'✅ Order placed! We\'ll call you.',
+  activeOrders:'Active orders',oos:'N/A',
+  statOrders:'ORDERS',statActive:'ACTIVE',statSpent:'SPENT AED',
+  noAddrWarning:'Please add a delivery address first',
+  lcTitle:'Are you there?',
+  lcMsg:'It looks like you\'re not near the selected address. Order there anyway?',
+  lcYes:'Yes, order',lcNo:'Cancel',
 },
 };
 
-// ══════════════════════════════════════
-// STATE
-// ══════════════════════════════════════
-let lang="ru", cart={}, catF="all", tip=0, locInfo=null;
-let orders=JSON.parse(localStorage.getItem("ambar_orders")||"[]");
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let lang='ru',cart={},catF='all',tip=0;
+let curMethod='gps',selTypeGps=null,selTypeMan=null,selArea=null;
+let locInfo=null;    // GPS result {lat,lon,office_id,office_name}
+let activeAddrIdx=null; // index into getSaved() — the selected delivery address
+let orders=JSON.parse(localStorage.getItem('ambar_orders')||'[]');
+let curPg='catalog';
+let pendingOrderConfirmed=false; // for location mismatch flow
 const tg=window.Telegram?.WebApp||null;
 
-// ══════════════════════════════════════
-// BOOT
-// ══════════════════════════════════════
-function initApp(){
-  if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor("#07070E");tg.setBackgroundColor&&tg.setBackgroundColor("#07070E");}
-  buildChips();renderGrid();buildTips();renderOrders();applyLang();
-}
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#07070E');tg.setBackgroundColor&&tg.setBackgroundColor('#07070E');}
+  // Restore active address index
+  const saved=localStorage.getItem('ambar_active_addr');
+  if(saved!==null) activeAddrIdx=parseInt(saved);
+  // Validate it still exists
+  if(activeAddrIdx!==null&&!getSaved()[activeAddrIdx]) activeAddrIdx=null;
+  buildTips();renderOrders();applyLang();loadCatalog();
+  updateAddrPill();updateCartAddrBar();
+});
 
-// ══════════════════════════════════════
-// LANG
-// ══════════════════════════════════════
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function t(k){return TX[lang][k]||TX.ru[k]||k;}
-function flipLang(){
-  lang=lang==="ru"?"en":"ru";
-  document.querySelectorAll(".lang-btn").forEach(b=>b.textContent=lang==="ru"?"🇷🇺":"🇬🇧");
-  applyLang();buildChips();renderGrid();buildTips();renderOrders();renderCart();buildSummary();buildProfile();
-}
-function applyLang(){
-  const f=lang==="ru"?"🇷🇺":"🇬🇧";
-  document.querySelectorAll(".lang-btn").forEach(b=>b.textContent=f);
-  set("sh-catalog",t("catalog")); set("ls-cart",t("cart")); set("ls-co",t("co"));
-  set("ls-ord",t("orders")); set("ls-prof",t("profile"));
-  set("sh-orders",t("orders")); set("sh-active",t("activeOrders"));
-  set("nbl-cat",t("catalog")); set("nbl-cart",t("cart")); set("nbl-co",t("co"));
-  set("nbl-ord",t("orders")); set("nbl-prof",t("profile"));
-  set("tot-lbl",t("total")); set("co-btn",t("coBtn")); set("clear-btn",t("clearCart"));
-  set("ct1",t("ct1")); set("ct2",t("ct2")); set("ct3",t("ct3"));
-  set("loc-btn-txt",t("locBtn"));
-  set("addr-lbl",t("addrLbl")); el("addr-in").placeholder=t("addrPh");
-  set("phone-lbl",t("phoneLbl")); el("phone-in").placeholder=t("phonePh");
-  set("sum-title",t("sumTitle")); set("sum-tip-lbl",t("tipLbl")); set("sum-tot-lbl",t("totLbl"));
-  set("place-btn",t("placeBtn")); set("tip-lbl",t("tip"));
-  el("tip-input").placeholder=lang==="ru"?"Введите сумму...":"Enter amount...";
-}
 function el(id){return document.getElementById(id);}
 function set(id,v){const e=el(id);if(e)e.textContent=v;}
 
-// ══════════════════════════════════════
-// PAGES
-// ══════════════════════════════════════
-let curPg="catalog";
-const PAGES=["catalog","cart","checkout","orders","profile"];
+// ── LANGUAGE ──────────────────────────────────────────────────────────────────
+function flipLang(){
+  lang=lang==='ru'?'en':'ru';
+  applyLang();buildChips();renderGrid();buildTips();renderOrders();renderCart();buildSummary();buildProfile();
+  buildTypeChips('gps');buildTypeChips('man');buildAreaChips();renderSavedCards();updateAddrPill();updateCartAddrBar();
+}
+function applyLang(){
+  const f=lang==='ru'?'🇷🇺':'🇬🇧';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=f);
+  set('sh-catalog',t('catalog'));set('ls-cart',t('cart'));set('ls-addr',t('addrPage'));
+  set('ls-ord',t('orders'));set('ls-prof',t('profile'));
+  set('sh-orders',t('orders'));set('sh-active',t('activeOrders'));
+  set('nbl-cat',t('catalog'));set('nbl-cart',t('cart'));set('nbl-addr',t('addrPage'));
+  set('nbl-ord',t('orders'));set('nbl-prof',t('profile'));
+  set('tot-lbl',t('total'));set('co-btn',t('coBtn'));set('clear-btn',t('clearCart'));
+  set('modal-title',t('modalTitle'));set('modal-add-lbl',t('modalAdd'));
+  set('sh-saved-addr',t('shSaved'));set('add-form-title',t('addFormTitle'));
+  set('lbl-area',t('lblArea'));set('lbl-street',t('lblStreet'));
+  set('lbl-type-gps',t('lblTypeGps'));set('lbl-type-man',t('lblTypeMan'));
+  set('gps-lbl',t('gpsBtn'));
+  set('lbl-addr-name',t('lblAddrName'));set('save-addr-btn',t('saveAddrBtn'));
+  set('cab-label',t('cabLabel'));set('cab-change',t('cabChange'));
+  set('ct2',t('ct2'));set('phone-lbl',t('phoneLbl'));
+  el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
+  el('man-street').placeholder=lang==='ru'?'JVC Bloom Tower / Jumeirah St':'JVC Bloom Tower / Jumeirah St';
+  el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
+  set('sum-title',t('sumTitle'));set('sum-tip-lbl',t('tipLbl'));set('sum-tot-lbl',t('totLbl'));
+  set('place-btn',t('placeBtn'));set('tip-lbl',t('tip'));set('co-addr-title',t('coAddrTitle'));
+  el('tip-input').placeholder=lang==='ru'?'Введите сумму...':'Enter amount...';
+  set('mtl-gps','GPS');set('mtl-manual',lang==='ru'?'Вручную':'Manual');
+  set('lc-title',t('lcTitle'));set('lc-msg',t('lcMsg'));set('lc-yes',t('lcYes'));set('lc-no',t('lcNo'));
+}
+
+// ── PAGES ─────────────────────────────────────────────────────────────────────
+const PAGES=['catalog','cart','address','orders','profile','checkout'];
 function go(p){
   PAGES.forEach(id=>{
-    el("pg-"+id)?.classList.toggle("hidden",id!==p);
-    el("nb-"+id)?.classList.toggle("on",id===p);
+    el('pg-'+id)?.classList.toggle('hidden',id!==p);
+    el('nb-'+id)?.classList.toggle('on',id===p);
   });
   curPg=p;
-  if(p==="cart")renderCart();
-  if(p==="orders")renderOrders();
-  if(p==="checkout")buildSummary();
-  if(p==="profile")buildProfile();
+  if(p==='cart'){renderCart();updateCartAddrBar();}
+  if(p==='orders')renderOrders();
+  if(p==='address'){renderSavedCards();buildTypeChips('gps');buildAreaChips();buildTypeChips('man');}
+  if(p==='profile')buildProfile();
+  if(p==='checkout')buildSummary();
 }
 
-// ══════════════════════════════════════
-// CATEGORY CHIPS
-// ══════════════════════════════════════
+// ── SAVED ADDRESSES ───────────────────────────────────────────────────────────
+function getSaved(){return JSON.parse(localStorage.getItem('ambar_saved')||'[]');}
+function setSaved(a){localStorage.setItem('ambar_saved',JSON.stringify(a.slice(0,10)));}
+function setActiveAddr(idx){
+  activeAddrIdx=idx;
+  if(idx===null)localStorage.removeItem('ambar_active_addr');
+  else localStorage.setItem('ambar_active_addr',String(idx));
+  updateAddrPill();updateCartAddrBar();
+}
+
+function updateAddrPill(){
+  const arr=getSaved();
+  const dot=el('addr-pill-dot'),txt=el('addr-pill-txt');
+  if(!dot||!txt)return;
+  if(activeAddrIdx!==null&&arr[activeAddrIdx]){
+    const a=arr[activeAddrIdx];
+    dot.style.background='var(--green)';
+    txt.textContent=a.label||a.address;
+  } else {
+    dot.style.background='var(--muted)';
+    txt.textContent=t('addrPill');
+  }
+}
+
+function updateCartAddrBar(){
+  const arr=getSaved();
+  const cab=el('cab-addr');if(!cab)return;
+  if(activeAddrIdx!==null&&arr[activeAddrIdx]){
+    const a=arr[activeAddrIdx];
+    cab.textContent=a.label?a.label+' — '+a.address:a.address;
+    cab.style.color='var(--text)';
+  } else {
+    cab.textContent=t('cabNoAddr');
+    cab.style.color='var(--muted)';
+  }
+}
+
+function renderSavedCards(){
+  const arr=getSaved();
+  const wrap=el('saved-cards');if(!wrap)return;
+  if(!arr.length){
+    wrap.innerHTML=`<div class="empty" style="padding:24px 0"><div class="empty-icon">📍</div><div>${t('noSaved')}</div></div>`;
+    return;
+  }
+  wrap.innerHTML=arr.map((a,i)=>{
+    const isActive=i===activeAddrIdx;
+    const typeIcon=a.typeIcon||'📍';
+    return`<div class="saved-card${isActive?' active-addr':''}">
+      ${isActive?`<div class="active-badge">${t('activeAddrLabel')}</div>`:''}
+      <span class="sc-icon">${typeIcon}</span>
+      <div class="sc-info">
+        <div class="sc-label">${a.label||a.address}</div>
+        <div class="sc-addr">${a.label&&a.label!==a.address?a.address:''}</div>
+        <div class="sc-office">🏢 ${a.office_name||''}</div>
+      </div>
+      <div class="sc-actions">
+        <button class="sc-btn sel" onclick="selectAddr(${i})" title="Выбрать">✓</button>
+        <button class="sc-btn del" onclick="deleteAddr(${i})" title="Удалить">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectAddr(i){
+  setActiveAddr(i);
+  renderSavedCards();
+  closeAddrModal();
+  showToast(t('addrSelected')+': '+(getSaved()[i]?.label||''),'ok');
+}
+
+function deleteAddr(i){
+  const arr=getSaved();arr.splice(i,1);setSaved(arr);
+  // Adjust active index
+  if(activeAddrIdx===i) setActiveAddr(arr.length?0:null);
+  else if(activeAddrIdx!==null&&activeAddrIdx>i) setActiveAddr(activeAddrIdx-1);
+  renderSavedCards();renderModalAddrList();
+  showToast(t('addrDeleted'),'ok');
+}
+
+// ── ADDRESS MODAL ─────────────────────────────────────────────────────────────
+function openAddrModal(){
+  renderModalAddrList();
+  el('addr-modal').classList.add('show');
+}
+function closeAddrModal(e){
+  if(e&&e.target!==el('addr-modal'))return;
+  el('addr-modal').classList.remove('show');
+}
+function renderModalAddrList(){
+  const arr=getSaved();
+  const list=el('modal-addr-list');if(!list)return;
+  if(!arr.length){
+    list.innerHTML=`<div style="padding:20px 16px;font-size:13px;color:var(--muted)">${t('noSaved')}</div>`;return;
+  }
+  list.innerHTML=arr.map((a,i)=>`
+    <div class="modal-addr-item${i===activeAddrIdx?' active':''}" onclick="selectAddr(${i})">
+      <span class="mai-icon">${a.typeIcon||'📍'}</span>
+      <div class="mai-info">
+        <div class="mai-label">${a.label||a.address}</div>
+        <div class="mai-addr">${a.label&&a.label!==a.address?a.address:a.office_name||''}</div>
+      </div>
+      ${i===activeAddrIdx?'<span class="mai-check">✓</span>':''}
+    </div>
+  `).join('');
+}
+
+// ── METHOD TABS ───────────────────────────────────────────────────────────────
+function switchMethod(m){
+  curMethod=m;
+  ['gps','manual'].forEach(id=>{
+    el('mtab-'+id)?.classList.toggle('on',id===m);
+    el('mpanel-'+id)?.classList.toggle('show',id===m);
+  });
+  if(m==='manual'){buildAreaChips();buildTypeChips('man');}
+  if(m==='gps'){buildTypeChips('gps');}
+  const ae=el('addr-form-err');if(ae){ae.classList.remove('on');ae.textContent='';}
+}
+
+// ── AREA CHIPS ────────────────────────────────────────────────────────────────
+function buildAreaChips(){
+  const ac=el('area-chips');if(!ac)return;
+  ac.innerHTML=AREAS[lang].map((a,i)=>`
+    <button class="type-chip${selArea===i?' on':''}" onclick="pickArea(${i})">${a.lbl}</button>
+  `).join('');
+}
+function pickArea(i){
+  selArea=i;buildAreaChips();
+  const area=AREAS[lang][i];
+  const off=OFFICES.find(o=>o.id===area.office)||OFFICES[0];
+  locInfo={lat:0,lon:0,office_id:off.id,office_name:off.name};
+  showPill(off.name);
+}
+
+// ── TYPE CHIPS ────────────────────────────────────────────────────────────────
+function buildTypeChips(p){
+  const types=TYPES[lang];
+  const sel=p==='gps'?selTypeGps:selTypeMan;
+  const chipsEl=el('tchips-'+p),fieldsEl=el('tfields-'+p);
+  if(!chipsEl||!fieldsEl)return;
+  chipsEl.innerHTML=types.map(tp=>`
+    <button class="type-chip${tp.id===sel?' on':''}" onclick="pickType('${p}','${tp.id}')">${tp.icon} ${tp.lbl}</button>
+  `).join('');
+  if(sel){const tp=types.find(x=>x.id===sel);if(tp)renderFields(p,tp);}
+  else fieldsEl.innerHTML='';
+}
+function pickType(p,id){
+  if(p==='gps')selTypeGps=id;else selTypeMan=id;
+  buildTypeChips(p);
+}
+function renderFields(p,tp){
+  const el_=el('tfields-'+p);if(!el_)return;
+  let html='';
+  for(let i=0;i<tp.fields.length;i+=2){
+    const a=tp.fields[i],b=tp.fields[i+1];
+    const optA=!a.req?` <span style="color:var(--muted);font-size:8px">(${lang==='ru'?'необяз.':'opt.'})</span>`:'';
+    const optB=b&&!b.req?` <span style="color:var(--muted);font-size:8px">(${lang==='ru'?'необяз.':'opt.'})</span>`:'';
+    html+=`<div class="frow">
+      <div><label class="flabel">${a.l}${optA}</label><input class="finput" id="f-${p}-${a.k}" type="text" placeholder="${a.p}"></div>
+      ${b?`<div><label class="flabel">${b.l}${optB}</label><input class="finput" id="f-${p}-${b.k}" type="text" placeholder="${b.p}"></div>`:''}
+    </div>`;
+  }
+  el_.innerHTML=html;
+}
+
+// ── GPS ───────────────────────────────────────────────────────────────────────
+function grabGPS(){
+  const btn=el('gps-btn'),stat=el('gps-status');
+  btn.style.opacity='0.6';set('gps-lbl',t('gpsBtnLoading'));stat.className='gps-status';
+  if(!navigator.geolocation){fail();return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const{latitude:lat,longitude:lon}=pos.coords;
+    const off=nearestOffice(lat,lon);
+    locInfo={lat,lon,office_id:off.id,office_name:off.name};
+    btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));
+    stat.className='gps-status ok';stat.textContent=t('gpsOk');
+    el('gps-extra').style.display='block';
+    buildTypeChips('gps');showPill(off.name);
+  },()=>fail(),{timeout:10000,maximumAge:60000,enableHighAccuracy:true});
+  function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
+}
+
+function showPill(name){
+  const p=el('opill');if(!p)return;
+  p.textContent='🏢 '+t('nearOffice')+': '+name;p.className='opill on';
+}
+
+// ── BUILD ADDRESS STRING ──────────────────────────────────────────────────────
+function buildAddrStr(p){
+  const types=TYPES[lang];
+  const sel=p==='gps'?selTypeGps:selTypeMan;
+  if(!sel)return null;
+  const tp=types.find(x=>x.id===sel);if(!tp)return null;
+  // Check required
+  const missing=tp.fields.filter(f=>f.req&&!(el('f-'+p+'-'+f.k)?.value||'').trim());
+  if(missing.length)return null;
+  const parts=[];
+  if(p==='manual'){
+    if(selArea!==null){const area=AREAS[lang][selArea];if(area)parts.push(area.lbl);}
+    const s=(el('man-street')?.value||'').trim();if(s)parts.push(s);
+  }
+  tp.fields.forEach(f=>{const v=(el('f-'+p+'-'+f.k)?.value||'').trim();if(v)parts.push(f.l+': '+v);});
+  if(!parts.length)return null;
+  return tp.icon+' '+tp.lbl+' — '+parts.join(' | ');
+}
+
+// ── SAVE NEW ADDRESS ──────────────────────────────────────────────────────────
+function saveNewAddress(){
+  const ae=el('addr-form-err');ae.classList.remove('on');ae.textContent='';
+
+  // Validate method
+  if(curMethod==='manual'&&selArea===null){
+    ae.textContent=t('areaErr');ae.classList.add('on');return;
+  }
+  if(curMethod==='gps'&&!locInfo){
+    ae.textContent=t('gpsFail');ae.classList.add('on');return;
+  }
+
+  const addrStr=buildAddrStr(curMethod==='gps'?'gps':'man');
+  if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
+
+  const label=(el('addr-name-in')?.value||'').trim();
+  const types=TYPES[lang];
+  const sel=curMethod==='gps'?selTypeGps:selTypeMan;
+  const tp=types.find(x=>x.id===sel);
+
+  const newAddr={
+    label:label||tp?.lbl||addrStr,
+    address:addrStr,
+    typeIcon:tp?.icon||'📍',
+    lat:locInfo?.lat||0,
+    lon:locInfo?.lon||0,
+    office_id:locInfo?.office_id||'office_central',
+    office_name:locInfo?.office_name||OFFICES[0].name,
+  };
+
+  const arr=getSaved();
+  arr.unshift(newAddr);
+  setSaved(arr);
+
+  // Auto-select if first address
+  if(arr.length===1) setActiveAddr(0);
+  else setActiveAddr(0); // always select the newly added one (it's at index 0)
+
+  // Reset form
+  resetAddrForm();
+  renderSavedCards();
+  showToast(t('addrSaved'),'ok');
+}
+
+function resetAddrForm(){
+  curMethod='gps';selTypeGps=null;selTypeMan=null;selArea=null;locInfo=null;
+  el('gps-status').className='gps-status';
+  el('gps-extra').style.display='none';
+  el('opill').className='opill';
+  el('addr-name-in').value='';
+  el('man-street').value='';
+  el('tfields-gps').innerHTML='';el('tfields-man').innerHTML='';
+  el('addr-form-err').classList.remove('on');el('addr-form-err').textContent='';
+  set('gps-lbl',t('gpsBtn'));
+  switchMethod('gps');buildTypeChips('gps');buildAreaChips();buildTypeChips('man');
+}
+
+// ── CATALOG CHIPS & GRID ──────────────────────────────────────────────────────
 function buildChips(){
-  const cats=["all",...new Set(P.map(p=>lang==="ru"?p.cat:p.catE))];
-  el("cat-chips").innerHTML=cats.map(c=>{
-    const lbl=c==="all"?t("all"):c;
-    return`<button class="chip${c===catF?" on":""}" onclick="setCat('${c}',this)">${lbl}</button>`;
-  }).join("");
+  const cats=['all',...new Set(P.map(p=>lang==='ru'?p.cat:p.catE))];
+  el('cat-chips').innerHTML=cats.map(c=>`<button class="chip${c===catF?' on':''}" onclick="setCat('${c}',this)">${c==='all'?t('all'):c}</button>`).join('');
 }
-function setCat(c,btn){
-  catF=c;
-  document.querySelectorAll(".chip").forEach(b=>b.classList.remove("on"));
-  btn.classList.add("on");
-  renderGrid();
-}
-
-// ══════════════════════════════════════
-// GRID
-// ══════════════════════════════════════
+function setCat(c,btn){catF=c;document.querySelectorAll('.chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderGrid();}
 function renderGrid(){
-  const list=catF==="all"?P:P.filter(p=>(lang==="ru"?p.cat:p.catE)===catF);
-  el("p-grid").innerHTML=list.map(p=>{
+  const list=catF==='all'?P:P.filter(p=>(lang==='ru'?p.cat:p.catE)===catF);
+  el('p-grid').innerHTML=list.map(p=>{
     const qty=cart[p.id]||0;
     return`<div class="pcard">
       <div class="pimg-box">
-        ${!p.stock?`<span class="pbadge oos">${t("oos")}</span>`:""}
-        ${p.isNew?`<span class="pbadge isnew">NEW</span>`:""}
-        <img class="pimg" src="${p.img}" alt="${p.name}"
-          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
+        ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
+        ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
+        <img class="pimg" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
       </div>
       <div class="pinfo">
-        <div class="pcat">${lang==="ru"?p.cat:p.catE}</div>
+        <div class="pcat">${lang==='ru'?p.cat:p.catE}</div>
         <div class="pname">${p.name}</div>
-        <div class="pdesc">${lang==="ru"?p.dRu:p.dEn}</div>
-        <div class="pfoot">
-          <div class="pprice">${p.price}<small> AED</small></div>
-          <div id="ctrl-${p.id}">${ctrlHTML(p,qty)}</div>
-        </div>
+        <div class="pdesc">${lang==='ru'?p.dRu:p.dEn}</div>
+        <div class="pfoot"><div class="pprice">${p.price}<small> AED</small></div><div id="ctrl-${p.id}">${ctrlHTML(p,qty)}</div></div>
       </div>
     </div>`;
-  }).join("");
+  }).join('');
 }
-
 function ctrlHTML(p,qty){
-  if(qty===0) return`<button class="add-btn"${!p.stock?" disabled":""} onclick="addItem('${p.id}')">+</button>`;
-  return`<div class="qctrl">
-    <button class="qb" onclick="chgQty('${p.id}',-1)">−</button>
-    <span class="qn">${qty}</span>
-    <button class="qb" onclick="chgQty('${p.id}',1)">+</button>
-  </div>`;
+  if(qty===0)return`<button class="add-btn"${!p.stock?' disabled':''} onclick="addItem('${p.id}')">+</button>`;
+  return`<div class="qctrl"><button class="qb" onclick="chgQty('${p.id}',-1)">−</button><span class="qn">${qty}</span><button class="qb" onclick="chgQty('${p.id}',1)">+</button></div>`;
 }
-
 function addItem(id){
-  const p=P.find(x=>x.id===id); if(!p||!p.stock) return;
-  cart[id]=1; syncCtrl(id); updHdr();
-  showToast(t("added")+": "+p.name,"ok");
+  const p=P.find(x=>x.id===id);if(!p||!p.stock)return;
+  const max=p.stockQty||999;
+  if((cart[id]||0)>=max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
+  cart[id]=1;syncCtrl(id);updHdr();showToast(t('added')+': '+p.name,'ok');
 }
-
 function chgQty(id,d){
-  const nq=(cart[id]||0)+d;
-  if(nq<=0) delete cart[id]; else cart[id]=nq;
-  syncCtrl(id); updHdr();
-  if(curPg==="cart") renderCart();
+  const p=P.find(x=>x.id===id),max=p?(p.stockQty||999):999,nq=(cart[id]||0)+d;
+  if(d>0&&nq>max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
+  if(nq<=0)delete cart[id];else cart[id]=nq;
+  syncCtrl(id);updHdr();if(curPg==='cart')renderCart();
 }
-
-function syncCtrl(id){
-  const e=el("ctrl-"+id); if(!e) return;
-  const p=P.find(x=>x.id===id);
-  e.innerHTML=ctrlHTML(p,cart[id]||0);
-}
-
-function cartSubtotal(){
-  return Object.entries(cart).reduce((s,[id,qty])=>{
-    const p=P.find(x=>x.id===id); return s+(p?p.price*qty:0);
-  },0);
-}
-
+function syncCtrl(id){const e=el('ctrl-'+id);if(!e)return;const p=P.find(x=>x.id===id);e.innerHTML=ctrlHTML(p,cart[id]||0);}
+function cartSub(){return Object.entries(cart).reduce((s,[id,qty])=>{const p=P.find(x=>x.id===id);return s+(p?p.price*qty:0);},0);}
 function updHdr(){
   const cnt=Object.values(cart).reduce((a,b)=>a+b,0);
-  const tot=cartSubtotal();
-  el("hdr-tot").textContent=tot>0?tot+" AED":"0 AED";
-  const dot=el("hdr-dot"); dot.textContent=cnt; dot.style.display=cnt>0?"flex":"none";
+  el('hdr-tot').textContent=cartSub()+' AED';
+  const dot=el('hdr-dot');dot.textContent=cnt;dot.style.display=cnt>0?'flex':'none';
 }
 
-// ══════════════════════════════════════
-// CART
-// ══════════════════════════════════════
+// ── CART ──────────────────────────────────────────────────────────────────────
 function renderCart(){
   const entries=Object.entries(cart).filter(([,q])=>q>0);
-  const foot=el("cart-foot"), tipSec=el("tip-section");
+  const foot=el('cart-foot'),tipSec=el('tip-section');
   if(!entries.length){
-    el("cart-list").innerHTML=`<div class="empty"><div class="empty-icon">🛒</div><div>${t("emptyCart")}</div></div>`;
-    foot.style.display="none"; tipSec.style.display="none"; return;
+    el('cart-list').innerHTML=`<div class="empty"><div class="empty-icon">🛒</div><div>${t('emptyCart')}</div></div>`;
+    foot.style.display='none';tipSec.style.display='none';return;
   }
-  el("cart-list").innerHTML=entries.map(([id,qty])=>{
-    const p=P.find(x=>x.id===id); if(!p) return"";
-    return`<div class="ci">
-      <img class="ci-img" src="${p.img}" alt="${p.name}"
-        onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 52 62%22><text y=%2248%22 font-size=%2240%22>🍾</text></svg>'">
+  el('cart-list').innerHTML=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id);if(!p)return'';
+    return`<div class="ci"><img class="ci-img" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 52 62%22><text y=%2248%22 font-size=%2240%22>🍾</text></svg>'">
       <div class="ci-info"><div class="ci-name">${p.name}</div><div class="ci-price">${p.price*qty} AED</div></div>
-      <div class="qctrl">
-        <button class="qb" onclick="chgQty('${id}',-1)">−</button>
-        <span class="qn">${qty}</span>
-        <button class="qb" onclick="chgQty('${id}',1)">+</button>
-      </div>
+      <div class="qctrl"><button class="qb" onclick="chgQty('${id}',-1)">−</button><span class="qn">${qty}</span><button class="qb" onclick="chgQty('${id}',1)">+</button></div>
     </div>`;
-  }).join("");
-  el("tot-n").textContent=cartSubtotal()+tip;
-  foot.style.display="block"; tipSec.style.display="block";
+  }).join('');
+  el('tot-n').textContent=cartSub()+tip;foot.style.display='block';tipSec.style.display='block';
 }
+function clearCart(){cart={};tip=0;updHdr();renderCart();buildTips();}
 
-function clearCart(){
-  cart={}; tip=0; updHdr(); renderCart(); buildTips();
-}
-
-// ══════════════════════════════════════
-// TIPS
-// ══════════════════════════════════════
+// ── TIPS ──────────────────────────────────────────────────────────────────────
 function buildTips(){
-  el("tip-row").innerHTML=TIP_OPTS.map((v,i)=>{
-    const isLast=i===TIP_OPTS.length-1;
-    const lbl=isLast?t("customTip"):(v===0?t("noTip"):`${v} AED`);
-    return`<button class="tip-chip${v===tip&&!isLast?" on":""}" onclick="pickTip(${v},${isLast},this)">${lbl}</button>`;
-  }).join("");
-  el("tip-input").placeholder=lang==="ru"?"Введите сумму...":"Enter amount...";
+  el('tip-row').innerHTML=TIP_OPTS.map((v,i)=>{
+    const isLast=i===TIP_OPTS.length-1,lbl=isLast?t('customTip'):(v===0?t('noTip'):`${v} AED`);
+    return`<button class="tip-chip${v===tip&&!isLast?' on':''}" onclick="pickTip(${v},${isLast},this)">${lbl}</button>`;
+  }).join('');
+  el('tip-input').placeholder=lang==='ru'?'Введите сумму...':'Enter amount...';
 }
-
 function pickTip(v,isCustom,btn){
-  document.querySelectorAll(".tip-chip").forEach(b=>b.classList.remove("on"));
-  btn.classList.add("on");
-  const inp=el("tip-input");
-  if(isCustom){
-    inp.style.display="block"; inp.focus();
-    inp.oninput=()=>{tip=Math.max(0,parseInt(inp.value)||0); updCartTot();};
-  } else {
-    inp.style.display="none"; tip=v; updCartTot();
-  }
+  document.querySelectorAll('.tip-chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  const inp=el('tip-input');
+  if(isCustom){inp.style.display='block';inp.focus();inp.oninput=()=>{tip=Math.max(0,parseInt(inp.value)||0);updCartTot()};}
+  else{inp.style.display='none';tip=v;updCartTot();}
 }
+function updCartTot(){el('tot-n').textContent=cartSub()+tip;buildSummary();}
 
-function updCartTot(){
-  el("tot-n").textContent=cartSubtotal()+tip;
-  buildSummary();
-}
-
-// ══════════════════════════════════════
-// LOCATION (GPS)
-// ══════════════════════════════════════
-function grabLocation(){
-  const btn=el("loc-btn"), stat=el("loc-state"), ob=el("office-badge");
-  btn.style.opacity="0.6";
-  el("loc-btn-txt").textContent=t("locGetting");
-  stat.className="loc-state"; ob.className="office-badge";
-
-  if(!navigator.geolocation){
-    locInfo=null; btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
-    stat.className="loc-state fail"; stat.textContent=t("locFail"); return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      const {latitude:lat,longitude:lon}=pos.coords;
-      const off=nearestOffice(lat,lon);
-      locInfo={lat,lon,office_id:off.id,office_name:off.name,dist_km:off._d.toFixed(1)};
-      btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
-      stat.className="loc-state ok"; stat.textContent=t("locOk");
-      ob.className="office-badge on";
-      ob.innerHTML=`${t("officeLabel")} <strong>${off.name}</strong> · ${off._d.toFixed(1)} km`;
-      el("n1").className="co-num done"; el("n1").textContent="✓";
-    },
-    ()=>{
-      locInfo=null; btn.style.opacity="1"; el("loc-btn-txt").textContent=t("locBtn");
-      stat.className="loc-state fail"; stat.textContent=t("locFail");
-    },
-    {timeout:10000,maximumAge:60000,enableHighAccuracy:true}
-  );
-}
-
-function clearErr(field){
-  el(field+"-in").classList.remove("err");
-  el(field+"-err").classList.remove("on");
-}
-
-// ══════════════════════════════════════
-// SUMMARY
-// ══════════════════════════════════════
+// ── SUMMARY ───────────────────────────────────────────────────────────────────
 function buildSummary(){
-  const entries=Object.entries(cart).filter(([,q])=>q>0);
-  const sub=cartSubtotal();
-  el("sum-items").innerHTML=entries.map(([id,qty])=>{
-    const p=P.find(x=>x.id===id);
-    return p?`<div class="sum-line"><span>${p.name} ×${qty}</span><span>${p.price*qty} AED</span></div>`:"";
-  }).join("");
-  const tr=el("sum-tip-row");
-  if(tip>0){tr.style.display="flex"; el("sum-tip-val").textContent=tip+" AED";}
-  else tr.style.display="none";
-  el("sum-tot-val").textContent=(sub+tip)+" AED";
+  const entries=Object.entries(cart).filter(([,q])=>q>0),sub=cartSub();
+  el('sum-items').innerHTML=entries.map(([id,qty])=>{const p=P.find(x=>x.id===id);return p?`<div class="sum-line"><span>${p.name} ×${qty}</span><span>${p.price*qty} AED</span></div>`:''}).join('');
+  const tr=el('sum-tip-row');
+  if(tip>0){tr.style.display='flex';el('sum-tip-val').textContent=tip+' AED';}else tr.style.display='none';
+  el('sum-tot-val').textContent=(sub+tip)+' AED';
 }
 
-// ══════════════════════════════════════
-// PLACE ORDER
-// ══════════════════════════════════════
+// ── ORDER FLOW ────────────────────────────────────────────────────────────────
+function tryOrder(){
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  if(!entries.length){showToast(t('emptyCart'),'err');return;}
+
+  // No address → send to address page
+  if(activeAddrIdx===null||!getSaved()[activeAddrIdx]){
+    showToast(t('noAddrWarning'),'err');
+    setTimeout(()=>go('address'),600);return;
+  }
+
+  // Check location mismatch
+  const addr=getSaved()[activeAddrIdx];
+  if(addr.lat&&addr.lon&&navigator.geolocation&&!pendingOrderConfirmed){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const dist=hav(pos.coords.latitude,pos.coords.longitude,addr.lat,addr.lon);
+      if(dist>15){ // more than 15km away → warn
+        showLocConfirm();
+      } else {
+        proceedToCheckout();
+      }
+    },()=>{proceedToCheckout();},{timeout:5000,maximumAge:120000});
+  } else {
+    proceedToCheckout();
+  }
+}
+
+function showLocConfirm(){
+  el('loc-confirm').classList.add('show');
+}
+function confirmLocYes(){
+  el('loc-confirm').classList.remove('show');
+  pendingOrderConfirmed=true;
+  proceedToCheckout();
+}
+function confirmLocNo(){
+  el('loc-confirm').classList.remove('show');
+}
+
+function proceedToCheckout(){
+  pendingOrderConfirmed=false;
+  // Show address preview in checkout
+  const addr=getSaved()[activeAddrIdx];
+  el('co-addr-preview').innerHTML=`<strong>${addr.label||''}</strong>${addr.label?'<br>':''}${addr.address}<br><span style="color:var(--gold);font-size:11px">🏢 ${addr.office_name}</span>`;
+  buildSummary();
+  go('checkout');
+}
+
 function placeOrder(){
   const entries=Object.entries(cart).filter(([,q])=>q>0);
-  if(!entries.length){showToast(t("emptyCart"),"err");return;}
+  if(!entries.length){showToast(t('emptyCart'),'err');return;}
 
-  // Validate address
-  const addr=el("addr-in").value.trim();
-  if(addr.length<10){
-    el("addr-in").classList.add("err");
-    el("addr-err").textContent=t("addrErr");
-    el("addr-err").classList.add("on");
-    el("addr-in").focus(); go("checkout"); return;
+  const addr=getSaved()[activeAddrIdx];
+  if(!addr){showToast(t('noAddrWarning'),'err');return;}
+
+  const raw=el('phone-in').value.trim(),digits=raw.replace(/\D/g,'');
+  if(digits.length<10||digits.length>15){
+    el('phone-in').classList.add('err');el('phone-err').textContent=t('phoneErr');el('phone-err').classList.add('on');
+    el('phone-in').focus();return;
   }
 
-  // Validate phone — digits only, 10-15 chars
-  const rawPhone=el("phone-in").value.trim();
-  const digits=rawPhone.replace(/\D/g,"");
-  if(digits.length<10||digits.length>15||!/^\+?\d+$/.test(rawPhone)){
-    el("phone-in").classList.add("err");
-    el("phone-err").textContent=t("phoneErr");
-    el("phone-err").classList.add("on");
-    el("phone-in").focus(); go("checkout"); return;
-  }
-
-  const items=entries.map(([id,qty])=>{
-    const p=P.find(x=>x.id===id);
-    return{id,name:p.name,price:p.price,qty,line_total:p.price*qty};
-  });
-  const sub=cartSubtotal(), total=sub+tip;
-  const oid="AMB"+Date.now().toString().slice(-7);
-
+  const items=entries.map(([id,qty])=>{const p=P.find(x=>x.id===id);return{id,name:p.name,price:p.price,qty,line_total:p.price*qty};});
+  const sub=cartSub(),total=sub+tip,oid='AMB'+Date.now().toString().slice(-7);
   const payload={
-    action:"order", order_id:oid,
-    items, subtotal:sub, tip, total, currency:"AED",
-    phone:digits, address:addr,
-    location: locInfo ? {lat:locInfo.lat,lon:locInfo.lon} : {lat:0,lon:0},
-    office_id: locInfo?.office_id || "office_central",
-    office_name: locInfo?.office_name || "Ambar",
-    lang,
+    action:'order',order_id:oid,items,subtotal:sub,tip,total,currency:'AED',
+    phone:digits,address:addr.address,address_label:addr.label,
+    location:{lat:addr.lat||0,lon:addr.lon||0},
+    office_id:addr.office_id||'office_central',
+    office_name:addr.office_name||OFFICES[0].name,lang,
   };
 
-  // Store locally
-  orders.unshift({order_id:oid,items,total,address:addr,status:"pending",timestamp:new Date().toISOString()});
-  localStorage.setItem("ambar_orders",JSON.stringify(orders.slice(0,50)));
+  orders.unshift({order_id:oid,items,total,address:addr.label||addr.address,status:'pending',timestamp:new Date().toISOString()});
+  localStorage.setItem('ambar_orders',JSON.stringify(orders.slice(0,50)));
 
-  if(tg?.sendData){
-    tg.sendData(JSON.stringify(payload));
-  } else {
-    console.log("ORDER PAYLOAD:",JSON.stringify(payload,null,2));
-  }
+  if(tg?.sendData)tg.sendData(JSON.stringify(payload));
+  else console.log('ORDER:',JSON.stringify(payload,null,2));
 
-  // Reset
-  cart={}; tip=0; locInfo=null;
-  el("addr-in").value=""; el("phone-in").value="";
-  el("loc-state").className="loc-state"; el("office-badge").className="office-badge";
-  el("n1").className="co-num"; el("n1").textContent="1";
-  updHdr(); buildTips();
-  showToast(t("placed"),"ok");
-  setTimeout(()=>go("orders"),1400);
+  cart={};tip=0;el('phone-in').value='';el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
+  updHdr();buildTips();showToast(t('placed'),'ok');
+  setTimeout(()=>go('orders'),1400);
 }
 
-// ══════════════════════════════════════
-// ORDERS
-// ══════════════════════════════════════
+// ── ORDERS ────────────────────────────────────────────────────────────────────
 function renderOrders(){
-  if(!orders.length){
-    el("orders-list").innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div>${t("noOrders")}</div></div>`;
-    return;
-  }
-  const cls={pending:"sp",confirmed:"sc",delivered:"sd",declined:"sx"};
-  const lbl={pending:()=>t("stP"),confirmed:()=>t("stC"),delivered:()=>t("stD"),declined:()=>t("stX")};
-  el("orders-list").innerHTML=orders.map(o=>{
-    const ts=o.timestamp?o.timestamp.slice(0,16).replace("T"," "):"";
-    const sc=cls[o.status]||"sp", sl=(lbl[o.status]||lbl.pending)();
-    return`<div class="ocard">
-      <div class="ocard-top">
-        <div><div class="o-id">#${o.order_id}</div><div class="o-date">${ts}</div></div>
-        <span class="o-status ${sc}">${sl}</span>
-      </div>
-      <div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(" · ")}</div>
-      <div class="o-total">${o.total} AED</div>
-    </div>`;
-  }).join("");
+  if(!orders.length){el('orders-list').innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div>${t('noOrders')}</div></div>`;return;}
+  const cls={pending:'sp',confirmed:'sc2',delivered:'sd',declined:'sx'};
+  const lbl={pending:()=>t('stP'),confirmed:()=>t('stC'),delivered:()=>t('stD'),declined:()=>t('stX')};
+  el('orders-list').innerHTML=orders.map(o=>{
+    const ts=o.timestamp?o.timestamp.slice(0,16).replace('T',' '):'';
+    return`<div class="ocard"><div class="ocard-top"><div><div class="o-id">#${o.order_id}</div><div class="o-date">${ts}</div></div><span class="o-status ${cls[o.status]||'sp'}">${(lbl[o.status]||lbl.pending)()}</span></div><div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(' · ')}</div><div class="o-total">${o.total} AED</div></div>`;
+  }).join('');
 }
 
-// ══════════════════════════════════════
-// PROFILE
-// ══════════════════════════════════════
+// ── PROFILE ───────────────────────────────────────────────────────────────────
 function buildProfile(){
-  const name=tg?.initDataUnsafe?.user?.first_name||"Guest";
-  const av=name[0]?.toUpperCase()||"A";
-  el("prof-av").textContent=av; el("prof-name").textContent=name;
-
-  const active=orders.filter(o=>["pending","confirmed"].includes(o.status));
-  const spent=orders.filter(o=>o.status==="delivered").reduce((s,o)=>s+o.total,0);
-  el("stat-total").textContent=orders.length;
-  el("stat-active").textContent=active.length;
-  el("stat-spent").textContent=spent;
-  el("stat-lbl1").textContent=t("statOrders");
-  el("stat-lbl2").textContent=t("statActive");
-  el("stat-lbl3").textContent=t("statSpent");
-
-  if(!active.length){
-    el("active-list").innerHTML=`<div class="empty" style="padding:20px 0"><div>${t("noActive")}</div></div>`;
-    return;
-  }
-  const cls={pending:"sp",confirmed:"sc"};
-  const lbl={pending:()=>t("stP"),confirmed:()=>t("stC")};
-  el("active-list").innerHTML=active.map(o=>{
-    const sc=cls[o.status]||"sp", sl=(lbl[o.status]||lbl.pending)();
-    return`<div class="ocard">
-      <div class="ocard-top">
-        <div><div class="o-id">#${o.order_id}</div></div>
-        <span class="o-status ${sc}">${sl}</span>
-      </div>
-      <div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(" · ")}</div>
-      <div class="o-total">${o.total} AED</div>
-    </div>`;
-  }).join("");
+  const name=tg?.initDataUnsafe?.user?.first_name||'Guest';
+  el('prof-av').textContent=name[0]?.toUpperCase()||'A';el('prof-name').textContent=name;
+  const active=orders.filter(o=>['pending','confirmed'].includes(o.status));
+  const spent=orders.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  el('stat-total').textContent=orders.length;el('stat-active').textContent=active.length;el('stat-spent').textContent=spent;
+  set('stat-lbl1',t('statOrders'));set('stat-lbl2',t('statActive'));set('stat-lbl3',t('statSpent'));
+  if(!active.length){el('active-list').innerHTML=`<div class="empty" style="padding:20px 0"><div>${t('noActive')}</div></div>`;return;}
+  el('active-list').innerHTML=active.map(o=>`<div class="ocard"><div class="ocard-top"><div><div class="o-id">#${o.order_id}</div></div><span class="o-status ${o.status==='confirmed'?'sc2':'sp'}">${o.status==='confirmed'?t('stC'):t('stP')}</span></div><div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(' · ')}</div><div class="o-total">${o.total} AED</div></div>`).join('');
 }
 
-// ══════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════
-let toastTimer;
-function showToast(msg,type=""){
-  const e=el("toast");
-  e.textContent=msg; e.className="toast "+(type||""); e.classList.add("show");
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>e.classList.remove("show"),2800);
+// ── TOAST (two-element ping-pong, never sticks) ───────────────────────────────
+let _tt,_ti=0;
+function showToast(msg,type=''){
+  clearTimeout(_tt);
+  _ti=1-_ti;
+  const cur=el('toast'+_ti),other=el('toast'+(1-_ti));
+  if(other)other.className='toast';
+  if(!cur)return;
+  cur.className='toast';
+  cur.textContent=msg;
+  setTimeout(()=>{cur.className='toast'+(type?' '+type:'')+' show';},16);
+  _tt=setTimeout(()=>cur.classList.remove('show'),2800);
 }
-
-// ══════════════════════════════════════
-// CATALOG LOADER
-// ══════════════════════════════════════
-window.addEventListener("DOMContentLoaded", async () => {
-  initApp();
-  try {
-    const res = await fetch("catalog.json");
-    const products = await res.json();
-    P.length = 0;
-    products.forEach(p => P.push(p));
-    buildChips();
-    renderGrid();
-  } catch(e) {
-    console.error("Catalog load failed:", e);
-  }
-});
-
 </script>
 </body>
 </html>

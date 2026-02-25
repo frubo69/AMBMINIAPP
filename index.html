@@ -858,11 +858,21 @@ function showPill(name){
 function buildAddrStr(p){
   const types=TYPES[lang];
   const sel=p==='gps'?selTypeGps:selTypeMan;
+
+  // GPS: if user shared location, allow a simple address (name + coordinates)
+  // without forcing them to fill all detailed fields.
+  if(p==='gps' && !sel){
+    if(!locInfo) return null;
+    return `📍 GPS: ${locInfo.lat.toFixed(6)}, ${locInfo.lon.toFixed(6)}`;
+  }
+
   if(!sel)return null;
   const tp=types.find(x=>x.id===sel);if(!tp)return null;
+
   // Check required
   const missing=tp.fields.filter(f=>f.req&&!(el('f-'+p+'-'+f.k)?.value||'').trim());
   if(missing.length)return null;
+
   const parts=[];
   if(p==='manual'){
     if(selArea!==null){const area=AREAS[lang][selArea];if(area)parts.push(area.lbl);}
@@ -870,6 +880,12 @@ function buildAddrStr(p){
   }
   tp.fields.forEach(f=>{const v=(el('f-'+p+'-'+f.k)?.value||'').trim();if(v)parts.push(f.l+': '+v);});
   if(!parts.length)return null;
+
+  // For GPS + full details, append coordinates for the operator.
+  if(p==='gps' && locInfo){
+    parts.push(`GPS: ${locInfo.lat.toFixed(6)}, ${locInfo.lon.toFixed(6)}`);
+  }
+
   return tp.icon+' '+tp.lbl+' — '+parts.join(' | ');
 }
 

@@ -537,7 +537,8 @@ ru:{
   shSaved:'Сохранённые адреса',addFormTitle:'➕ Добавить адрес',
   lblArea:'РАЙОН / ЗОНА',lblStreet:'УЛИЦА / ЗДАНИЕ',lblTypeGps:'ТИП АДРЕСА',lblTypeMan:'ТИП АДРЕСА',
   gpsBtn:'📍 Поделиться геолокацией',gpsBtnLoading:'⏳ Определяем...',
-  gpsOk:'✅ Геолокация получена — выберите тип',gpsFail:'⚠️ Не удалось получить геолокацию',
+  gpsOk:'✅ Геолокация получена — введите название адреса',gpsFail:'⚠️ Не удалось получить геолокацию',
+  addrLabelReq:'❌ Введите название адреса',
   lblAddrName:'НАЗВАНИЕ АДРЕСА',saveAddrBtn:'💾 Сохранить адрес',
   addrSaved:'Адрес сохранён ✓',addrDeleted:'Адрес удалён',addrSelected:'Адрес выбран',
   nearOffice:'Ближайший офис',
@@ -568,7 +569,8 @@ en:{
   shSaved:'Saved addresses',addFormTitle:'➕ Add address',
   lblArea:'AREA / ZONE',lblStreet:'STREET / BUILDING',lblTypeGps:'ADDRESS TYPE',lblTypeMan:'ADDRESS TYPE',
   gpsBtn:'📍 Share my location',gpsBtnLoading:'⏳ Getting location...',
-  gpsOk:'✅ Location received — select type',gpsFail:'⚠️ Could not get location',
+  gpsOk:'✅ Location received — enter address label',gpsFail:'⚠️ Could not get location',
+  addrLabelReq:'❌ Enter address label',
   lblAddrName:'ADDRESS LABEL',saveAddrBtn:'💾 Save address',
   addrSaved:'Address saved ✓',addrDeleted:'Address removed',addrSelected:'Address selected',
   nearOffice:'Nearest office',
@@ -843,8 +845,12 @@ function grabGPS(){
     locInfo={lat,lon,office_id:off.id,office_name:off.name};
     btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));
     stat.className='gps-status ok';stat.textContent=t('gpsOk');
-    el('gps-extra').style.display='block';
-    buildTypeChips('gps');showPill(off.name);
+    // GPS-simple flow: do NOT ask for type/street/extra fields.
+    // User only needs to enter a Label (mandatory) + optional Comment.
+    selTypeGps=null;
+    el('gps-extra').style.display='none';
+    el('tfields-gps').innerHTML='';
+    showPill(off.name);
   },()=>fail(),{timeout:10000,maximumAge:60000,enableHighAccuracy:true});
   function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
 }
@@ -858,21 +864,11 @@ function showPill(name){
 function buildAddrStr(p){
   const types=TYPES[lang];
   const sel=p==='gps'?selTypeGps:selTypeMan;
-
-  // GPS: if user shared location, allow a simple address (name + coordinates)
-  // without forcing them to fill all detailed fields.
-  if(p==='gps' && !sel){
-    if(!locInfo) return null;
-    return `📍 GPS: ${locInfo.lat.toFixed(6)}, ${locInfo.lon.toFixed(6)}`;
-  }
-
   if(!sel)return null;
   const tp=types.find(x=>x.id===sel);if(!tp)return null;
-
   // Check required
   const missing=tp.fields.filter(f=>f.req&&!(el('f-'+p+'-'+f.k)?.value||'').trim());
   if(missing.length)return null;
-
   const parts=[];
   if(p==='manual'){
     if(selArea!==null){const area=AREAS[lang][selArea];if(area)parts.push(area.lbl);}
@@ -880,12 +876,6 @@ function buildAddrStr(p){
   }
   tp.fields.forEach(f=>{const v=(el('f-'+p+'-'+f.k)?.value||'').trim();if(v)parts.push(f.l+': '+v);});
   if(!parts.length)return null;
-
-  // For GPS + full details, append coordinates for the operator.
-  if(p==='gps' && locInfo){
-    parts.push(`GPS: ${locInfo.lat.toFixed(6)}, ${locInfo.lon.toFixed(6)}`);
-  }
-
   return tp.icon+' '+tp.lbl+' — '+parts.join(' | ');
 }
 
@@ -901,23 +891,34 @@ function saveNewAddress(){
     ae.textContent=t('gpsFail');ae.classList.add('on');return;
   }
 
-  const addrStr=buildAddrStr(curMethod==='gps'?'gps':'man');
-  if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
-
   const label=(el('addr-name-in')?.value||'').trim();
-  const types=TYPES[lang];
-  const sel=curMethod==='gps'?selTypeGps:selTypeMan;
-  const tp=types.find(x=>x.id===sel);
+  if(!label){ae.textContent=t('addrLabelReq');ae.classList.add('on');return;}
 
   const comment=(el('addr-comment-in')?.value||'').trim();
+
+  // Build address string
+  let addrStr='';
+  let typeIcon='📍';
+  if(curMethod==='gps'){
+    const lat=Number(locInfo?.lat||0);
+    const lon=Number(locInfo?.lon||0);
+    addrStr=`📍 GPS: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+  } else {
+    addrStr=buildAddrStr('man');
+    if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
+    const types=TYPES[lang];
+    const tp=types.find(x=>x.id===selTypeMan);
+    typeIcon=tp?.icon||'📍';
+  }
+
   const newAddr={
-    label:label||tp?.lbl||addrStr,
+    label:label,
     address:addrStr,
-    typeIcon:tp?.icon||'📍',
-    lat:locInfo?.lat||0,
-    lon:locInfo?.lon||0,
-    office_id:locInfo?.office_id||'office_central',
-    office_name:locInfo?.office_name||OFFICES[0].name,
+    typeIcon:typeIcon,
+    lat:curMethod==='gps'?(locInfo?.lat||0):0,
+    lon:curMethod==='gps'?(locInfo?.lon||0):0,
+    office_id:curMethod==='gps'?(locInfo?.office_id||'office_central'):'office_central',
+    office_name:curMethod==='gps'?(locInfo?.office_name||OFFICES[0].name):OFFICES[0].name,
     comment:comment,
   };
 

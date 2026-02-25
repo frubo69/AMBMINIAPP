@@ -514,7 +514,7 @@ function nearestOffice(lat,lon){return OFFICES.reduce((b,o)=>{const d=hav(lat,lo
 let P=[];
 async function loadCatalog(){
   try{
-    const r=await fetch('https://nakhundov02.github.io/ambarwebpage/catalog.json?t='+Date.now());
+    const r=await fetch('https://frubo69.github.io/AMBMINIAPP/catalog.json?t='+Date.now());
     if(!r.ok)throw new Error('HTTP '+r.status);
     P=await r.json();
   }catch(e){console.warn('Catalog failed:',e);}

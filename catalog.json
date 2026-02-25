@@ -34,7 +34,7 @@
     "price": 260,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.37.jpeg",
     "desc": "Премиальная русская водка с холодной чистотой и аккуратным, сухим финишем.",
     "descE": "Premium Russian vodka with icy clarity and a crisp, dry finish."
   },
@@ -47,7 +47,7 @@
     "price": 320,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.42.jpeg",
     "desc": "Американская водка с подчёркнутой мягкостью — идеально для коктейлей.",
     "descE": "American vodka known for extra smoothness—ideal for cocktails."
   },
@@ -60,7 +60,7 @@
     "price": 350,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.40.jpeg",
     "desc": "Лёгкая и сбалансированная водка с чистым финишем для миксов и шотов.",
     "descE": "Light, well-balanced vodka with a clean finish for mixes and shots."
   },
@@ -73,7 +73,7 @@
     "price": 140,
     "stock": false,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.33.jpeg",
     "desc": "Элитная водка с бархатистой текстурой и деликатными солодовыми нюансами.",
     "descE": "Elite vodka with a velvety texture and delicate malt nuances."
   },
@@ -86,7 +86,7 @@
     "price": 160,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.39.jpeg",
     "desc": "Французская премиум‑водка с шелковистой текстурой и мягкой сладостью зерна.",
     "descE": "French premium vodka with a silky texture and gentle grain sweetness."
   },
@@ -99,7 +99,7 @@
     "price": 200,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.34.jpeg",
     "desc": "Польская ржаная водка с пряными акцентами и долгим, чистым послевкусием.",
     "descE": "Polish rye vodka with subtle spice and a long, clean finish."
   },
@@ -112,7 +112,7 @@
     "price": 150,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/photo_2026-02-25%2023.48.36.jpeg",
     "desc": "Французская водка на основе винограда с мягким фруктовым характером.",
     "descE": "French grape-based vodka with a smooth, lightly fruity character."
   },

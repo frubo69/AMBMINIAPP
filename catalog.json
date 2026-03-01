@@ -606,7 +606,7 @@
     "price": 0,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Asahi%20Super%20Dry%20330ml.jpg?raw=true",
     "desc": "Японский лагер в стиле «super dry»: чистый, сухой и очень освежающий. Упаковка 12 шт.",
     "descE": "Japanese 'super dry' lager: clean, dry and highly refreshing. Pack of 12."
   },
@@ -619,7 +619,7 @@
     "price": 0,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Asahi%20Super%20Dry%20330ml.jpg?raw=true",
     "desc": "Японский лагер в стиле «super dry»: чистый, сухой и очень освежающий. Упаковка 24 шт.",
     "descE": "Japanese 'super dry' lager: clean, dry and highly refreshing. Pack of 24."
   },
@@ -788,7 +788,7 @@
     "price": 250,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Budweiser%20330ml%20Bottle.jpg?raw=true",
     "desc": "Американский лагер с чистым, мягким вкусом и лёгкой сладостью солода. Упаковка 12 шт. (2)",
     "descE": "American lager with a clean, smooth taste and light malt sweetness. Pack of 12. (2)"
   },
@@ -801,7 +801,7 @@
     "price": 150,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Budweiser%20330ml%20Bottle.jpg?raw=true",
     "desc": "Американский лагер с чистым, мягким вкусом и лёгкой сладостью солода. Упаковка 24 шт. (2)",
     "descE": "American lager with a clean, smooth taste and light malt sweetness. Pack of 24. (2)"
   },
@@ -840,7 +840,7 @@
     "price": 250,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Bacardi%20White%20Rum%201L.jpg?raw=true",
     "desc": "Лёгкий белый ром для коктейлей: чистый вкус и сухой финиш.",
     "descE": "Light white rum for cocktails with a clean taste and dry finish."
   },
@@ -853,7 +853,7 @@
     "price": 300,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Bacardi%20Black%20Rum%201L.jpg?raw=true",
     "desc": "Тёмный ром с насыщенными нотами карамели, дуба и лёгкого дыма.",
     "descE": "Dark rum with rich caramel, oak and a faint smoky touch."
   },
@@ -866,7 +866,7 @@
     "price": 250,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Bacardi%20Gold%20Rum%201L.jpg?raw=true",
     "desc": "Золотой ром средней выдержки с мягкой ванилью и карамельным оттенком.",
     "descE": "Medium-aged golden rum with soft vanilla and caramel notes."
   },
@@ -944,7 +944,7 @@
     "price": 350,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Bombay%20Sapphire%20Gin%201L.jpg?raw=true",
     "desc": "Сухой джин с ярким можжевельником и цитрусовыми оттенками из ботаникалов.",
     "descE": "Dry gin with bold juniper and citrus tones from classic botanicals."
   },
@@ -1054,8 +1054,8 @@
   },
   {
     "id": "p82",
-    "cat": "Текила",
-    "catE": "Tequila",
+    "cat": "az",
+    "catE": "",
     "name": "Jose Cuervo Gold 1 ltr",
     "nameE": "Jose Cuervo Gold 1 ltr",
     "price": 150,
@@ -1230,7 +1230,7 @@
     "price": 200,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Baileys%20Irish%20Cream%201L.jpg?raw=true",
     "desc": "Сливочный ирландский ликёр с нотами какао, кофе и мягкого виски.",
     "descE": "Irish cream liqueur with cocoa, coffee and smooth whiskey notes."
   },
@@ -1243,7 +1243,7 @@
     "price": 250,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Amarula%20Cream%201L.jpg?raw=true",
     "desc": "Сливочный ликёр из марулы с карамельными и тропическими фруктовыми оттенками.",
     "descE": "Cream liqueur from marula fruit with caramel and tropical fruit notes."
   },
@@ -1269,7 +1269,7 @@
     "price": 0,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Aperol%20Aperitivo%201L.jpg?raw=true",
     "desc": "Итальянский аперитив с горько‑сладким апельсином и лёгкой травяной свежестью.",
     "descE": "Italian aperitivo with bittersweet orange and a light herbal freshness."
   },
@@ -1282,7 +1282,7 @@
     "price": 100,
     "stock": true,
     "isNew": false,
-    "img": "",
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Arak%20Touma%20750ml.jpg?raw=true",
     "desc": "Ливанский арак с выраженным анисовым ароматом — традиционно подают с водой и льдом.",
     "descE": "Lebanese arak with pronounced anise aroma—traditionally served with water and ice."
   },
@@ -1792,5 +1792,18 @@
     "img": "",
     "desc": "Вино с гармоничным вкусом и выразительным сортовым характером. (7)",
     "descE": "A well-balanced wine with a clear varietal character. (7)"
+  },
+  {
+    "id": "p139",
+    "cat": "Ликёр",
+    "catE": "Liqueur",
+    "name": "Tequila Rose Strawberry Cream 0.7 ltr",
+    "nameE": "Tequila Rose Strawberry Cream 0.7 ltr",
+    "price": 200,
+    "stock": true,
+    "isNew": false,
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/Liqueur%20De%20Tequila%20Rose%20Strawberry%20Cream%201L.jpg",
+    "desc": "Сливочный ликёр на основе текилы с клубничным вкусом — сладкий и соблазнительный.",
+    "descE": "Tequila-based cream liqueur with strawberry flavor—sweet and indulgent."
   }
 ]

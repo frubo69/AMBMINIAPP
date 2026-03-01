@@ -1002,9 +1002,8 @@ function saveNewAddress(){
   // Reset form
   resetAddrForm();
   renderSavedCards();
-  showToast(t('addrSaved'),'ok');
 
-  // If redirected from cart, offer to go back
+  // If redirected from cart, show back-to-cart prompt instead of toast
   if(fromCart){
     fromCart=false;
     setTimeout(()=>{
@@ -1013,6 +1012,8 @@ function saveNewAddress(){
       const no=lang==='ru'?'Остаться':'Stay';
       showBackToCartPrompt(msg,yes,no);
     },400);
+  } else {
+    showToast(t('addrSaved'),'ok');
   }
 }
 

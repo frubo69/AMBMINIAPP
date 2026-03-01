@@ -247,10 +247,11 @@ img{display:block}
 .pdm-oos{height:44px;padding:0 20px;border-radius:12px;background:var(--card2);border:1px solid var(--border2);color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;cursor:not-allowed}
 
 /* Toast */
-.toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:500;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
+.toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:600;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
 .toast.show{opacity:1;visibility:visible}
 .toast.ok{border-color:var(--green);color:#90e8b8}
 .toast.err{border-color:var(--red);color:#f0a0a0}
+.toast.pdm-mode{bottom:auto;top:28px}
 </style>
 </head>
 <body>
@@ -1261,9 +1262,10 @@ function showToast(msg,type=''){
   const cur=el('toast'+_ti),other=el('toast'+(1-_ti));
   if(other)other.className='toast';
   if(!cur)return;
-  cur.className='toast';
+  const inPDM=el('pdm-overlay')?.classList.contains('show');
+  cur.className='toast'+(inPDM?' pdm-mode':'');
   cur.textContent=msg;
-  setTimeout(()=>{cur.className='toast'+(type?' '+type:'')+' show';},16);
+  setTimeout(()=>{cur.className='toast'+(inPDM?' pdm-mode':'')+(type?' '+type:'')+' show';},16);
   _tt=setTimeout(()=>cur.classList.remove('show'),2800);
 }
 </script>

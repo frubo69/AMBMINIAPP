@@ -271,26 +271,24 @@ img{display:block}
 <!-- ═══ CATALOG ═══ -->
 <div id="pg-catalog" class="page">
   <div style="position:sticky;top:0;z-index:40;background:rgba(7,7,14,.96);backdrop-filter:blur(20px)">
-    <!-- Row 1: Logo + controls -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 6px">
+    <!-- Row 1: Logo + address centered + controls -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:relative">
       <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
-      <div class="hdr-right">
-        <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
-        <button class="fav-btn" id="fav-hdr-btn" onclick="toggleFavFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="fav-dot" id="fav-dot"></span></button>
-        <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
-      </div>
-    </div>
-    <!-- Row 2: Address centered -->
-    <div style="display:flex;justify-content:center;padding:2px 16px 8px">
-      <div class="addr-pill" onclick="openAddrModal()" id="addr-pill">
+      <div class="addr-pill" onclick="openAddrModal()" id="addr-pill" style="position:absolute;left:50%;transform:translateX(-50%)">
         <span style="font-size:11px;color:var(--muted);font-weight:500;flex-shrink:0" id="addr-pill-label"></span>
         <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес</span>
         <span style="color:var(--gold);font-size:12px;flex-shrink:0">▾</span>
       </div>
+      <div class="hdr-right">
+        <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
+        <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
+      </div>
     </div>
-    <!-- Row 3: Category chips -->
-    <div style="border-bottom:1px solid var(--border2)">
-      <div class="chips" id="cat-chips"></div>
+    <!-- Row 2: Heart (fixed left) + category chips (scrollable) -->
+    <div style="display:flex;align-items:center;border-bottom:1px solid var(--border2)">
+      <button class="fav-btn" id="fav-hdr-btn" onclick="toggleFavFilter()" style="flex-shrink:0;margin-left:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="fav-dot" id="fav-dot"></span></button>
+      <div style="width:1px;height:20px;background:var(--border2);flex-shrink:0;margin:0 4px"></div>
+      <div class="chips" id="cat-chips" style="flex:1"></div>
     </div>
   </div>
   <div class="sec-h" id="sh-catalog">Каталог</div>
@@ -436,7 +434,10 @@ img{display:block}
       <div class="co-head"><div class="co-num">2</div><div class="co-title" id="ct2">Номер телефона</div></div>
       <div class="co-inner">
         <label class="flabel" id="phone-lbl">ТОЛЬКО ЦИФРЫ, 10–15 ЗНАКОВ</label>
-        <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="971501234567" oninput="this.classList.remove('err');el('phone-err').classList.remove('on')">
+        <div style="display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);overflow:hidden">
+          <span style="padding:0 10px;font-size:15px;font-weight:600;color:var(--sub);flex-shrink:0;border-right:1px solid var(--border2);height:100%;display:flex;align-items:center;line-height:48px">+</span>
+          <input class="finput" id="phone-in" type="tel" inputmode="numeric" placeholder="971501234567" style="border:none;border-radius:0;background:transparent;flex:1" oninput="this.classList.remove('err');el('phone-err').classList.remove('on');localStorage.setItem('ambar_phone',this.value.trim())">
+        </div>
         <div class="ferr" id="phone-err"></div>
       </div>
     </div>
@@ -700,6 +701,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Validate it still exists
   if(activeAddrIdx!==null&&!getSaved()[activeAddrIdx]) activeAddrIdx=null;
   buildTips();renderOrders();applyLang();loadCatalog();updateFavBtn();
+  // Pre-fill saved phone
+  const savedPhone=localStorage.getItem('ambar_phone');
+  if(savedPhone)el('phone-in').value=savedPhone;
   updateAddrPill();updateCartAddrBar();
 });
 
@@ -1237,7 +1241,7 @@ function placeOrder(){
   const sub=cartSub(),total=sub+tip,oid='AMB'+Date.now().toString().slice(-7);
   const payload={
     action:'order',order_id:oid,items,subtotal:sub,tip,total,currency:'AED',
-    phone:digits,address:addr.address,address_label:addr.label,comment:addr.comment||'',
+    phone:'+'+digits,address:addr.address,address_label:addr.label,comment:addr.comment||'',
     location:{lat:addr.lat||0,lon:addr.lon||0},
     office_id:addr.office_id||'office_central',
     office_name:addr.office_name||OFFICES[0].name,lang,
@@ -1249,7 +1253,7 @@ function placeOrder(){
   if(tg?.sendData)tg.sendData(JSON.stringify(payload));
   else console.log('ORDER:',JSON.stringify(payload,null,2));
 
-  cart={};tip=0;el('phone-in').value='';el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
+  cart={};tip=0;el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
   updHdr();buildTips();showToast(t('placed'),'ok');
   setTimeout(()=>go('orders'),1400);
 }

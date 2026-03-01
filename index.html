@@ -219,6 +219,33 @@ img{display:block}
 .ps:last-child{border-right:none}
 .ps-n{font-size:20px;font-weight:700;color:var(--gold2)}
 .ps-l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+/* Product Detail Modal */
+.pdm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:150;display:flex;align-items:flex-end;pointer-events:none;transition:background .25s}
+.pdm-overlay.show{background:rgba(0,0,0,.82);pointer-events:all}
+.pdm-sheet{width:100%;background:var(--bg2);border-radius:24px 24px 0 0;padding-bottom:calc(20px + var(--safe-bottom));max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1,.64,1)}
+.pdm-overlay.show .pdm-sheet{transform:translateY(0)}
+.pdm-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:14px auto 0}
+.pdm-close{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--sub);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+.pdm-close:active{transform:scale(.85)}
+.pdm-img-box{height:260px;background:linear-gradient(155deg,#0E0E1E,#090916);display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+.pdm-img{max-height:220px;max-width:80%;object-fit:contain;filter:drop-shadow(0 12px 32px rgba(0,0,0,.8))}
+.pdm-body{padding:20px 18px 0}
+.pdm-cat{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
+.pdm-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;line-height:1.15;margin-bottom:14px}
+.pdm-desc{font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border2)}
+.pdm-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:4px}
+.pdm-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold2);line-height:1}
+.pdm-price small{font-size:13px;color:var(--muted);font-weight:400;font-family:'Outfit',sans-serif}
+.pdm-ctrl{flex-shrink:0}
+.pdm-add-btn{height:44px;padding:0 22px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#07070E;font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;transition:.13s;white-space:nowrap}
+.pdm-add-btn:active{transform:scale(.93)}
+.pdm-add-btn:disabled{background:var(--card2);color:var(--muted);cursor:not-allowed}
+.pdm-qctrl{display:flex;align-items:center;gap:8px}
+.pdm-qb{width:40px;height:40px;border-radius:11px;border:1px solid var(--border);background:var(--bg3);color:var(--gold);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s}
+.pdm-qb:active{transform:scale(.75)}
+.pdm-qn{font-size:18px;font-weight:700;min-width:28px;text-align:center;color:var(--gold2)}
+.pdm-oos{height:44px;padding:0 20px;border-radius:12px;background:var(--card2);border:1px solid var(--border2);color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;cursor:not-allowed}
+
 /* Toast */
 .toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:500;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
 .toast.show{opacity:1;visibility:visible}
@@ -433,6 +460,28 @@ img{display:block}
     <div class="confirm-btns">
       <button class="confirm-yes" onclick="confirmLocYes()" id="lc-yes">Да, заказать</button>
       <button class="confirm-no" onclick="confirmLocNo()" id="lc-no">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Detail Modal -->
+<div class="pdm-overlay" id="pdm-overlay" onclick="closePDM(event)">
+  <div class="pdm-sheet" id="pdm-sheet" style="position:relative">
+    <div class="pdm-handle"></div>
+    <button class="pdm-close" onclick="closePDMDirect()">✕</button>
+    <div class="pdm-img-box">
+      <img class="pdm-img" id="pdm-img" src="" alt="">
+    </div>
+    <div class="pdm-body">
+      <div class="pdm-cat" id="pdm-cat"></div>
+      <div class="pdm-name" id="pdm-name"></div>
+      <div class="pdm-desc" id="pdm-desc"></div>
+      <div class="pdm-footer">
+        <div>
+          <div class="pdm-price"><span id="pdm-price"></span><small> AED</small></div>
+        </div>
+        <div class="pdm-ctrl" id="pdm-ctrl"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -968,7 +1017,8 @@ function renderGrid(){
   const list=catF==='all'?P:P.filter(p=>(lang==='ru'?p.cat:p.catE)===catF);
   el('p-grid').innerHTML=list.map(p=>{
     const qty=cart[p.id]||0;
-    return`<div class="pcard">
+    const desc=lang==='ru'?p.desc:p.descE;
+    return`<div class="pcard" onclick="openPDM('${p.id}')" style="cursor:pointer">
       <div class="pimg-box">
         ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
         ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
@@ -976,9 +1026,9 @@ function renderGrid(){
       </div>
       <div class="pinfo">
         <div class="pcat">${lang==='ru'?p.cat:p.catE}</div>
-        <div class="pname">${p.name}</div>
-        <div class="pdesc">${lang==='ru'?p.dRu:p.dEn}</div>
-        <div class="pfoot"><div class="pprice">${p.price}<small> AED</small></div><div id="ctrl-${p.id}">${ctrlHTML(p,qty)}</div></div>
+        <div class="pname">${lang==='ru'?p.name:p.nameE}</div>
+        <div class="pdesc">${desc}</div>
+        <div class="pfoot"><div class="pprice">${p.price}<small> AED</small></div><div id="ctrl-${p.id}" onclick="event.stopPropagation()">${ctrlHTML(p,qty)}</div></div>
       </div>
     </div>`;
   }).join('');
@@ -1156,7 +1206,54 @@ function buildProfile(){
   el('active-list').innerHTML=active.map(o=>`<div class="ocard"><div class="ocard-top"><div><div class="o-id">#${o.order_id}</div></div><span class="o-status ${o.status==='confirmed'?'sc2':'sp'}">${o.status==='confirmed'?t('stC'):t('stP')}</span></div><div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(' · ')}</div><div class="o-total">${o.total} AED</div></div>`).join('');
 }
 
-// ── TOAST (two-element ping-pong, never sticks) ───────────────────────────────
+// ── PRODUCT DETAIL MODAL ─────────────────────────────────────────────────────
+let pdmId=null;
+function openPDM(id){
+  const p=P.find(x=>x.id===id);if(!p)return;
+  pdmId=id;
+  el('pdm-img').src=p.img||'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><text y="68" font-size="64">🍾</text></svg>';
+  el('pdm-img').onerror=function(){this.src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><text y="68" font-size="64">🍾</text></svg>';};
+  el('pdm-cat').textContent=lang==='ru'?p.cat:p.catE;
+  el('pdm-name').textContent=lang==='ru'?p.name:p.nameE;
+  el('pdm-desc').textContent=lang==='ru'?p.desc:p.descE;
+  el('pdm-price').textContent=p.price;
+  updatePDMCtrl(p);
+  el('pdm-overlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function updatePDMCtrl(p){
+  const qty=cart[p.id]||0;
+  const ctrl=el('pdm-ctrl');if(!ctrl)return;
+  if(!p.stock){
+    ctrl.innerHTML=`<div class="pdm-oos">${t('oos')}</div>`;
+  } else if(qty===0){
+    ctrl.innerHTML=`<button class="pdm-add-btn" onclick="pdmAdd('${p.id}')">+ ${lang==='ru'?'В корзину':'Add to cart'}</button>`;
+  } else {
+    ctrl.innerHTML=`<div class="pdm-qctrl"><button class="pdm-qb" onclick="pdmChg('${p.id}',-1)">−</button><span class="pdm-qn">${qty}</span><button class="pdm-qb" onclick="pdmChg('${p.id}',1)">+</button></div>`;
+  }
+}
+function pdmAdd(id){
+  const p=P.find(x=>x.id===id);if(!p||!p.stock)return;
+  const max=p.stockQty||999;
+  if((cart[id]||0)>=max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
+  cart[id]=1;syncCtrl(id);updHdr();updatePDMCtrl(p);showToast(t('added')+': '+(lang==='ru'?p.name:p.nameE),'ok');
+}
+function pdmChg(id,d){
+  const p=P.find(x=>x.id===id),max=p?(p.stockQty||999):999,nq=(cart[id]||0)+d;
+  if(d>0&&nq>max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
+  if(nq<=0)delete cart[id];else cart[id]=nq;
+  syncCtrl(id);updHdr();updatePDMCtrl(p);if(curPg==='cart')renderCart();
+}
+function closePDM(e){
+  if(e&&e.target!==el('pdm-overlay'))return;
+  closePDMDirect();
+}
+function closePDMDirect(){
+  el('pdm-overlay').classList.remove('show');
+  document.body.style.overflow='';
+  pdmId=null;
+}
+
 let _tt,_ti=0;
 function showToast(msg,type=''){
   clearTimeout(_tt);

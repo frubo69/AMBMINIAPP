@@ -33,12 +33,22 @@ img{display:block}
 .cart-dot{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;border-radius:50%;width:18px;height:18px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
 .lang-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:.15s}
 .lang-btn:active{transform:scale(.85)}
+.fav-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
+.fav-btn:active{transform:scale(.85)}
+.fav-btn svg{width:16px;height:16px;transition:.15s}
+.fav-btn.has-favs svg{fill:#e05555;stroke:#e05555}
+.fav-dot{position:absolute;top:-4px;right:-4px;background:#e05555;color:#fff;border-radius:50%;width:16px;height:16px;font-size:8px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
+.fav-dot.on{display:flex}
+.pfav{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;z-index:2}
+.pfav:active{transform:scale(.8)}
+.pfav svg{width:14px;height:14px;transition:.15s}
+.pfav.on svg{fill:#e05555;stroke:#e05555}
 
 /* Active address pill on catalog */
-.addr-pill{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:50px;padding:6px 12px;cursor:pointer;transition:.15s;max-width:200px}
-.addr-pill:active{border-color:var(--gold)}
-.addr-pill-txt{font-size:11px;font-weight:500;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
-.addr-pill-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.addr-pill{display:flex;align-items:center;gap:4px;background:transparent;border:none;padding:0;cursor:pointer;transition:.15s;justify-content:center}
+.addr-pill:active{opacity:.7}
+.addr-pill-txt{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.addr-pill-dot{display:none}
 
 /* Address selector modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -260,21 +270,24 @@ img{display:block}
 
 <!-- ═══ CATALOG ═══ -->
 <div id="pg-catalog" class="page">
-  <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
-    <div class="hdr-right">
-      <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
-      <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
+  <div style="position:sticky;top:0;z-index:40;background:rgba(7,7,14,.96);backdrop-filter:blur(20px)">
+    <div class="hdr" style="position:relative;border-bottom:none">
+      <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
+      <div class="addr-pill" onclick="openAddrModal()" id="addr-pill" style="position:absolute;left:50%;transform:translateX(-50%)">
+        <span style="font-size:11px;color:var(--muted);font-weight:500;flex-shrink:0" id="addr-pill-label"></span>
+        <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес</span>
+        <span style="color:var(--gold);font-size:12px;flex-shrink:0">▾</span>
+      </div>
+      <div class="hdr-right">
+        <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
+        <button class="fav-btn" id="fav-hdr-btn" onclick="toggleFavFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="fav-dot" id="fav-dot"></span></button>
+        <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
+      </div>
+    </div>
+    <div style="border-bottom:1px solid var(--border2)">
+      <div class="chips" id="cat-chips"></div>
     </div>
   </div>
-  <!-- Active address selector -->
-  <div style="padding:8px 14px 0">
-    <div class="addr-pill" onclick="openAddrModal()" id="addr-pill">
-      <span class="addr-pill-dot" id="addr-pill-dot" style="background:var(--muted)"></span>
-      <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес доставки</span>
-    </div>
-  </div>
-  <div class="chips" id="cat-chips"></div>
   <div class="sec-h" id="sh-catalog">Каталог</div>
   <div class="grid" id="p-grid"></div>
 </div>
@@ -598,7 +611,7 @@ ru:{
   catalog:'Каталог',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
   all:'Все',total:'ИТОГО',tip:'ЧАЕВЫЕ',noTip:'Без чаевых',customTip:'✏️ Своя',
   coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',
-  addrPill:'Добавьте адрес доставки',addrPillChange:'Изменить',
+  addrPill:'Добавьте адрес',addrPillChange:'Изменить',
   modalTitle:'Адрес доставки',modalAdd:'Добавить новый адрес',
   cabLabel:'АДРЕС ДОСТАВКИ',cabNoAddr:'Не выбран — нажмите чтобы добавить',cabChange:'Изменить',
   shSaved:'Сохранённые адреса',addFormTitle:'➕ Добавить адрес',
@@ -630,7 +643,7 @@ en:{
   catalog:'Catalog',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
   all:'All',total:'TOTAL',tip:'TIP',noTip:'No tip',customTip:'✏️ Custom',
   coBtn:'Checkout →',clearCart:'🗑 Clear cart',
-  addrPill:'Add delivery address',addrPillChange:'Change',
+  addrPill:'Add address',addrPillChange:'Change',
   modalTitle:'Delivery address',modalAdd:'Add new address',
   cabLabel:'DELIVERY ADDRESS',cabNoAddr:'Not set — tap to add',cabChange:'Change',
   shSaved:'Saved addresses',addFormTitle:'➕ Add address',
@@ -662,6 +675,8 @@ en:{
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let lang='ru',cart={},catF='all',tip=0;
+let favs=new Set(JSON.parse(localStorage.getItem('ambar_favs')||'[]'));
+let showFavOnly=false;
 let curMethod='gps',selTypeGps=null,selTypeMan=null,selArea=null;
 let locInfo=null;
 let activeAddrIdx=null;
@@ -679,7 +694,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(saved!==null) activeAddrIdx=parseInt(saved);
   // Validate it still exists
   if(activeAddrIdx!==null&&!getSaved()[activeAddrIdx]) activeAddrIdx=null;
-  buildTips();renderOrders();applyLang();loadCatalog();
+  buildTips();renderOrders();applyLang();loadCatalog();updateFavBtn();
   updateAddrPill();updateCartAddrBar();
 });
 
@@ -750,15 +765,17 @@ function setActiveAddr(idx){
 
 function updateAddrPill(){
   const arr=getSaved();
-  const dot=el('addr-pill-dot'),txt=el('addr-pill-txt');
-  if(!dot||!txt)return;
+  const txt=el('addr-pill-txt');
+  const lbl=el('addr-pill-label');
+  if(!txt)return;
   if(activeAddrIdx!==null&&arr[activeAddrIdx]){
-    const a=arr[activeAddrIdx];
-    dot.style.background='var(--green)';
-    txt.textContent=a.label||a.address;
+    if(lbl)lbl.textContent=lang==='ru'?'Адрес: ':'Address: ';
+    txt.textContent=arr[activeAddrIdx].label||arr[activeAddrIdx].address;
+    txt.style.color='var(--text)';
   } else {
-    dot.style.background='var(--muted)';
+    if(lbl)lbl.textContent='';
     txt.textContent=t('addrPill');
+    txt.style.color='var(--muted)';
   }
 }
 
@@ -1031,13 +1048,37 @@ function resetAddrForm(){
 }
 
 // ── CATALOG CHIPS & GRID ──────────────────────────────────────────────────────
+// ── FAVOURITES ────────────────────────────────────────────────────────────────
+function saveFavs(){localStorage.setItem('ambar_favs',JSON.stringify([...favs]));}
+function toggleFav(id){
+  if(favs.has(id))favs.delete(id);else favs.add(id);
+  saveFavs();
+  // update card heart
+  const btn=el('pfav-'+id);
+  if(btn)btn.classList.toggle('on',favs.has(id));
+  updateFavBtn();
+}
+function updateFavBtn(){
+  const btn=el('fav-hdr-btn'),dot=el('fav-dot');
+  if(!btn)return;
+  btn.classList.toggle('has-favs',favs.size>0);
+  if(dot){dot.textContent=favs.size;dot.classList.toggle('on',favs.size>0);}
+}
+function toggleFavFilter(){
+  showFavOnly=!showFavOnly;
+  el('fav-hdr-btn').style.background=showFavOnly?'rgba(224,85,85,.2)':'';
+  el('fav-hdr-btn').style.borderColor=showFavOnly?'#e05555':'';
+  renderGrid();
+}
+
 function buildChips(){
   const cats=['all',...new Set(P.map(p=>lang==='ru'?p.cat:p.catE))];
   el('cat-chips').innerHTML=cats.map(c=>`<button class="chip${c===catF?' on':''}" onclick="setCat('${c}',this)">${c==='all'?t('all'):c}</button>`).join('');
 }
 function setCat(c,btn){catF=c;document.querySelectorAll('.chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderGrid();}
 function renderGrid(){
-  const list=catF==='all'?P:P.filter(p=>(lang==='ru'?p.cat:p.catE)===catF);
+  let list=catF==='all'?P:P.filter(p=>(lang==='ru'?p.cat:p.catE)===catF);
+  if(showFavOnly)list=list.filter(p=>favs.has(p.id));
   el('p-grid').innerHTML=list.map(p=>{
     const qty=cart[p.id]||0;
     const desc=lang==='ru'?p.desc:p.descE;
@@ -1045,6 +1086,7 @@ function renderGrid(){
       <div class="pimg-box">
         ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
         ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
+        <button class="pfav${favs.has(p.id)?' on':''}" id="pfav-${p.id}" onclick="event.stopPropagation();toggleFav('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
         <img class="pimg" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
       </div>
       <div class="pinfo">

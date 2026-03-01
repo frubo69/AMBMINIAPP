@@ -864,7 +864,6 @@ function pickArea(i){
   const area=AREAS[lang][i];
   const off=OFFICES.find(o=>o.id===area.office)||OFFICES[0];
   locInfo={lat:0,lon:0,office_id:off.id,office_name:off.name};
-  showPill(off.name);
 }
 
 // ── TYPE CHIPS ────────────────────────────────────────────────────────────────
@@ -914,7 +913,6 @@ function grabGPS(){
     selTypeGps=null;
     el('gps-extra').style.display='none';
     el('tfields-gps').innerHTML='';
-    showPill(off.name);
   },()=>fail(),{timeout:10000,maximumAge:60000,enableHighAccuracy:true});
   function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
 }

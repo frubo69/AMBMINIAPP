@@ -157,8 +157,7 @@ img{display:block}
 .type-chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:600}
 .frow{display:flex;gap:8px;margin-bottom:10px}
 .frow>div{flex:1;min-width:0}
-.opill{font-size:11px;font-weight:600;color:var(--gold);background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);padding:8px 12px;border-radius:8px;margin-top:10px;display:none}
-.opill.on{display:block}
+
 
 /* Saved addr cards */
 .saved-card{background:var(--card);border:2px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
@@ -357,7 +356,7 @@ img{display:block}
           <div id="tfields-man"></div>
         </div>
 
-        <div class="opill" id="opill"></div>
+
         <div class="ferr" id="addr-form-err"></div>
 
         <!-- Name label -->
@@ -917,10 +916,7 @@ function grabGPS(){
   function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
 }
 
-function showPill(name){
-  const p=el('opill');if(!p)return;
-  p.textContent='🏢 '+t('nearOffice')+': '+name;p.className='opill on';
-}
+
 
 // ── BUILD ADDRESS STRING ──────────────────────────────────────────────────────
 function buildAddrStr(p){
@@ -1002,7 +998,7 @@ function resetAddrForm(){
   curMethod='gps';selTypeGps=null;selTypeMan=null;selArea=null;locInfo=null;
   el('gps-status').className='gps-status';
   el('gps-extra').style.display='none';
-  el('opill').className='opill';
+
   el('addr-name-in').value='';el('addr-comment-in').value='';
   el('man-street').value='';
   el('tfields-gps').innerHTML='';el('tfields-man').innerHTML='';

@@ -437,7 +437,7 @@ img{display:block}
 <div class="bnav">
   <button class="nb on" id="nb-catalog" onclick="go('catalog')"><i>🍾</i><span id="nbl-cat">Каталог</span></button>
   <button class="nb" id="nb-cart" onclick="go('cart')"><i>🛒</i><span id="nbl-cart">Корзина</span></button>
-  <button class="nb" id="nb-address" onclick="go('address')"><i>📍</i><span id="nbl-addr">Адреса</span></button>
+  <button class="nb" id="nb-address" onclick="fromCart=false;go('address')"><i>📍</i><span id="nbl-addr">Адреса</span></button>
   <button class="nb" id="nb-orders" onclick="go('orders')"><i>📦</i><span id="nbl-ord">История</span></button>
   <button class="nb" id="nb-profile" onclick="go('profile');buildProfile()"><i>👤</i><span id="nbl-prof">Профиль</span></button>
 </div>
@@ -486,6 +486,17 @@ img{display:block}
         <div class="pdm-ctrl" id="pdm-ctrl"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Back to cart prompt -->
+<div class="modal-overlay" id="back-cart-overlay" onclick="closeBackToCart(event)">
+  <div class="modal-sheet" style="padding:20px 16px calc(20px + var(--safe-bottom))">
+    <div class="modal-handle"></div>
+    <div style="font-size:22px;text-align:center;margin:8px 0 10px">🛒</div>
+    <div id="back-cart-msg" style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2);text-align:center;margin-bottom:20px"></div>
+    <button class="btn-main" id="back-cart-yes" onclick="go('cart');closeBackToCartDirect()"></button>
+    <button class="btn-outline" id="back-cart-no" onclick="closeBackToCartDirect()" style="margin-top:10px"></button>
   </div>
 </div>
 
@@ -652,8 +663,9 @@ en:{
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let lang='ru',cart={},catF='all',tip=0;
 let curMethod='gps',selTypeGps=null,selTypeMan=null,selArea=null;
-let locInfo=null;    // GPS result {lat,lon,office_id,office_name}
-let activeAddrIdx=null; // index into getSaved() — the selected delivery address
+let locInfo=null;
+let activeAddrIdx=null;
+let fromCart=false; // flag: user was redirected here from cart
 let orders=JSON.parse(localStorage.getItem('ambar_orders')||'[]');
 let curPg='catalog';
 let pendingOrderConfirmed=false; // for location mismatch flow
@@ -773,7 +785,6 @@ function renderSavedCards(){
   wrap.innerHTML=arr.map((a,i)=>{
     const isActive=i===activeAddrIdx;
     const typeIcon=a.typeIcon||'📍';
-    const activeLabel=lang==='ru'?'✓ Выбран для доставки':'✓ Selected for delivery';
     const delLabel=lang==='ru'?'🗑 Удалить адрес':'🗑 Remove address';
     return`<div class="saved-card${isActive?' active-addr':''}" onclick="selectAddr(${i})">
       <div class="sc-top">
@@ -783,7 +794,7 @@ function renderSavedCards(){
           <div class="sc-label">${a.label||a.address}</div>
           <div class="sc-addr">${a.label&&a.label!==a.address?a.address:''}</div>
           <div class="sc-office">🏢 ${a.office_name||''}</div>
-          ${isActive?`<div class="sc-active-tag">${activeLabel}</div>`:''}
+
         </div>
       </div>
       <button class="sc-del-btn" onclick="event.stopPropagation();deleteAddr(${i})">${delLabel}</button>
@@ -992,6 +1003,17 @@ function saveNewAddress(){
   resetAddrForm();
   renderSavedCards();
   showToast(t('addrSaved'),'ok');
+
+  // If redirected from cart, offer to go back
+  if(fromCart){
+    fromCart=false;
+    setTimeout(()=>{
+      const msg=lang==='ru'?'Вернуться в корзину и оформить заказ?':'Go back to cart and place order?';
+      const yes=lang==='ru'?'В корзину →':'To cart →';
+      const no=lang==='ru'?'Остаться':'Stay';
+      showBackToCartPrompt(msg,yes,no);
+    },400);
+  }
 }
 
 function resetAddrForm(){
@@ -1109,6 +1131,7 @@ function tryOrder(){
   // No address → send to address page
   if(activeAddrIdx===null||!getSaved()[activeAddrIdx]){
     showToast(t('noAddrWarning'),'err');
+    fromCart=true;
     setTimeout(()=>go('address'),600);return;
   }
 
@@ -1252,6 +1275,21 @@ function closePDMDirect(){
   el('pdm-overlay').classList.remove('show');
   document.body.style.overflow='';
   pdmId=null;
+}
+
+// ── BACK TO CART PROMPT ───────────────────────────────────────────────────────
+function showBackToCartPrompt(msg,yes,no){
+  el('back-cart-msg').textContent=msg;
+  el('back-cart-yes').textContent=yes;
+  el('back-cart-no').textContent=no;
+  el('back-cart-overlay').classList.add('show');
+}
+function closeBackToCart(e){
+  if(e&&e.target!==el('back-cart-overlay'))return;
+  closeBackToCartDirect();
+}
+function closeBackToCartDirect(){
+  el('back-cart-overlay').classList.remove('show');
 }
 
 let _tt,_ti=0;

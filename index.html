@@ -27,7 +27,7 @@ img{display:block}
 .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .logo-sub{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:-2px}
 .hdr-right{display:flex;gap:6px;align-items:center}
-.cart-pill{display:flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:6px 10px;position:relative;cursor:pointer;transition:.15s}
+.cart-pill{display:flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:0 12px;height:34px;position:relative;cursor:pointer;transition:.15s}
 .cart-pill:active{transform:scale(.93)}
 .cart-txt{font-size:12px;font-weight:600;color:var(--gold2)}
 .cart-dot{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;border-radius:50%;width:18px;height:18px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
@@ -75,11 +75,28 @@ img{display:block}
 
 .chips{display:flex;gap:7px;padding:8px 14px 6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .chips::-webkit-scrollbar{display:none}
+.sort-opt{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--border2);cursor:pointer;transition:.15s;font-size:14px;color:var(--text)}
+.sort-opt:active{background:rgba(255,255,255,.03)}
+.sort-opt.on{color:var(--gold)}
+.sort-opt-check{font-size:18px;color:var(--gold);opacity:0;transition:.15s}
+.sort-opt.on .sort-opt-check{opacity:1}
+.sort-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.sort-btn:active{transform:scale(.85)}
+.sort-btn.active{border-color:var(--gold);color:var(--gold)}
+.search-wrap{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:50px;padding:0 14px;gap:8px;transition:.2s}
+.search-wrap:focus-within{border-color:rgba(201,169,110,.5)}
+.search-ico{width:15px;height:15px;color:var(--muted);flex-shrink:0}
+.search-inp{flex:1;background:transparent;border:none;outline:none;font-size:13px;color:var(--text);padding:9px 0;font-family:inherit}
+.search-inp::placeholder{color:var(--muted)}
+.search-clr{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
 .chip{white-space:nowrap;padding:7px 14px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;transition:.15s}
 .chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
 .sec-h{padding:10px 14px 8px;font-family:'Cormorant Garamond',serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .sec-h::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 12px 16px}
+.cat-section-hdr{padding:16px 14px 8px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:10px;letter-spacing:1px}
+.cat-section-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,169,110,.3),transparent)}
+.grid-group{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px 4px}
+.grid{padding:2px 0 16px}
 @media(min-width:460px){.grid{grid-template-columns:repeat(3,1fr)}}
 .pcard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.15s}
 .pcard:active{transform:scale(.97)}
@@ -284,14 +301,24 @@ img{display:block}
         <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
       </div>
     </div>
-    <!-- Row 2: Heart (fixed left) + category chips (scrollable) -->
+    <!-- Row 2: Search bar -->
+    <div style="padding:0 14px 8px">
+      <div class="search-wrap">
+        <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-inp" id="search-inp" type="text" placeholder="Поиск..." oninput="onSearch(this.value)">
+        <button class="search-clr" id="search-clr" onclick="clearSearch()" style="display:none">✕</button>
+      </div>
+    </div>
+    <!-- Row 3: Heart + Sort (fixed left) + category chips (scrollable) -->
     <div style="display:flex;align-items:center;border-bottom:1px solid var(--border2)">
       <button class="fav-btn" id="fav-hdr-btn" onclick="toggleFavFilter()" style="flex-shrink:0;margin-left:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="fav-dot" id="fav-dot"></span></button>
-      <div style="width:1px;height:20px;background:var(--border2);flex-shrink:0;margin:0 4px"></div>
+      <button class="sort-btn" id="sort-btn" onclick="cycleSort()" style="flex-shrink:0;margin-left:6px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div style="width:1px;height:20px;background:var(--border2);flex-shrink:0;margin:0 6px"></div>
       <div class="chips" id="cat-chips" style="flex:1"></div>
     </div>
   </div>
-  <div class="sec-h" id="sh-catalog">Каталог</div>
   <div class="grid" id="p-grid"></div>
 </div>
 
@@ -519,6 +546,15 @@ img{display:block}
   </div>
 </div>
 
+<!-- ═══ SORT SHEET ═══ -->
+<div class="modal-overlay" id="sort-overlay" onclick="closeSortSheet(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="sort-sheet-title">Сортировка</div>
+    <div id="sort-options"></div>
+  </div>
+</div>
+
 <!-- Toasts (two elements to avoid stuck animation) -->
 <div class="toast" id="toast0"></div>
 <div class="toast" id="toast1"></div>
@@ -614,7 +650,7 @@ const TIP_OPTS=[0,50,100,200,500];
 // ── TRANSLATIONS ──────────────────────────────────────────────────────────────
 const TX={
 ru:{
-  catalog:'Каталог',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
+  catalog:'Каталог',favs:'Избранное',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
   all:'Все',total:'ИТОГО',tip:'ЧАЕВЫЕ',noTip:'Без чаевых',customTip:'✏️ Своя',
   coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',
   addrPill:'Добавьте адрес',addrPillChange:'Изменить',
@@ -646,7 +682,7 @@ ru:{
   lcYes:'Да, оформить',lcNo:'Отмена',
 },
 en:{
-  catalog:'Catalog',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
+  catalog:'Catalog',favs:'Favourites',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
   all:'All',total:'TOTAL',tip:'TIP',noTip:'No tip',customTip:'✏️ Custom',
   coBtn:'Checkout →',clearCart:'🗑 Clear cart',
   addrPill:'Add address',addrPillChange:'Change',
@@ -681,6 +717,8 @@ en:{
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let lang='ru',cart={},catF='all',tip=0;
+let sortMode='none';
+let catFilter=null; // null = all, string = selected category
 let favs=new Set(JSON.parse(localStorage.getItem('ambar_favs')||'[]'));
 let showFavOnly=false;
 let curMethod='gps',selTypeGps=null,selTypeMan=null,selArea=null;
@@ -700,7 +738,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(saved!==null) activeAddrIdx=parseInt(saved);
   // Validate it still exists
   if(activeAddrIdx!==null&&!getSaved()[activeAddrIdx]) activeAddrIdx=null;
-  buildTips();renderOrders();applyLang();loadCatalog();updateFavBtn();
+  buildTips();renderOrders();applyLang();loadCatalog();updateFavBtn();updateSortBtn();
   // Pre-fill saved phone
   const savedPhone=localStorage.getItem('ambar_phone');
   if(savedPhone)el('phone-in').value=savedPhone;
@@ -715,13 +753,13 @@ function set(id,v){const e=el(id);if(e)e.textContent=v;}
 // ── LANGUAGE ──────────────────────────────────────────────────────────────────
 function flipLang(){
   lang=lang==='ru'?'en':'ru';
-  applyLang();buildChips();renderGrid();buildTips();renderOrders();renderCart();buildSummary();buildProfile();
+  applyLang();buildChips();renderGrid();buildTips();renderOrders();renderCart();buildSummary();buildProfile();updateSortBtn();
   buildTypeChips('gps');buildTypeChips('man');buildAreaChips();renderSavedCards();updateAddrPill();updateCartAddrBar();
 }
 function applyLang(){
   const f=lang==='ru'?'🇷🇺':'🇬🇧';
   document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=f);
-  set('sh-catalog',t('catalog'));set('ls-cart',t('cart'));set('ls-addr',t('addrPage'));
+  set('catalog-page-title',showFavOnly?t('favs'):t('catalog'));set('ls-cart',t('cart'));set('ls-addr',t('addrPage'));
   set('ls-ord',t('orders'));set('ls-prof',t('profile'));
   set('sh-orders',t('orders'));set('sh-active',t('activeOrders'));
   set('nbl-cat',t('catalog'));set('nbl-cart',t('cart'));set('nbl-addr',t('addrPage'));
@@ -736,6 +774,7 @@ function applyLang(){
   set('cab-label',t('cabLabel'));set('cab-change',t('cabChange'));
   set('ct2',t('ct2'));set('phone-lbl',t('phoneLbl'));
   el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
+  const si=el('search-inp');if(si)si.placeholder=lang==='ru'?'Поиск...':'Search...';
   el('man-street').placeholder=lang==='ru'?'JVC Bloom Tower / Jumeirah St':'JVC Bloom Tower / Jumeirah St';
   el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
   set('lbl-addr-comment',lang==='ru'?'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА':'COMMENT FOR COURIER');
@@ -1057,6 +1096,168 @@ function resetAddrForm(){
 }
 
 // ── CATALOG CHIPS & GRID ──────────────────────────────────────────────────────
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+let searchQ='';
+
+// Transliteration: both directions
+const RU2EN={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+const EN2RU={a:'а',b:'б',v:'в',g:'г',d:'д',e:'е',z:'з',i:'и',y:'й',k:'к',l:'л',m:'м',n:'н',o:'о',p:'п',r:'р',s:'с',t:'т',u:'у',f:'ф',zh:'ж',kh:'х',ts:'ц',ch:'ч',sh:'ш',sch:'щ',yu:'ю',ya:'я',yo:'ё'};
+
+function translit(str){
+  // Convert Cyrillic → Latin
+  let ru2en=str.split('').map(c=>RU2EN[c]||c).join('');
+  // Convert Latin → Cyrillic (try longer sequences first)
+  let en2ru='';
+  let i=0;
+  while(i<str.length){
+    let found=false;
+    for(let len=3;len>=1;len--){
+      const chunk=str.slice(i,i+len);
+      if(EN2RU[chunk]){en2ru+=EN2RU[chunk];i+=len;found=true;break;}
+    }
+    if(!found){en2ru+=str[i];i++;}
+  }
+  return[str,ru2en,en2ru];
+}
+
+// ── SEARCH ALIASES (Russian names → product IDs) ─────────────────────────────
+const ALIASES={
+  // Водка
+  'абсолют':['p1'],'absolut':['p1'],
+  'столичная':['p2'],'stolichnaya':['p2'],
+  'русский стандарт':['p3'],'russian standard':['p3'],
+  'скай':['p4'],'skyy':['p4'],
+  'смирнофф':['p5'],'смирнов':['p5'],'smirnoff':['p5'],
+  'белуга':['p6'],'beluga':['p6'],
+  'серый гусь':['p7'],'grey goose':['p7'],
+  'бельведер':['p8'],'belvedere':['p8'],
+  'сирок':['p9'],'ciroc':['p9'],
+  // Виски
+  'красная этикетка':['p10'],'рэд лейбл':['p10'],'red label':['p10'],
+  'чёрная этикетка':['p11'],'черная этикетка':['p11'],'блэк лейбл':['p11'],'black label':['p11'],
+  'джек дэниэлс':['p12','p19'],'джек даниэлс':['p12','p19'],'jack daniels':['p12','p19'],
+  'чивас':['p13','p18','p22','p24'],'chivas':['p13','p18','p22','p24'],
+  'джеймсон':['p14'],'jameson':['p14'],
+  'баллантайнс':['p15'],'ballantines':['p15'],
+  'дабл блэк':['p16'],'double black':['p16'],
+  'голд лейбл':['p17'],'gold label':['p17'],
+  'джек мёд':['p19'],'jack honey':['p19'],
+  'джентльмен джек':['p20'],'gentleman jack':['p20'],
+  'синяя этикетка':['p21'],'блю лейбл':['p21'],'blue label':['p21'],
+  'роял салют':['p22'],'royal salute':['p22'],
+  'гленфиддик':['p25','p26','p27'],'glenfiddich':['p25','p26','p27'],
+  'макаллан':['p28','p29','p30'],'макалан':['p28','p29','p30'],'macallan':['p28','p29','p30'],
+  // Пиво
+  'хайнекен':['p31','p32','p59','p60'],'heineken':['p31','p32','p59','p60'],
+  'бадвайзер':['p33','p34','p61','p62'],'budweiser':['p33','p34','p61','p62'],
+  'карлсберг':['p35','p36'],'carlsberg':['p35','p36'],
+  'ред хорс':['p37','p38'],'red horse':['p37','p38'],
+  'стелла артуа':['p39','p40','p63','p64'],'stella artois':['p39','p40','p63','p64'],'стелла':['p39','p40','p63','p64'],
+  'амстел':['p41','p42'],'amstel':['p41','p42'],
+  'гиннесс':['p43','p44'],'guinness':['p43','p44'],
+  'корона':['p51','p52'],'corona':['p51','p52'],
+  'перони':['p53','p54'],'peroni':['p53','p54'],
+  'смирнофф айс':['p55','p56'],'smirnoff ice':['p55','p56'],
+  'бакарди бризер':['p57','p58'],'bacardi breezer':['p57','p58'],
+  'асахи':['p47','p48'],'asahi':['p47','p48'],
+  'хугарден':['p49','p50'],'hoegaarden':['p49','p50'],
+  // Ром
+  'бакарди белый':['p65'],'bacardi white':['p65'],
+  'бакарди чёрный':['p66'],'bacardi black':['p66'],
+  'бакарди голд':['p67'],'bacardi gold':['p67'],
+  'бакарди':['p65','p66','p67'],'bacardi':['p65','p66','p67'],
+  'капитан морган':['p68','p69'],'captain morgan':['p68','p69'],
+  'малибу':['p70'],'malibu':['p70'],
+  // Вермут
+  'мартини бьянко':['p71'],'martini bianco':['p71'],'мартини':['p71','p110'],
+  // Джин
+  'гордонс':['p72','p75'],'gordons':['p72','p75'],'gordon':['p72','p75'],
+  'бомбей сапфир':['p73'],'bombay sapphire':['p73'],'бомбей':['p73'],
+  'хендрикс':['p74'],'hendricks':['p74'],
+  'розовый гордон':['p75'],'gordon pink':['p75'],
+  'танкерей':['p76'],'tanqueray':['p76'],
+  'манки 47':['p77'],'monkey 47':['p77'],
+  'малфи апельсин':['p78'],'malfy arancia':['p78'],
+  'малфи роза':['p79'],'malfy rosa':['p79'],
+  'малфи':['p78','p79'],'malfy':['p78','p79'],
+  'драмшанбо':['p80'],'drumshanbo':['p80'],'gunpowder':['p80'],
+  // Текила
+  'хосе куэрво серебро':['p81'],'jose cuervo silver':['p81'],
+  'хосе куэрво голд':['p82'],'jose cuervo gold':['p82'],
+  'хосе куэрво':['p81','p82'],'jose cuervo':['p81','p82'],
+  'патрон':['p83','p84','p85'],'patron':['p83','p84','p85'],
+  'дон хулио бланко':['p86'],'don julio blanco':['p86'],
+  'дон хулио репосадо':['p87'],'don julio reposado':['p87'],
+  'дон хулио аньехо':['p88'],'don julio anejo':['p88'],
+  'дон хулио 1942':['p89'],'don julio 1942':['p89'],
+  'дон хулио':['p86','p87','p88','p89'],'don julio':['p86','p87','p88','p89'],
+  'класе азул':['p90'],'clase azul':['p90'],
+  // Коньяк
+  'хеннесси':['p91','p92','p93'],'hennessy':['p91','p92','p93'],
+  'хеннесси вс':['p91'],'hennessy vs':['p91'],
+  'хеннесси всоп':['p92'],'hennessy vsop':['p92'],
+  'хеннесси хо':['p93'],'hennessy xo':['p93'],
+  'реми мартен':['p94'],'remy martin':['p94'],'реми мартин':['p94'],
+  // Ликёр
+  'бейлис':['p95'],'baileys':['p95'],
+  'амарула':['p96'],'amarula':['p96'],
+  'егермейстер':['p97'],'егерь':['p97'],'jagermeister':['p97'],
+  'апероль':['p98'],'aperol':['p98'],
+  // Арак
+  'арак тума':['p99'],'arak touma':['p99'],
+  'эфе раки':['p100'],'efe raki':['p100'],'раки':['p100'],
+  // Шампанское
+  'моэт брют':['p101'],'moet brut':['p101'],
+  'моэт розе':['p102'],'moet rose':['p102'],
+  'моэт айс':['p103'],'moet ice':['p103'],
+  'моэт':['p101','p102','p103'],'moet':['p101','p102','p103'],
+  'вёв клико':['p104'],'вдова клико':['p104'],'veuve clicquot':['p104'],
+  'руинар':['p105'],'ruinart':['p105'],
+  'дом периньон':['p106'],'dom perignon':['p106'],
+  // Просекко
+  'боттега':['p107','p108','p109'],'bottega':['p107','p108','p109'],
+  'мартини асти':['p110'],'martini asti':['p110'],
+  'зонин':['p111'],'zonin':['p111'],
+  // Вино
+  'джейкоб крик':['p112','p121'],'jacob creek':['p112','p121'],
+  'пино гриджо':['p113'],'pinot grigio':['p113'],
+  'совиньон блан':['p114','p115','p120'],'sauvignon blanc':['p114','p115','p120'],
+  'сансер':['p116'],'sancerre':['p116'],
+  'шабли':['p117'],'chablis':['p117'],
+  'мерло':['p122'],'merlot':['p122'],
+  'шираз':['p121'],'shiraz':['p121'],
+  'мальбек':['p128'],'malbec':['p128'],
+  'шато':['p124','p125','p127','p130','p133'],'chateau':['p124','p125','p127','p130','p133'],
+  'ангел':['p134'],'whispering angel':['p134'],
+  'дростди хоф':['p137','p138'],'drostdy hof':['p137','p138'],
+};
+
+function matchSearch(p,q){
+  if(!q)return true;
+  // 1. Direct alias match
+  for(const[alias,ids]of Object.entries(ALIASES)){
+    if(q.includes(alias)||alias.includes(q)){
+      if(ids.includes(p.id))return true;
+    }
+  }
+  // 2. Plain text match across all fields + transliteration
+  const haystack=(p.name+' '+(p.nameE||'')+' '+(p.cat||'')+' '+(p.catE||'')+' '+(p.desc||'')+' '+(p.descE||'')).toLowerCase();
+  const variants=translit(q);
+  return variants.some(v=>v&&haystack.includes(v));
+}
+
+function onSearch(val){
+  searchQ=val.trim().toLowerCase();
+  el('search-clr').style.display=searchQ?'block':'none';
+  renderGrid();
+}
+function clearSearch(){
+  el('search-inp').value='';
+  searchQ='';
+  el('search-clr').style.display='none';
+  renderGrid();
+}
+
 // ── FAVOURITES ────────────────────────────────────────────────────────────────
 function saveFavs(){localStorage.setItem('ambar_favs',JSON.stringify([...favs]));}
 function toggleFav(id){
@@ -1080,33 +1281,176 @@ function toggleFavFilter(){
   renderGrid();
 }
 
-function buildChips(){
-  const cats=['all',...new Set(P.map(p=>lang==='ru'?p.cat:p.catE))];
-  el('cat-chips').innerHTML=cats.map(c=>`<button class="chip${c===catF?' on':''}" onclick="setCat('${c}',this)">${c==='all'?t('all'):c}</button>`).join('');
+const SORT_OPTIONS=[
+  {key:'none',   ru:'По умолчанию',      en:'Default'},
+  {key:'asc',    ru:'Цена: сначала дешевле', en:'Price: low to high'},
+  {key:'desc',   ru:'Цена: сначала дороже',  en:'Price: high to low'},
+  {key:'name',   ru:'По названию (А–Я)',     en:'Name (A–Z)'},
+  {key:'stock',  ru:'Сначала в наличии',     en:'In stock first'},
+];
+
+function openSortSheet(){
+  el('sort-sheet-title').textContent=lang==='ru'?'Сортировка':'Sort by';
+  el('sort-options').innerHTML=SORT_OPTIONS.map(o=>`
+    <div class="sort-opt${sortMode===o.key?' on':''}" onclick="applySort('${o.key}')">
+      <span>${lang==='ru'?o.ru:o.en}</span>
+      <svg class="sort-opt-check" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2.5" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>`).join('');
+  el('sort-overlay').classList.add('show');
 }
-function setCat(c,btn){catF=c;document.querySelectorAll('.chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderGrid();}
-function renderGrid(){
-  let list=catF==='all'?P:P.filter(p=>(lang==='ru'?p.cat:p.catE)===catF);
-  if(showFavOnly)list=list.filter(p=>favs.has(p.id));
-  el('p-grid').innerHTML=list.map(p=>{
-    const qty=cart[p.id]||0;
-    const desc=lang==='ru'?p.desc:p.descE;
-    return`<div class="pcard" onclick="openPDM('${p.id}')" style="cursor:pointer">
-      <div class="pimg-box">
-        ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
-        ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
-        <button class="pfav${favs.has(p.id)?' on':''}" id="pfav-${p.id}" onclick="event.stopPropagation();toggleFav('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-        <img class="pimg" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
-      </div>
-      <div class="pinfo">
-        <div class="pcat">${lang==='ru'?p.cat:p.catE}</div>
-        <div class="pname">${lang==='ru'?p.name:p.nameE}</div>
-        <div class="pdesc">${desc}</div>
-        <div class="pfoot"><div class="pprice">${p.price}<small> AED</small></div><div id="ctrl-${p.id}" onclick="event.stopPropagation()">${ctrlHTML(p,qty)}</div></div>
-      </div>
-    </div>`;
+function closeSortSheet(e){
+  if(e&&e.target!==el('sort-overlay'))return;
+  el('sort-overlay').classList.remove('show');
+}
+function applySort(key){
+  sortMode=key;
+  if(key==='none')catFilter=null;
+  el('sort-overlay').classList.remove('show');
+  updateSortBtn();buildChips();renderGrid();
+  el('pg-catalog').scrollTop=0;
+}
+function cycleSort(){openSortSheet();}
+function updateSortBtn(){
+  const btn=el('sort-btn');
+  if(!btn)return;
+  btn.classList.toggle('active',sortMode!=='none');
+}
+
+function buildChips(){
+  const cats=[...new Set(P.map(p=>p.cat))];
+  el('cat-chips').innerHTML=cats.map(c=>{
+    const label=lang==='ru'?c:(P.find(p=>p.cat===c)?.catE||c);
+    const isOn=catFilter===c;
+    return`<button class="chip${isOn?' on':''}" data-cat="${c}" onclick="setCat('${c}',this)">${label}</button>`;
   }).join('');
 }
+function setCat(c,btn){
+  if(showFavOnly||searchQ||sortMode!=='none'){
+    // toggle category filter
+    catFilter=catFilter===c?null:c;
+    buildChips();
+    renderGrid();
+    return;
+  }
+  // default mode: scroll to section
+  catFilter=null;
+  const hdr=document.querySelector(`#p-grid .cat-section-hdr[data-cat="${c}"]`);
+  const page=el('pg-catalog');
+  if(!hdr||!page)return;
+  const stickyH=page.querySelector('[style*="sticky"]')?.offsetHeight||160;
+  page.scrollTop=hdr.offsetTop-stickyH+1;
+}
+function renderGrid(){
+  let list=[...P];
+  if(catFilter)list=list.filter(p=>p.cat===catFilter);
+  if(showFavOnly)list=list.filter(p=>favs.has(p.id));
+  if(searchQ)list=list.filter(p=>matchSearch(p,searchQ));
+  if(sortMode==='asc')list=[...list].sort((a,b)=>a.price-b.price);
+  else if(sortMode==='desc')list=[...list].sort((a,b)=>b.price-a.price);
+  else if(sortMode==='name')list=[...list].sort((a,b)=>(lang==='ru'?a.name:a.nameE).localeCompare(lang==='ru'?b.name:b.nameE));
+  else if(sortMode==='stock')list=[...list].sort((a,b)=>(b.stock?1:0)-(a.stock?1:0));
+
+  // Empty state
+  if(list.length===0){
+    const isSearch=!!searchQ;
+    const isFav=showFavOnly;
+    let emoji,title,sub;
+    if(isFav){
+      emoji='🤍';
+      title=lang==='ru'?'Избранное пусто':'No favourites yet';
+      sub=lang==='ru'?'Нажмите ♡ на товаре, чтобы добавить его сюда':'Tap ♡ on any product to save it here';
+    } else if(isSearch){
+      emoji='🔍';
+      title=lang==='ru'?'Ничего не найдено':'Nothing found';
+      sub=lang==='ru'?'Попробуйте другой запрос':'Try a different search';
+    } else {
+      emoji='📦';
+      title=lang==='ru'?'Нет товаров':'No products';
+      sub='';
+    }
+    el('p-grid').innerHTML=`<div style="text-align:center;padding:60px 24px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px">${emoji}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text);margin-bottom:8px">${title}</div>
+      <div style="font-size:13px">${sub}</div>
+    </div>`;
+    initScrollSpy();
+    return;
+  }
+
+  // Build HTML with category section headers when showing all
+  let html='';
+  if(!catFilter&&!searchQ&&sortMode==='none'){
+    let lastCat=null;
+    list.forEach(p=>{
+      const cat=lang==='ru'?p.cat:p.catE;
+      if(cat!==lastCat){
+        if(lastCat!==null)html+='</div>'; // close previous grid-group
+        html+=`<div class="cat-section-hdr" data-cat="${p.cat}">${cat}</div><div class="grid-group">`;
+        lastCat=cat;
+      }
+      html+=renderCard(p);
+    });
+    if(lastCat!==null)html+='</div>';
+  } else {
+    html='<div class="grid-group">'+list.map(renderCard).join('')+'</div>';
+  }
+  el('p-grid').innerHTML=html;
+  initScrollSpy();
+}
+
+function renderCard(p){
+  const qty=cart[p.id]||0;
+  const desc=lang==='ru'?p.desc:p.descE;
+  const catVal=lang==='ru'?p.cat:p.catE;
+  return`<div class="pcard" onclick="openPDM('${p.id}')" style="cursor:pointer" data-cat="${p.cat}">
+    <div class="pimg-box">
+      ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
+      ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
+      <button class="pfav${favs.has(p.id)?' on':''}" id="pfav-${p.id}" onclick="event.stopPropagation();toggleFav('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      <img class="pimg" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
+    </div>
+    <div class="pinfo">
+      <div class="pcat">${catVal}</div>
+      <div class="pname">${lang==='ru'?p.name:p.nameE}</div>
+      <div class="pdesc">${desc}</div>
+      <div class="pfoot"><div class="pprice">${p.price}<small> AED</small></div><div id="ctrl-${p.id}" onclick="event.stopPropagation()">${ctrlHTML(p,qty)}</div></div>
+    </div>
+  </div>`;
+}
+
+// ── SCROLL SPY ────────────────────────────────────────────────────────────────
+let _spyObserver=null;
+function initScrollSpy(){
+  if(_spyObserver)_spyObserver.disconnect();
+  const page=el('pg-catalog');
+  if(!page)return;
+  if(searchQ||sortMode!=='none'){
+    if(!catFilter){
+      document.querySelectorAll('#cat-chips .chip').forEach(b=>b.classList.remove('on'));
+    }
+    page.onscroll=null;
+    return;
+  }
+  page.onscroll=()=>{
+    const headers=[...document.querySelectorAll('#p-grid .cat-section-hdr')];
+    if(!headers.length)return;
+    const stickyH=170;
+    const scrollTop=page.scrollTop;
+    let active=null;
+    for(const h of headers){
+      if(h.offsetTop-stickyH<=scrollTop+1)active=h;
+    }
+    highlightChip(active?active.dataset.cat:null);
+  };
+}
+function highlightChip(cat){
+  const chips=document.querySelectorAll('#cat-chips .chip');
+  chips.forEach(btn=>{
+    const match=btn.dataset.cat===cat;
+    btn.classList.toggle('on',match);
+  });
+}
+
 function ctrlHTML(p,qty){
   if(qty===0)return`<button class="add-btn"${!p.stock?' disabled':''} onclick="addItem('${p.id}')">+</button>`;
   return`<div class="qctrl"><button class="qb" onclick="chgQty('${p.id}',-1)">−</button><span class="qn">${qty}</span><button class="qb" onclick="chgQty('${p.id}',1)">+</button></div>`;

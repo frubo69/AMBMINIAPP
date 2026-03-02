@@ -732,7 +732,7 @@ const tg=window.Telegram?.WebApp||null;
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
-  if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#07070E');tg.setBackgroundColor&&tg.setBackgroundColor('#07070E');}
+  if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#07070E');tg.setBackgroundColor&&tg.setBackgroundColor('#07070E');tg.enableClosingConfirmation&&tg.enableClosingConfirmation();}
   // Restore active address index
   const saved=localStorage.getItem('ambar_active_addr');
   if(saved!==null) activeAddrIdx=parseInt(saved);
@@ -1654,7 +1654,7 @@ function buildProfile(){
 // ── BEER PICKER ───────────────────────────────────────────────────────────────
 // Any product with cat === 'Пиво' gets a 12/24 pcs picker.
 // _beerPcs stores the chosen pack size per product id: { 'p31': 12, 'p31': 24 }
-let _beerProduct=null, _beerPcsChoice=null; // current PDM beer product & chosen pcs
+let _beerProduct=null, _beerPcsChoice=null, _beerPendingQty=1;
 
 function isBeer(p){ return p && p.cat==='Пиво'; }
 
@@ -1662,10 +1662,8 @@ function renderBeerPDM(p){
   const row=el('pdm-add-row');if(!row)return;
   const inCart=(cart[p.id]||0)>0;
   const chosen=inCart?(beerPcs[p.id]||_beerPcsChoice):_beerPcsChoice;
-
-  // Price labels
-  const price12=p.price||0;
-  const price24=Math.round(price12*1.8);
+  const price12=p.price_12||p.price||0;
+  const price24=p.price_24||Math.round(price12*1.8);
 
   let html='<div style="display:flex;gap:10px;margin-bottom:12px">';
   for(const pcs of [12,24]){
@@ -1679,21 +1677,27 @@ function renderBeerPDM(p){
   }
   html+='</div>';
 
-  if(inCart){
-    const qty=cart[p.id];
-    html+=`<div class="pdm-qctrl-full">
-      <button class="pdm-qb" onclick="beerChg(-1)">−</button>
-      <span class="pdm-qn">${qty}</span>
-      <button class="pdm-qb" onclick="beerChg(1)">+</button>
-    </div>`;
-  } else if(chosen){
-    const priceLabel=chosen===12?price12:price24;
-    html+=`<button class="pdm-add-btn" onclick="beerAdd()">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
-        <span>${lang==='ru'?'В корзину':'Add to cart'}</span>
-        <span style="font-size:12px;font-weight:500;opacity:.75">${priceLabel?priceLabel+' AED':''}</span>
+  if(chosen){
+    // _beerPendingQty: staging counter (not yet in cart until button pressed)
+    const pendingQty=_beerPendingQty||1;
+    const unitPrice=chosen===12?price12:price24;
+    const totalPrice=unitPrice*pendingQty;
+    const cartQty=cart[p.id]||0;
+    const btnLabel=lang==='ru'?'В корзину':'Add to cart';
+
+    html+=`<div style="display:flex;align-items:center;gap:10px">
+      <button class="pdm-add-btn" onclick="beerAddPending()" style="flex:1">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+          <span>${btnLabel}</span>
+          <span style="font-size:12px;font-weight:500;opacity:.75">${totalPrice?totalPrice+' AED':''}</span>
+        </div>
+      </button>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+        <button class="pdm-qb" style="width:36px;height:36px;font-size:16px" onclick="beerPendingChg(-1)">−</button>
+        <span class="pdm-qn" style="min-width:20px;text-align:center;font-size:16px">${pendingQty}</span>
+        <button class="pdm-qb" style="width:36px;height:36px;font-size:16px" onclick="beerPendingChg(1)">+</button>
       </div>
-    </button>`;
+    </div>`;
   } else {
     html+=`<button class="pdm-add-btn" disabled style="opacity:.35;cursor:not-allowed">
       ${lang==='ru'?'Выберите упаковку':'Choose pack size'}
@@ -1705,17 +1709,39 @@ function renderBeerPDM(p){
 
 function beerSelectPcs(pcs){
   _beerPcsChoice=pcs;
+  if(_beerProduct && cart[_beerProduct.id]>0) _beerPendingQty=cart[_beerProduct.id];
+  else _beerPendingQty=1;
   if(_beerProduct) renderBeerPDM(_beerProduct);
 }
 
-function beerAdd(){
+function beerPendingChg(d){
+  const p=_beerProduct; if(!p) return;
+  const nq=(_beerPendingQty||1)+d;
+  if(nq<=0){
+    // Remove from cart and reset
+    delete cart[p.id];
+    delete beerPcs[p.id];
+    _beerPcsChoice=null;
+    _beerPendingQty=1;
+    syncCtrl(p.id); updHdr();
+    renderBeerPDM(p);
+    if(curPg==='cart') renderCart();
+    return;
+  }
+  _beerPendingQty=nq;
+  if(_beerProduct) renderBeerPDM(_beerProduct);
+}
+
+function beerAddPending(){
   const p=_beerProduct; if(!p||!_beerPcsChoice) return;
-  cart[p.id]=1;
+  cart[p.id]=_beerPendingQty;
   beerPcs[p.id]=_beerPcsChoice;
   syncCtrl(p.id); updHdr();
-  renderBeerPDM(p);
-  showToast(t('added')+': '+(lang==='ru'?p.name:p.nameE)+' ('+_beerPcsChoice+' '+(lang==='ru'?'шт':'pcs')+')','ok');
+  if(curPg==='cart') renderCart();
+  showToast(t('added')+': '+(lang==='ru'?p.name:p.nameE)+' ('+_beerPcsChoice+' '+(lang==='ru'?'шт':'pcs')+' × '+_beerPendingQty+')','ok');
+  closePDMDirect();
 }
+
 
 function beerChg(d){
   const p=_beerProduct; if(!p) return;
@@ -1733,11 +1759,13 @@ function beerChg(d){
 }
 
 // ── PRODUCT DETAIL MODAL ─────────────────────────────────────────────────────
-let pdmId=null;
+let pdmId=null, _pdmPendingQty=1;
 function openPDM(id){
   const p=P.find(x=>x.id===id);if(!p)return;
   _beerProduct=isBeer(p)?p:null;
   _beerPcsChoice=(cart[p.id]>0)?beerPcs[p.id]:null;
+  _beerPendingQty=(cart[p.id]>0)?cart[p.id]:1;
+  _pdmPendingQty=(cart[p.id]>0)?cart[p.id]:1;
   pdmId=id;
   const img=el('pdm-img');
   img.src=p.img||'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><text y="68" font-size="64">🍾</text></svg>';
@@ -1757,10 +1785,22 @@ function updatePDMCtrl(p){
   const qty=cart[p.id]||0;
   if(!p.stock){
     row.innerHTML=`<div style="text-align:center;padding:14px 0;color:var(--muted);font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${t('oos')}</div>`;
-  } else if(qty===0){
-    row.innerHTML=`<button class="pdm-add-btn" onclick="pdmAdd('${p.id}')"><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span>${lang==='ru'?'В корзину':'Add to cart'}</span><span style="font-size:12px;font-weight:500;opacity:.75">${p.price} AED</span></div></button>`;
   } else {
-    row.innerHTML=`<div class="pdm-qctrl-full"><button class="pdm-qb" onclick="pdmChg('${p.id}',-1)">−</button><span class="pdm-qn">${qty}</span><button class="pdm-qb" onclick="pdmChg('${p.id}',1)">+</button></div>`;
+    const pendingQty=_pdmPendingQty||1;
+    const totalPrice=p.price*pendingQty;
+    row.innerHTML=`<div style="display:flex;align-items:center;gap:10px">
+      <button class="pdm-add-btn" onclick="pdmAdd('${p.id}')" style="flex:1">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+          <span>${lang==='ru'?'В корзину':'Add to cart'}</span>
+          <span style="font-size:12px;font-weight:500;opacity:.75">${totalPrice} AED</span>
+        </div>
+      </button>
+      ${qty>0?`<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+        <button class="pdm-qb" style="width:36px;height:36px;font-size:16px" onclick="pdmPendingChg(-1)">−</button>
+        <span class="pdm-qn" style="min-width:20px;text-align:center;font-size:16px">${pendingQty}</span>
+        <button class="pdm-qb" style="width:36px;height:36px;font-size:16px" onclick="pdmPendingChg(1)">+</button>
+      </div>`:''}
+    </div>`;
   }
 }
 function initPinchZoom(){
@@ -1795,8 +1835,25 @@ function initPinchZoom(){
 function pdmAdd(id){
   const p=P.find(x=>x.id===id);if(!p||!p.stock)return;
   const max=p.stockQty||999;
-  if((cart[id]||0)>=max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
-  cart[id]=1;syncCtrl(id);updHdr();updatePDMCtrl(p);showToast(t('added')+': '+(lang==='ru'?p.name:p.nameE),'ok');
+  const qty=_pdmPendingQty||1;
+  if(qty>max){showToast(lang==='ru'?`Доступно: ${max}`:`Only ${max} available`,'err');return;}
+  cart[id]=qty;
+  syncCtrl(id);updHdr();
+  showToast(t('added')+': '+(lang==='ru'?p.name:p.nameE),'ok');
+  closePDMDirect();
+}
+function pdmPendingChg(d){
+  const p=P.find(x=>x.id===pdmId);if(!p)return;
+  const nq=(_pdmPendingQty||1)+d;
+  if(nq<=0){
+    delete cart[p.id];
+    _pdmPendingQty=1;
+    syncCtrl(p.id);updHdr();updatePDMCtrl(p);
+    if(curPg==='cart')renderCart();
+    return;
+  }
+  _pdmPendingQty=nq;
+  updatePDMCtrl(p);
 }
 function pdmChg(id,d){
   const p=P.find(x=>x.id===id),max=p?(p.stockQty||999):999,nq=(cart[id]||0)+d;
@@ -1812,6 +1869,7 @@ function closePDMDirect(){
   el('pdm-overlay').classList.remove('show');
   document.body.style.overflow='';
   pdmId=null;
+  _pdmPendingQty=1;
 }
 
 // ── BACK TO CART PROMPT ───────────────────────────────────────────────────────

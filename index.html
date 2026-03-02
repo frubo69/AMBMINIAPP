@@ -1448,6 +1448,15 @@ function highlightChip(cat){
   chips.forEach(btn=>{
     const match=btn.dataset.cat===cat;
     btn.classList.toggle('on',match);
+    if(match){
+      // scroll only the chips container, not the page
+      const container=el('cat-chips');
+      const btnLeft=btn.offsetLeft;
+      const btnWidth=btn.offsetWidth;
+      const containerWidth=container.offsetWidth;
+      const target=btnLeft-(containerWidth/2)+(btnWidth/2);
+      container.scrollTo({left:target,behavior:'smooth'});
+    }
   });
 }
 

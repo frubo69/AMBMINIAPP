@@ -403,6 +403,19 @@
     "descE": "Dutch lager with crisp freshness and a light hoppy bitterness."
   },
   {
+    "id": "p59",
+    "cat": "Пиво",
+    "catE": "Beer",
+    "name": "Heineken 0.33 bottle",
+    "nameE": "Heineken 0.33 bottle",
+    "price": 100,
+    "stock": true,
+    "isNew": false,
+    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/Heineken%20330ml%20Bottle.jpg",
+    "desc": "Нидерландский лагер с хрустящей свежестью и лёгкой хмелевой горчинкой. (2)",
+    "descE": "Dutch lager with crisp freshness and a light hoppy bitterness. (2)"
+  },
+  {
     "id": "p33",
     "cat": "Пиво",
     "catE": "Beer",
@@ -414,6 +427,19 @@
     "img": "",
     "desc": "Американский лагер с чистым, мягким вкусом и лёгкой сладостью солода.",
     "descE": "American lager with a clean, smooth taste and light malt sweetness."
+  },
+  {
+    "id": "p61",
+    "cat": "Пиво",
+    "catE": "Beer",
+    "name": "Budweiser 0.33 bottle",
+    "nameE": "Budweiser 0.33 bottle",
+    "price": 250,
+    "stock": true,
+    "isNew": false,
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Budweiser%20330ml%20Bottle.jpg?raw=true",
+    "desc": "Американский лагер с чистым, мягким вкусом и лёгкой сладостью солода. (2)",
+    "descE": "American lager with a clean, smooth taste and light malt sweetness. (2)"
   },
   {
     "id": "p37",
@@ -440,6 +466,19 @@
     "img": "",
     "desc": "Бельгийский лагер с благородной горчинкой и аккуратным зерновым ароматом.",
     "descE": "Belgian lager with a refined bitterness and clean grain aroma."
+  },
+  {
+    "id": "p63",
+    "cat": "Пиво",
+    "catE": "Beer",
+    "name": "Stella Artois 0.33 bottle",
+    "nameE": "Stella Artois 0.33 bottle",
+    "price": 200,
+    "stock": true,
+    "isNew": false,
+    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Asahi%20Super%20Dry%20330ml.jpg?raw=true",
+    "desc": "Бельгийский лагер с благородной горчинкой и аккуратным зерновым ароматом. (2)",
+    "descE": "Belgian lager with a refined bitterness and clean grain aroma. (2)"
   },
   {
     "id": "p41",
@@ -557,45 +596,6 @@
     "img": "",
     "desc": "Фруктовый слабоалкогольный микс со вкусом дыни — лёгкий и освежающий.",
     "descE": "Fruity alcopop with melon flavor—light and refreshing."
-  },
-  {
-    "id": "p59",
-    "cat": "Пиво",
-    "catE": "Beer",
-    "name": "Heineken 0.33 bottle",
-    "nameE": "Heineken 0.33 bottle",
-    "price": 100,
-    "stock": true,
-    "isNew": false,
-    "img": "https://raw.githubusercontent.com/frubo69/Ambar_Pictures/refs/heads/main/Heineken%20330ml%20Bottle.jpg",
-    "desc": "Нидерландский лагер с хрустящей свежестью и лёгкой хмелевой горчинкой. (2)",
-    "descE": "Dutch lager with crisp freshness and a light hoppy bitterness. (2)"
-  },
-  {
-    "id": "p61",
-    "cat": "Пиво",
-    "catE": "Beer",
-    "name": "Budweiser 0.33 bottle",
-    "nameE": "Budweiser 0.33 bottle",
-    "price": 250,
-    "stock": true,
-    "isNew": false,
-    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Budweiser%20330ml%20Bottle.jpg?raw=true",
-    "desc": "Американский лагер с чистым, мягким вкусом и лёгкой сладостью солода. (2)",
-    "descE": "American lager with a clean, smooth taste and light malt sweetness. (2)"
-  },
-  {
-    "id": "p63",
-    "cat": "Пиво",
-    "catE": "Beer",
-    "name": "Stella Artois 0.33 bottle",
-    "nameE": "Stella Artois 0.33 bottle",
-    "price": 200,
-    "stock": true,
-    "isNew": false,
-    "img": "https://github.com/frubo69/Ambar_Pictures/blob/main/Asahi%20Super%20Dry%20330ml.jpg?raw=true",
-    "desc": "Бельгийский лагер с благородной горчинкой и аккуратным зерновым ароматом. (2)",
-    "descE": "Belgian lager with a refined bitterness and clean grain aroma. (2)"
   },
   {
     "id": "p65",

@@ -1527,7 +1527,13 @@ function updCartTot(){el('tot-n').textContent=cartSub()+tip;buildSummary();}
 // ── SUMMARY ───────────────────────────────────────────────────────────────────
 function buildSummary(){
   const entries=Object.entries(cart).filter(([,q])=>q>0),sub=cartSub();
-  el('sum-items').innerHTML=entries.map(([id,qty])=>{const p=P.find(x=>x.id===id);return p?`<div class="sum-line"><span>${p.name} ×${qty}</span><span>${p.price*qty} AED</span></div>`:''}).join('');
+  el('sum-items').innerHTML=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id);if(!p)return'';
+    const pcs=isBeer(p)?beerPcs[id]:null;
+    const unitPrice=pcs===24?Math.round(p.price*1.8):p.price;
+    const label=pcs?`${p.name} <span style="color:var(--gold);font-size:11px">(${pcs} ${lang==='ru'?'шт':'pcs'})</span>`:p.name;
+    return`<div class="sum-line"><span>${label} ×${qty}</span><span>${unitPrice*qty} AED</span></div>`;
+  }).join('');
   const tr=el('sum-tip-row');
   if(tip>0){tr.style.display='flex';el('sum-tip-val').textContent=tip+' AED';}else tr.style.display='none';
   el('sum-tot-val').textContent=(sub+tip)+' AED';
@@ -1595,7 +1601,13 @@ function placeOrder(){
     el('phone-in').focus();return;
   }
 
-  const items=entries.map(([id,qty])=>{const p=P.find(x=>x.id===id);return{id,name:p.name,price:p.price,qty,line_total:p.price*qty};});
+  const items=entries.map(([id,qty])=>{
+    const p=P.find(x=>x.id===id);
+    const pcs=isBeer(p)?beerPcs[id]:null;
+    const unitPrice=pcs===24?Math.round(p.price*1.8):p.price;
+    const displayName=pcs?`${p.name} (${pcs} ${lang==='ru'?'шт':'pcs'})`:p.name;
+    return{id,name:displayName,price:unitPrice,qty,line_total:unitPrice*qty,pcs:pcs||null};
+  });
   const sub=cartSub(),total=sub+tip,oid='AMB'+Date.now().toString().slice(-7);
   const payload={
     action:'order',order_id:oid,items,subtotal:sub,tip,total,currency:'AED',
@@ -1611,7 +1623,7 @@ function placeOrder(){
   if(tg?.sendData)tg.sendData(JSON.stringify(payload));
   else console.log('ORDER:',JSON.stringify(payload,null,2));
 
-  cart={};tip=0;el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
+  cart={};beerPcs={};tip=0;el('phone-err').classList.remove('on');el('phone-in').classList.remove('err');
   updHdr();buildTips();showToast(t('placed'),'ok');
   setTimeout(()=>go('orders'),1400);
 }

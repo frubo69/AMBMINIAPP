@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>AMBAR</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -18,20 +18,20 @@
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;height:100%;overflow:hidden}
-button,input{font-family:'Outfit',sans-serif;outline:none}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:100%;overflow:hidden}
+button,input{font-family:'DM Sans',sans-serif;outline:none}
 img{display:block}
 .page{position:fixed;top:0;left:0;right:0;height:calc(var(--tg-h,100vh) - 60px - var(--safe-bottom));overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;opacity:1;transition:opacity .2s,transform .2s}
 .page.hidden{opacity:0;pointer-events:none;transform:translateY(8px)}
 .hdr{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(7,7,14,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-sub{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:-2px}
+.logo-sub{font-size:7px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:-1px;font-family:'DM Sans',sans-serif;font-weight:400}
 .hdr-right{display:flex;gap:6px;align-items:center}
-.cart-pill{display:flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:0 12px;height:34px;position:relative;cursor:pointer;transition:.15s}
+.cart-pill{display:flex;align-items:center;gap:4px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:0 10px;height:30px;position:relative;cursor:pointer;transition:.15s;white-space:nowrap}
 .cart-pill:active{transform:scale(.93)}
-.cart-txt{font-size:12px;font-weight:600;color:var(--gold2)}
+.cart-txt{font-size:12px;font-weight:600;color:var(--gold2);white-space:nowrap}
 .cart-dot{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E;border-radius:50%;width:18px;height:18px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
-.lang-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:.15s}
+.lang-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:.15s}
 .lang-btn:active{transform:scale(.85)}
 .fav-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
 .fav-btn:active{transform:scale(.85)}
@@ -45,9 +45,11 @@ img{display:block}
 .pfav.on svg{fill:#e05555;stroke:#e05555}
 
 /* Active address pill on catalog */
-.addr-pill{display:flex;align-items:center;gap:4px;background:transparent;border:none;padding:0;cursor:pointer;transition:.15s;justify-content:center}
-.addr-pill:active{opacity:.7}
-.addr-pill-txt{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.addr-pill{display:flex;flex-direction:column;align-items:center;background:transparent;border:none;padding:0;cursor:pointer;transition:.15s;min-width:0;max-width:100%}
+.addr-pill:active{opacity:.6}
+.addr-pill-sub{font-size:8px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:500;white-space:nowrap}
+.addr-pill-row{display:flex;align-items:center;gap:3px;min-width:0;max-width:100%}
+.addr-pill-txt{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .addr-pill-dot{display:none}
 
 /* Address selector modal */
@@ -56,7 +58,7 @@ img{display:block}
 .modal-sheet{width:100%;background:var(--bg2);border-radius:20px 20px 0 0;padding:0 0 calc(16px + var(--safe-bottom));max-height:70vh;overflow-y:auto;transform:translateY(60px);transition:transform .25s cubic-bezier(.34,1,.64,1)}
 .modal-overlay.show .modal-sheet{transform:translateY(0)}
 .modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px}
-.modal-title{font-family:'Outfit',sans-serif;font-size:18px;color:var(--gold2);padding:0 16px 12px;border-bottom:1px solid var(--border2)}
+.modal-title{font-family:'DM Sans',sans-serif;font-size:18px;color:var(--gold2);padding:0 16px 12px;border-bottom:1px solid var(--border2)}
 .modal-addr-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border2);cursor:pointer;transition:.15s}
 .modal-addr-item:active{background:rgba(255,255,255,.03)}
 .modal-addr-item.active{background:rgba(201,169,110,.06)}
@@ -91,9 +93,9 @@ img{display:block}
 .search-clr{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
 .chip{white-space:nowrap;padding:7px 14px;border-radius:50px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;transition:.15s}
 .chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
-.sec-h{padding:10px 14px 8px;font-family:'Outfit',sans-serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sec-h{padding:10px 14px 8px;font-family:'DM Sans',sans-serif;font-size:20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .sec-h::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
-.cat-section-hdr{padding:16px 14px 8px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:10px;letter-spacing:1px}
+.cat-section-hdr{padding:16px 14px 8px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:10px;letter-spacing:2.5px;text-transform:uppercase}
 .cat-section-hdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,169,110,.3),transparent)}
 .grid-group{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px 4px}
 .grid{padding:2px 0 16px}
@@ -109,7 +111,7 @@ img{display:block}
 .pbadge.isnew{right:8px;top:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E}
 .pinfo{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
 .pcat{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600}
-.pname{font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;line-height:1.2}
+.pname{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;line-height:1.2}
 .pdesc{font-size:10px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
 .pprice{font-size:16px;font-weight:700;color:var(--gold2)}
@@ -123,6 +125,12 @@ img{display:block}
 .qn{font-size:13px;font-weight:700;min-width:20px;text-align:center;color:var(--gold2)}
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-icon{font-size:54px;margin-bottom:14px;opacity:.3}
+#cart-empty{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;gap:0}
+.ce-line{width:270px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(201,169,110,.5) 50%,transparent 100%)}
+.ce-brand-bg{font-size:80px;font-weight:700;font-family:'Cormorant Garamond',serif;letter-spacing:16px;color:rgba(201,169,110,.08);pointer-events:none;user-select:none;white-space:nowrap;line-height:1;padding:3px 0}
+.ce-title{display:none}
+.ce-btn{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.2);color:rgba(201,169,110,.7);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0 18px;height:34px;border-radius:8px;display:flex;align-items:center;gap:6px;letter-spacing:.5px;margin-top:22px;transition:.15s}
+.ce-btn:active{opacity:.5;transform:scale(.96)}
 .ci{display:flex;align-items:center;gap:11px;padding:13px 16px;border-bottom:1px solid var(--border2)}
 .ci-img{width:50px;height:60px;object-fit:contain;background:var(--card);border-radius:10px;padding:5px;flex-shrink:0}
 .ci-info{flex:1;min-width:0}
@@ -140,7 +148,7 @@ img{display:block}
 .cart-foot{padding:14px 16px;background:var(--bg2);border-top:1px solid var(--border)}
 .total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .total-lbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
-.total-val{font-family:'Outfit',sans-serif;font-size:28px;color:var(--gold2);font-weight:600}
+.total-val{font-family:'DM Sans',sans-serif;font-size:28px;color:var(--gold2);font-weight:600}
 .btn-main{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));color:#07070E;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:.15s}
 .btn-main:active{transform:scale(.98);opacity:.9}
 .btn-main:disabled{opacity:.3;cursor:not-allowed}
@@ -152,16 +160,17 @@ img{display:block}
 .cart-list-wrap{flex:1;min-height:0;position:relative;margin:0 12px 4px;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:flex-basis .2s,min-height .2s,margin-bottom .2s}
 .cart-list-wrap.tip-kbd{flex:0 0 0;min-height:0;margin-bottom:0;border-color:transparent}
 .cart-list-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--card));pointer-events:none}
-#cart-list{height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--card);scrollbar-width:thin;scrollbar-color:rgba(201,169,110,.35) transparent}
-#cart-list::-webkit-scrollbar{width:3px}
-#cart-list::-webkit-scrollbar-track{background:transparent}
-#cart-list::-webkit-scrollbar-thumb{background:rgba(201,169,110,.35);border-radius:2px}
+.cart-list-wrap::before{content:'';position:absolute;right:4px;top:8px;bottom:8px;width:3px;background:rgba(201,169,110,.18);border-radius:2px;z-index:3;pointer-events:none;display:none}
+.cart-list-wrap.can-scroll::before{display:block}
+#cart-thumb{position:absolute;right:4px;width:3px;background:rgba(201,169,110,.6);border-radius:2px;z-index:4;pointer-events:none;transition:top .08s,height .08s;display:none}
+#cart-list{height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--card);scrollbar-width:none}
+#cart-list::-webkit-scrollbar{display:none}
 #cart-list .ci:last-child{border-bottom:none}
 #tip-section,#cart-foot{flex-shrink:0}
 
 /* Cart active address banner */
 .cart-topbar{display:flex;align-items:center;gap:8px;padding:10px 16px 8px}
-.cart-back-btn{flex-shrink:0;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--sub);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;transition:.15s;font-family:'Outfit',sans-serif}
+.cart-back-btn{flex-shrink:0;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--sub);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;transition:.15s;font-family:'DM Sans',sans-serif}
 .cart-back-btn:active{border-color:var(--gold);color:var(--gold)}
 .cart-addr-bar{flex:1;min-width:0;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:0 12px;height:36px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:.15s}
 .cart-addr-bar:active{border-color:rgba(201,169,110,.5)}
@@ -206,29 +215,42 @@ img{display:block}
 
 
 /* Saved addr cards */
-.saved-card{background:var(--card);border:2px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
-.saved-card:active{transform:scale(.98)}
-.saved-card.active-addr{border-color:var(--green);background:rgba(76,175,125,.05)}
-.sc-top{display:flex;align-items:center;gap:12px}
-.sc-radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s}
+.saved-cards-wrap{position:relative;margin-bottom:12px}
+.saved-cards-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:36px;background:linear-gradient(to bottom,transparent,var(--card));pointer-events:none;border-radius:0 0 var(--r2) var(--r2);z-index:1}
+.saved-cards-wrap::before{content:'';position:absolute;right:4px;top:8px;bottom:8px;width:3px;background:rgba(201,169,110,.18);border-radius:2px;z-index:3;pointer-events:none}
+#sc-thumb{position:absolute;right:4px;width:3px;background:rgba(201,169,110,.6);border-radius:2px;z-index:4;pointer-events:none;transition:top .08s,height .08s;display:none}
+.saved-cards-wrap.few::after{display:none}
+.saved-cards-wrap.few::before{display:none}
+#saved-cards{max-height:162px;overflow-y:scroll;scrollbar-width:none;background:var(--card);border:1.5px solid var(--border2);border-radius:var(--r2)}
+#saved-cards::-webkit-scrollbar{display:none}
+.saved-card{padding:10px 12px;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border2);border-left:3px solid transparent}
+.saved-card:last-child{border-bottom:none}
+.saved-card:active{background:rgba(255,255,255,.03)}
+.saved-card.active-addr{border-left-color:var(--green);background:rgba(76,175,125,.05)}
+.sc-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s}
 .saved-card.active-addr .sc-radio{border-color:var(--green);background:var(--green)}
-.sc-radio-dot{width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;transform:scale(0);transition:.15s}
+.sc-radio-dot{width:5px;height:5px;border-radius:50%;background:#fff;opacity:0;transform:scale(0);transition:.15s}
 .saved-card.active-addr .sc-radio-dot{opacity:1;transform:scale(1)}
-.sc-icon{font-size:20px;flex-shrink:0}
+.sc-icon{font-size:16px;flex-shrink:0}
 .sc-info{flex:1;min-width:0}
-.sc-label{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sc-addr{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sc-office{font-size:10px;color:var(--gold);margin-top:3px}
-.sc-active-tag{font-size:10px;font-weight:700;color:var(--green);letter-spacing:.5px;margin-top:4px}
-.sc-del-btn{display:block;width:100%;margin-top:12px;padding:8px;border:none;background:transparent;color:var(--red);font-size:12px;font-weight:600;text-align:center;cursor:pointer;border-top:1px solid var(--border2);letter-spacing:.3px;opacity:.7;transition:.15s}
-.sc-del-btn:active{opacity:1}
+.sc-row1{display:flex;align-items:baseline;gap:5px;min-width:0}
+.sc-label{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;max-width:45%}
+.sc-sep{font-size:10px;color:var(--muted);flex-shrink:0}
+.sc-addr{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.sc-comment{font-size:10px;color:var(--sub);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.sc-actions{display:flex;gap:4px;flex-shrink:0}
+.sc-edit-btn,.sc-del-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;font-size:12px;font-family:'DM Sans',sans-serif}
+.sc-edit-btn{color:var(--gold)}
+.sc-del-btn{color:var(--red)}
+.sc-edit-btn:active{background:rgba(201,169,110,.15)}
+.sc-del-btn:active{background:rgba(224,85,85,.1)}
 
 /* Confirm modal */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
 .confirm-overlay.show{opacity:1;pointer-events:all}
 .confirm-box{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:320px}
 .confirm-icon{font-size:36px;text-align:center;margin-bottom:12px}
-.confirm-title{font-family:'Outfit',sans-serif;font-size:18px;color:var(--gold2);text-align:center;margin-bottom:8px}
+.confirm-title{font-family:'DM Sans',sans-serif;font-size:18px;color:var(--gold2);text-align:center;margin-bottom:8px}
 .confirm-msg{font-size:13px;color:var(--sub);text-align:center;line-height:1.5;margin-bottom:20px}
 .confirm-btns{display:flex;gap:10px}
 .confirm-btns button{flex:1;padding:12px;border-radius:var(--r3);border:none;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
@@ -243,7 +265,7 @@ img{display:block}
 .co-title{font-size:14px;font-weight:600}
 .co-inner{padding:14px 15px}
 .sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin:0 16px 14px}
-.sum-title{font-family:'Outfit',sans-serif;font-size:17px;color:var(--gold2);margin-bottom:10px}
+.sum-title{font-family:'DM Sans',sans-serif;font-size:17px;color:var(--gold2);margin-bottom:10px}
 .sum-line{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:5px}
 .sum-div{height:1px;background:var(--border2);margin:8px 0}
 .sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--gold2)}
@@ -260,8 +282,8 @@ img{display:block}
 .o-items{font-size:12px;color:var(--sub);line-height:1.75;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px}
 .o-total{font-size:14px;font-weight:700;color:var(--gold2);margin-top:6px}
 .profile-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin:14px}
-.profile-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;font-family:'Outfit',sans-serif;color:#07070E;font-weight:700}
-.profile-name{text-align:center;font-family:'Outfit',sans-serif;font-size:20px;color:var(--gold2)}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;font-family:'DM Sans',sans-serif;color:#07070E;font-weight:700}
+.profile-name{text-align:center;font-family:'DM Sans',sans-serif;font-size:20px;color:var(--gold2)}
 .profile-stat{display:flex;border-top:1px solid var(--border2);margin-top:14px}
 .ps{flex:1;text-align:center;padding:12px 6px;border-right:1px solid var(--border2)}
 .ps:last-child{border-right:none}
@@ -280,12 +302,12 @@ img{display:block}
 .pdm-zoom-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.3);pointer-events:none;white-space:nowrap}
 .pdm-body{padding:20px 18px 0}
 .pdm-cat{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
-.pdm-name{font-family:'Outfit',sans-serif;font-size:26px;font-weight:700;line-height:1.15;margin-bottom:6px}
-.pdm-name-price{font-family:'Outfit',sans-serif;font-size:20px;font-weight:600;color:var(--gold);margin-bottom:12px}
+.pdm-name{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;line-height:1.15;letter-spacing:-.3px;margin-bottom:6px}
+.pdm-name-price{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:600;color:var(--gold);margin-bottom:12px}
 .pdm-desc{font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:8px}
 .pdm-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:4px}
-.pdm-price{font-family:'Outfit',sans-serif;font-size:32px;font-weight:700;color:var(--gold2);line-height:1}
-.pdm-price small{font-size:13px;color:var(--muted);font-weight:400;font-family:'Outfit',sans-serif}
+.pdm-price{font-family:'DM Sans',sans-serif;font-size:32px;font-weight:700;color:var(--gold2);line-height:1}
+.pdm-price small{font-size:13px;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif}
 .pdm-ctrl{flex-shrink:0}
 .pdm-add-row{padding:12px 18px calc(16px + var(--safe-bottom))}
 .pdm-add-btn{height:52px;padding:0 28px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#07070E;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.13s;width:100%}
@@ -315,14 +337,18 @@ img{display:block}
 <div id="pg-catalog" class="page">
   <div style="position:sticky;top:0;z-index:40;background:rgba(7,7,14,.96);backdrop-filter:blur(20px)">
     <!-- Row 1: Logo + address centered + controls -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:relative">
-      <div><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
-      <div class="addr-pill" onclick="openAddrModal()" id="addr-pill" style="position:absolute;left:50%;transform:translateX(-50%)">
-        <span style="font-size:11px;color:var(--muted);font-weight:500;flex-shrink:0" id="addr-pill-label"></span>
-        <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес</span>
-        <span style="color:var(--gold);font-size:12px;flex-shrink:0">▾</span>
+    <div style="display:flex;align-items:center;padding:10px 14px;gap:4px">
+      <div style="flex:1;min-width:0"><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
+      <div style="flex:1;display:flex;justify-content:center;min-width:0;padding:0 6px">
+        <div class="addr-pill" onclick="openAddrModal()" id="addr-pill">
+          <span class="addr-pill-sub" id="addr-pill-label">АДРЕС</span>
+          <div class="addr-pill-row">
+            <span class="addr-pill-txt" id="addr-pill-txt">Добавьте адрес</span>
+            <span style="color:var(--gold);font-size:11px;flex-shrink:0">▾</span>
+          </div>
+        </div>
       </div>
-      <div class="hdr-right">
+      <div class="hdr-right" style="flex:1;justify-content:flex-end">
         <div class="cart-pill" onclick="go('cart')">🛒 <span class="cart-txt" id="hdr-tot">0 AED</span><span class="cart-dot" id="hdr-dot">0</span></div>
         <button class="lang-btn" onclick="flipLang()" id="lbtn">🇷🇺</button>
       </div>
@@ -366,8 +392,16 @@ img{display:block}
       <span class="cab-change"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
   </div>
+  <div id="cart-empty">
+    <div class="ce-line"></div>
+    <div class="ce-brand-bg">AMBAR</div>
+    <div class="ce-line"></div>
+    <button class="ce-btn" id="ce-btn" onclick="go('catalog')">каталог →</button>
+    <div id="ce-title" style="display:none"></div>
+  </div>
   <div class="cart-list-wrap">
     <div id="cart-list"></div>
+    <div id="cart-thumb"></div>
   </div>
   <div id="tip-section" style="display:none">
     <div class="tip-wrap">
@@ -395,10 +429,13 @@ img{display:block}
   <div class="addr-page-body">
     <!-- Saved addresses list -->
     <div class="sec-h" id="sh-saved-addr">Сохранённые адреса</div>
-    <div id="saved-cards"></div>
+    <div class="saved-cards-wrap" id="saved-cards-wrap">
+      <div id="saved-cards"></div>
+      <div id="sc-thumb"></div>
+    </div>
 
     <!-- Add new address form -->
-    <div class="addr-form-card">
+    <div class="addr-form-card" id="addr-form-card">
       <div class="addr-form-head">
         <span class="addr-form-title" id="add-form-title">➕ Добавить адрес</span>
       </div>
@@ -416,7 +453,6 @@ img{display:block}
           <div id="gps-extra" style="display:none">
             <label class="flabel" id="lbl-type-gps">ТИП АДРЕСА</label>
             <div class="type-chips" id="tchips-gps"></div>
-            <div id="tfields-gps"></div>
           </div>
         </div>
 
@@ -424,11 +460,18 @@ img{display:block}
         <div class="mpanel" id="mpanel-manual">
           <label class="flabel" id="lbl-area">РАЙОН / ЗОНА</label>
           <div class="type-chips" id="area-chips" style="margin-bottom:12px"></div>
-          <label class="flabel" id="lbl-street">УЛИЦА / ЗДАНИЕ</label>
-          <input class="finput" id="man-street" type="text" enterkeyhint="next" style="margin-bottom:12px" placeholder="JVC Bloom Tower / Jumeirah St">
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <div style="flex:2;min-width:0">
+              <label class="flabel" id="lbl-street">УЛИЦА</label>
+              <input class="finput" id="man-street" type="text" enterkeyhint="next" placeholder="Jumeirah St">
+            </div>
+            <div style="flex:1;min-width:0">
+              <label class="flabel" id="lbl-building">ДОМ / №</label>
+              <input class="finput" id="man-building" type="text" enterkeyhint="next" placeholder="12B">
+            </div>
+          </div>
           <label class="flabel" id="lbl-type-man">ТИП АДРЕСА</label>
           <div class="type-chips" id="tchips-man"></div>
-          <div id="tfields-man"></div>
         </div>
 
 
@@ -437,6 +480,7 @@ img{display:block}
         <!-- Name label -->
         <label class="flabel" style="margin-top:14px" id="lbl-addr-name">НАЗВАНИЕ АДРЕСА</label>
         <input class="finput" id="addr-name-in" type="text" enterkeyhint="next" placeholder="Дом / Офис / JVC...">
+        <button class="tip-done-btn" id="addr-name-done-btn" style="display:none" onpointerdown="event.preventDefault()" onclick="el('addr-name-in').blur()">Готово ✓</button>
 
         <label class="flabel" style="margin-top:14px" id="lbl-addr-comment">КОММЕНТАРИЙ ДЛЯ КУРЬЕРА</label>
         <textarea class="finput" id="addr-comment-in" rows="3" placeholder="" enterkeyhint="done" style="resize:none;height:76px;padding-top:10px"></textarea>
@@ -569,7 +613,7 @@ img{display:block}
   <div class="modal-sheet" style="padding:20px 16px calc(20px + var(--safe-bottom))">
     <div class="modal-handle"></div>
     <div style="font-size:22px;text-align:center;margin:8px 0 10px">🛒</div>
-    <div id="back-cart-msg" style="font-family:'Outfit',sans-serif;font-size:20px;color:var(--gold2);text-align:center;margin-bottom:20px"></div>
+    <div id="back-cart-msg" style="font-family:'DM Sans',sans-serif;font-size:20px;color:var(--gold2);text-align:center;margin-bottom:20px"></div>
     <button class="btn-main" id="back-cart-yes" onclick="go('cart');closeBackToCartDirect()"></button>
     <button class="btn-outline" id="back-cart-no" onclick="closeBackToCartDirect()" style="margin-top:10px"></button>
   </div>
@@ -686,12 +730,12 @@ ru:{
   modalTitle:'Адрес доставки',modalAdd:'Добавить новый адрес',
   cabLabel:'АДРЕС ДОСТАВКИ',cabNoAddr:'Не выбран — нажмите чтобы добавить',cabChange:'Изменить',
   shSaved:'Сохранённые адреса',addFormTitle:'➕ Добавить адрес',
-  lblArea:'РАЙОН / ЗОНА',lblStreet:'УЛИЦА / ЗДАНИЕ',lblTypeGps:'ТИП АДРЕСА',lblTypeMan:'ТИП АДРЕСА',
+  lblArea:'РАЙОН / ЗОНА',lblStreet:'УЛИЦА',lblBuilding:'ДОМ / №',lblTypeGps:'ТИП АДРЕСА',lblTypeMan:'ТИП АДРЕСА',
   gpsBtn:'Поделиться геолокацией',gpsBtnLoading:'⏳ Определяем...',
   gpsOk:'✅ Геолокация получена — введите название адреса',gpsFail:'⚠️ Не удалось получить геолокацию',
   addrLabelReq:'❌ Введите название адреса',
-  lblAddrName:'НАЗВАНИЕ АДРЕСА',saveAddrBtn:'💾 Сохранить адрес',
-  addrSaved:'Адрес сохранён ✓',addrDeleted:'Адрес удалён',addrSelected:'Адрес выбран',
+  lblAddrName:'НАЗВАНИЕ АДРЕСА',saveAddrBtn:'💾 Сохранить адрес',updateAddrBtn:'✏️ Обновить адрес',doneBtn:'Готово ✓',
+  addrSaved:'Адрес сохранён ✓',addrUpdated:'Адрес обновлён ✓',addrDeleted:'Адрес удалён',addrSelected:'Адрес выбран',
   nearOffice:'Ближайший офис',
   addrFormErr:'❌ Заполните обязательные поля',areaErr:'❌ Выберите район',
   noSaved:'Нет сохранённых адресов — добавьте первый!',
@@ -718,12 +762,12 @@ en:{
   modalTitle:'Delivery address',modalAdd:'Add new address',
   cabLabel:'DELIVERY ADDRESS',cabNoAddr:'Not set — tap to add',cabChange:'Change',
   shSaved:'Saved addresses',addFormTitle:'➕ Add address',
-  lblArea:'AREA / ZONE',lblStreet:'STREET / BUILDING',lblTypeGps:'ADDRESS TYPE',lblTypeMan:'ADDRESS TYPE',
+  lblArea:'AREA / ZONE',lblStreet:'STREET',lblBuilding:'BUILDING / №',lblTypeGps:'ADDRESS TYPE',lblTypeMan:'ADDRESS TYPE',
   gpsBtn:'Share my location',gpsBtnLoading:'⏳ Getting location...',
   gpsOk:'✅ Location received — enter address label',gpsFail:'⚠️ Could not get location',
   addrLabelReq:'❌ Enter address label',
-  lblAddrName:'ADDRESS LABEL',saveAddrBtn:'💾 Save address',
-  addrSaved:'Address saved ✓',addrDeleted:'Address removed',addrSelected:'Address selected',
+  lblAddrName:'ADDRESS LABEL',saveAddrBtn:'💾 Save address',updateAddrBtn:'✏️ Update address',doneBtn:'Done ✓',
+  addrSaved:'Address saved ✓',addrUpdated:'Address updated ✓',addrDeleted:'Address removed',addrSelected:'Address selected',
   nearOffice:'Nearest office',
   addrFormErr:'❌ Fill in required fields',areaErr:'❌ Select an area',
   noSaved:'No saved addresses — add your first one!',
@@ -751,7 +795,7 @@ let catFilter=null; // null = all, string = selected category
 let favs=new Set(JSON.parse(localStorage.getItem('ambar_favs')||'[]'));
 let showFavOnly=false;
 let curMethod='gps',selTypeGps=null,selTypeMan=null,selArea=null;
-let locInfo=null;
+let locInfo=null,editingAddrIdx=null;
 let activeAddrIdx=null;
 let fromCart=false; // flag: user was redirected here from cart
 let orders=JSON.parse(localStorage.getItem('ambar_orders')||'[]');
@@ -781,6 +825,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   const ac=el('addr-comment-in'),adb=el('addr-done-btn');
   ac.addEventListener('focus',()=>{adb.style.display='block';setTimeout(()=>ac.scrollIntoView({behavior:'smooth',block:'center'}),300);});
   ac.addEventListener('blur',()=>{setTimeout(()=>adb.style.display='none',150);});
+  const an=el('addr-name-in'),andb=el('addr-name-done-btn');
+  an.addEventListener('focus',()=>{andb.style.display='block';setTimeout(()=>an.scrollIntoView({behavior:'smooth',block:'center'}),300);});
+  an.addEventListener('blur',()=>{setTimeout(()=>andb.style.display='none',150);});
   // Scroll any focused input into view when keyboard opens/closes
   el('pg-address').addEventListener('focusin',e=>{
     if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')
@@ -795,6 +842,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'))
       setTimeout(()=>ae.scrollIntoView({behavior:'smooth',block:'center'}),120);
   });
+  const scEl=el('saved-cards');
+  if(scEl) scEl.addEventListener('scroll',updateScThumb);
+  const clEl=el('cart-list');
+  if(clEl) clEl.addEventListener('scroll',updateCartThumb);
 });
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
@@ -819,15 +870,17 @@ function applyLang(){
   set('tot-lbl',t('total'));set('co-btn',t('coBtn'));set('clear-btn',t('clearCart'));set('back-catalog-btn',t('backCatalog'));
   set('modal-title',t('modalTitle'));set('modal-add-lbl',t('modalAdd'));
   set('sh-saved-addr',t('shSaved'));set('add-form-title',t('addFormTitle'));
-  set('lbl-area',t('lblArea'));set('lbl-street',t('lblStreet'));
+  set('lbl-area',t('lblArea'));set('lbl-street',t('lblStreet'));set('lbl-building',t('lblBuilding'));
   set('lbl-type-gps',t('lblTypeGps'));set('lbl-type-man',t('lblTypeMan'));
   set('gps-lbl',t('gpsBtn'));
   set('lbl-addr-name',t('lblAddrName'));set('save-addr-btn',t('saveAddrBtn'));
+  set('addr-name-done-btn',t('doneBtn'));set('addr-done-btn',t('doneBtn'));set('tip-done-btn',t('doneBtn'));
   set('cab-label',t('cabLabel'));
   set('ct2',t('ct2'));set('phone-lbl',t('phoneLbl'));
   el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
   const si=el('search-inp');if(si)si.placeholder=lang==='ru'?'Поиск...':'Search...';
-  el('man-street').placeholder=lang==='ru'?'JVC Bloom Tower / Jumeirah St':'JVC Bloom Tower / Jumeirah St';
+  el('man-street').placeholder=lang==='ru'?'Jumeirah St':'Jumeirah St';
+  el('man-building').placeholder=lang==='ru'?'12B':'12B';
   el('addr-name-in').placeholder=lang==='ru'?'Дом / Офис / JVC...':'Home / Office / JVC...';
   set('lbl-addr-comment',lang==='ru'?'КОММЕНТАРИЙ ДЛЯ КУРЬЕРА':'COMMENT FOR COURIER');
   el('addr-comment-in').placeholder = lang==='ru' ? 'Например: проедьте чуть дальше шлагбаума, я встречу вас там...' : 'For example: drive a bit past the barrier, I will meet you there...';
@@ -841,6 +894,7 @@ function applyLang(){
 // ── PAGES ─────────────────────────────────────────────────────────────────────
 const PAGES=['catalog','cart','address','orders','profile','checkout'];
 function go(p){
+  dismissToast();
   PAGES.forEach(id=>{
     el('pg-'+id)?.classList.toggle('hidden',id!==p);
     el('nb-'+id)?.classList.toggle('on',id===p);
@@ -869,11 +923,11 @@ function updateAddrPill(){
   const lbl=el('addr-pill-label');
   if(!txt)return;
   if(activeAddrIdx!==null&&arr[activeAddrIdx]){
-    if(lbl)lbl.textContent=lang==='ru'?'Адрес: ':'Address: ';
+    if(lbl)lbl.textContent=lang==='ru'?'ДОСТАВКА В':'DELIVER TO';
     txt.textContent=arr[activeAddrIdx].label||arr[activeAddrIdx].address;
     txt.style.color='var(--text)';
   } else {
-    if(lbl)lbl.textContent='';
+    if(lbl)lbl.textContent=lang==='ru'?'АДРЕС':'ADDRESS';
     txt.textContent=t('addrPill');
     txt.style.color='var(--muted)';
   }
@@ -899,6 +953,8 @@ function updateCartAddrBar(){
 function renderSavedCards(){
   const arr=getSaved();
   const wrap=el('saved-cards');if(!wrap)return;
+  const wrapOuter=el('saved-cards-wrap');
+  if(wrapOuter) wrapOuter.classList.toggle('few', arr.length<=3);
   if(!arr.length){
     wrap.innerHTML=`<div class="empty" style="padding:24px 0"><div class="empty-icon">📍</div><div>${t('noSaved')}</div></div>`;
     return;
@@ -906,21 +962,39 @@ function renderSavedCards(){
   wrap.innerHTML=arr.map((a,i)=>{
     const isActive=i===activeAddrIdx;
     const typeIcon=a.typeIcon||'📍';
-    const delLabel=lang==='ru'?'🗑 Удалить адрес':'🗑 Remove address';
+    const commentHtml=a.comment?`<div class="sc-comment">💬 ${a.comment}</div>`:'';
+    const addrShort=a.label&&a.label!==a.address?a.address:'';
     return`<div class="saved-card${isActive?' active-addr':''}" onclick="selectAddr(${i})">
-      <div class="sc-top">
-        <div class="sc-radio"><div class="sc-radio-dot"></div></div>
-        <span class="sc-icon">${typeIcon}</span>
-        <div class="sc-info">
-          <div class="sc-label">${a.label||a.address}</div>
-          <div class="sc-addr">${a.label&&a.label!==a.address?a.address:''}</div>
-          <div class="sc-office">🏢 ${a.office_name||''}</div>
-
+      <div class="sc-radio"><div class="sc-radio-dot"></div></div>
+      <span class="sc-icon">${typeIcon}</span>
+      <div class="sc-info">
+        <div class="sc-row1">
+          <span class="sc-label">${a.label||a.address}</span>
+          ${addrShort?`<span class="sc-sep">·</span><span class="sc-addr">${addrShort}</span>`:''}
         </div>
+        ${commentHtml}
       </div>
-      <button class="sc-del-btn" onclick="event.stopPropagation();deleteAddr(${i})">${delLabel}</button>
+      <div class="sc-actions">
+        <button class="sc-edit-btn" onclick="event.stopPropagation();editAddr(${i})">✏️</button>
+        <button class="sc-del-btn" onclick="event.stopPropagation();deleteAddr(${i})">🗑</button>
+      </div>
     </div>`;
   }).join('');
+  updateScThumb();
+}
+function updateScThumb(){
+  const sc=el('saved-cards'),thumb=el('sc-thumb');
+  if(!sc||!thumb)return;
+  const ratio=sc.clientHeight/sc.scrollHeight;
+  if(ratio>=1){thumb.style.display='none';return;}
+  const trackH=sc.clientHeight-16;
+  const thumbH=Math.max(16,trackH*ratio);
+  const maxScroll=sc.scrollHeight-sc.clientHeight;
+  const pos=maxScroll>0?sc.scrollTop/maxScroll:0;
+  const thumbTop=8+pos*(trackH-thumbH);
+  thumb.style.display='block';
+  thumb.style.height=thumbH+'px';
+  thumb.style.top=thumbTop+'px';
 }
 
 function selectAddr(i){
@@ -937,6 +1011,30 @@ function deleteAddr(i){
   else if(activeAddrIdx!==null&&activeAddrIdx>i) setActiveAddr(activeAddrIdx-1);
   renderSavedCards();renderModalAddrList();
   showToast(t('addrDeleted'),'ok');
+}
+function editAddr(i){
+  const a=getSaved()[i];if(!a)return;
+  resetAddrForm();
+  editingAddrIdx=i;
+  set('add-form-title',lang==='ru'?'✏️ Редактировать адрес':'✏️ Edit address');
+  set('save-addr-btn',t('updateAddrBtn'));
+  el('addr-name-in').value=a.label||'';
+  el('addr-comment-in').value=a.comment||'';
+  const isGps=!!(a.lat&&a.lon);
+  if(isGps){
+    switchMethod('gps');
+    locInfo={lat:a.lat,lon:a.lon,office_id:a.office_id||'office_central',office_name:a.office_name||OFFICES[0].name,street:a.street||''};
+    const stat=el('gps-status');stat.className='gps-status ok';stat.textContent=t('gpsOk');
+    el('gps-extra').style.display='block';
+    if(a.typeId){selTypeGps=a.typeId;buildTypeChips('gps');}
+  } else {
+    switchMethod('manual');
+    if(a.areaIdx!==null&&a.areaIdx!==undefined)pickArea(a.areaIdx);
+    el('man-street').value=a.streetPart||a.street||'';
+    el('man-building').value=a.buildingPart||'';
+    if(a.typeId){selTypeMan=a.typeId;buildTypeChips('man');}
+  }
+  setTimeout(()=>el('addr-form-card')?.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
 // ── ADDRESS MODAL ─────────────────────────────────────────────────────────────
@@ -1001,13 +1099,11 @@ function pickArea(i){
 function buildTypeChips(p){
   const types=TYPES[lang];
   const sel=p==='gps'?selTypeGps:selTypeMan;
-  const chipsEl=el('tchips-'+p),fieldsEl=el('tfields-'+p);
-  if(!chipsEl||!fieldsEl)return;
+  const chipsEl=el('tchips-'+p);
+  if(!chipsEl)return;
   chipsEl.innerHTML=types.map(tp=>`
     <button class="type-chip${tp.id===sel?' on':''}" onclick="pickType('${p}','${tp.id}')">${tp.icon} ${tp.lbl}</button>
   `).join('');
-  if(sel){const tp=types.find(x=>x.id===sel);if(tp)renderFields(p,tp);}
-  else fieldsEl.innerHTML='';
 }
 function pickType(p,id){
   if(p==='gps')selTypeGps=id;else selTypeMan=id;
@@ -1104,21 +1200,24 @@ function saveNewAddress(){
     streetShort=locInfo?.street||'';
     addrStr=streetShort||`${lat.toFixed(5)}, ${lon.toFixed(5)}`;
   } else {
-    addrStr=buildAddrStr('man');
-    if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
-    const types=TYPES[lang];
-    const tp=types.find(x=>x.id===selTypeMan);
+    const street=(el('man-street')?.value||'').trim();
+    const building=(el('man-building')?.value||'').trim();
+    if(!street&&!building){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
+    const tp=TYPES[lang].find(x=>x.id===selTypeMan);
     typeIcon=tp?.icon||'📍';
-    // Compose short street: area + manual street input
     const areaPart=selArea!==null?(AREAS[lang][selArea]?.lbl||''):'';
-    const manPart=(el('man-street')?.value||'').trim();
-    streetShort=[areaPart,manPart].filter(Boolean).join(', ');
+    streetShort=[street,building].filter(Boolean).join(' ');
+    addrStr=[areaPart,street,building].filter(Boolean).join(', ');
   }
 
   const newAddr={
     label:label,
     address:addrStr,
     street:streetShort,
+    streetPart:curMethod==='manual'?(el('man-street')?.value||'').trim():'',
+    buildingPart:curMethod==='manual'?(el('man-building')?.value||'').trim():'',
+    areaIdx:curMethod==='manual'?selArea:null,
+    typeId:curMethod==='gps'?selTypeGps:selTypeMan,
     typeIcon:typeIcon,
     lat:curMethod==='gps'?(locInfo?.lat||0):0,
     lon:curMethod==='gps'?(locInfo?.lon||0):0,
@@ -1128,12 +1227,22 @@ function saveNewAddress(){
   };
 
   const arr=getSaved();
+  if(editingAddrIdx!==null){
+    const idx=editingAddrIdx;
+    arr[idx]=newAddr;
+    setSaved(arr);
+    if(activeAddrIdx===idx){updateCartAddrBar();updateAddrPill();}
+    resetAddrForm();
+    renderSavedCards();
+    if(fromCart){fromCart=false;setTimeout(()=>{const msg=lang==='ru'?'Вернуться в корзину и оформить заказ?':'Go back to cart and place order?';const yes=lang==='ru'?'В корзину →':'To cart →';const no=lang==='ru'?'Остаться':'Stay';showBackToCartPrompt(msg,yes,no);},400);}
+    else showToast(t('addrUpdated'),'ok');
+    return;
+  }
   arr.unshift(newAddr);
   setSaved(arr);
 
-  // Auto-select if first address
-  if(arr.length===1) setActiveAddr(0);
-  else setActiveAddr(0); // always select the newly added one (it's at index 0)
+  // Auto-select the newly added one
+  setActiveAddr(0);
 
   // Reset form
   resetAddrForm();
@@ -1154,13 +1263,13 @@ function saveNewAddress(){
 }
 
 function resetAddrForm(){
-  curMethod='gps';selTypeGps=null;selTypeMan=null;selArea=null;locInfo=null;
+  curMethod='gps';selTypeGps=null;selTypeMan=null;selArea=null;locInfo=null;editingAddrIdx=null;
+  set('save-addr-btn',t('saveAddrBtn'));set('add-form-title',t('addFormTitle'));
   el('gps-status').className='gps-status';
   el('gps-extra').style.display='none';
 
   el('addr-name-in').value='';el('addr-comment-in').value='';
-  el('man-street').value='';
-  el('tfields-gps').innerHTML='';el('tfields-man').innerHTML='';
+  el('man-street').value='';el('man-building').value='';
   el('addr-form-err').classList.remove('on');el('addr-form-err').textContent='';
   set('gps-lbl',t('gpsBtn'));
   switchMethod('gps');buildTypeChips('gps');buildAreaChips();buildTypeChips('man');
@@ -1441,7 +1550,7 @@ function renderGrid(){
     }
     el('p-grid').innerHTML=`<div style="text-align:center;padding:60px 24px;color:var(--muted)">
       <div style="font-size:48px;margin-bottom:16px">${emoji}</div>
-      <div style="font-family:'Outfit',sans-serif;font-size:20px;color:var(--text);margin-bottom:8px">${title}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:20px;color:var(--text);margin-bottom:8px">${title}</div>
       <div style="font-size:13px">${sub}</div>
     </div>`;
     initScrollSpy();
@@ -1560,10 +1669,18 @@ function updHdr(){
 function renderCart(){
   const entries=Object.entries(cart).filter(([,q])=>q>0);
   const foot=el('cart-foot'),tipSec=el('tip-section');
+  const topbar=document.querySelector('.cart-topbar');
   if(!entries.length){
-    el('cart-list').innerHTML=`<div class="empty"><div class="empty-icon">🛒</div><div>${t('emptyCart')}</div></div>`;
+    el('cart-empty').style.display='flex';
+    document.querySelector('.cart-list-wrap').style.display='none';
+    if(topbar)topbar.style.display='none';
+    el('ce-title').textContent=lang==='ru'?'пусто':'empty';
+    el('ce-btn').textContent=lang==='ru'?'каталог →':'catalog →';
     foot.style.display='none';tipSec.style.display='none';return;
   }
+  el('cart-empty').style.display='none';
+  document.querySelector('.cart-list-wrap').style.display='';
+  if(topbar)topbar.style.display='';
   el('cart-list').innerHTML=entries.map(([id,qty])=>{
     const p=P.find(x=>x.id===id);if(!p)return'';
     const isBeerItem=isBeer(p);
@@ -1576,6 +1693,22 @@ function renderCart(){
     </div>`;
   }).join('');
   el('tot-n').textContent=cartSub()+tip;foot.style.display='block';tipSec.style.display='block';
+  setTimeout(updateCartThumb,0);
+}
+function updateCartThumb(){
+  const sc=el('cart-list'),thumb=el('cart-thumb');
+  const wrap=document.querySelector('.cart-list-wrap');
+  if(!sc||!thumb||!wrap)return;
+  const ratio=sc.clientHeight/sc.scrollHeight;
+  if(ratio>=1){thumb.style.display='none';wrap.classList.remove('can-scroll');return;}
+  wrap.classList.add('can-scroll');
+  const trackH=sc.clientHeight-16;
+  const thumbH=Math.max(16,trackH*ratio);
+  const maxScroll=sc.scrollHeight-sc.clientHeight;
+  const pos=maxScroll>0?sc.scrollTop/maxScroll:0;
+  thumb.style.display='block';
+  thumb.style.height=thumbH+'px';
+  thumb.style.top=(8+pos*(trackH-thumbH))+'px';
 }
 function clearCart(){cart={};beerPcs={};tip=0;updHdr();renderCart();buildTips();}
 
@@ -1847,6 +1980,7 @@ function openPDM(id){
   el('pdm-name').textContent=lang==='ru'?p.name:p.nameE;
   el('pdm-desc').textContent=lang==='ru'?p.desc:p.descE;
   if(isBeer(p)){renderBeerPDM(p);}else{updatePDMCtrl(p);}
+  dismissToast();
   el('pdm-overlay').classList.add('show');
   document.body.style.overflow='hidden';
   initPinchZoom();
@@ -1959,6 +2093,11 @@ function closeBackToCartDirect(){
 }
 
 let _tt,_ti=0;
+function dismissToast(){
+  clearTimeout(_tt);
+  el('toast0')?.classList.remove('show');
+  el('toast1')?.classList.remove('show');
+}
 function showToast(msg,type=''){
   clearTimeout(_tt);
   _ti=1-_ti;

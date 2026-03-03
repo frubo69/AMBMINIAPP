@@ -25,7 +25,9 @@ img{display:block}
 .page.hidden{opacity:0;pointer-events:none;transform:translateY(8px)}
 .hdr{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(7,7,14,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:7px;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-sub{font-size:7px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:-1px;font-family:'DM Sans',sans-serif;font-weight:400}
+.logo-sub{font-size:7px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:-1px;font-family:'DM Sans',sans-serif;font-weight:400;text-align:center}
+.logo-grp{display:inline-flex;flex-direction:column;align-items:center;gap:2px}
+.logo-line{height:1px;background:linear-gradient(90deg,transparent 0%,rgba(201,169,110,.45) 50%,transparent 100%);flex-shrink:0}
 .hdr-right{display:flex;gap:6px;align-items:center}
 .cart-pill{display:flex;align-items:center;gap:4px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:0 10px;height:30px;position:relative;cursor:pointer;transition:.15s;white-space:nowrap}
 .cart-pill:active{transform:scale(.93)}
@@ -127,7 +129,7 @@ img{display:block}
 .empty-icon{font-size:54px;margin-bottom:14px;opacity:.3}
 #cart-empty{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;gap:0}
 .ce-line{width:270px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(201,169,110,.5) 50%,transparent 100%)}
-.ce-brand-bg{font-size:80px;font-weight:700;font-family:'Cormorant Garamond',serif;letter-spacing:16px;color:rgba(201,169,110,.08);pointer-events:none;user-select:none;white-space:nowrap;line-height:1;padding:3px 0}
+.ce-brand-bg{font-size:80px;font-weight:700;font-family:'Cormorant Garamond',serif;letter-spacing:16px;color:rgba(201,169,110,.08);pointer-events:none;user-select:none;white-space:nowrap;line-height:1;padding:1px 0;margin:-2px 0}
 .ce-title{display:none}
 .ce-btn{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.2);color:rgba(201,169,110,.7);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0 18px;height:34px;border-radius:8px;display:flex;align-items:center;gap:6px;letter-spacing:.5px;margin-top:22px;transition:.15s}
 .ce-btn:active{opacity:.5;transform:scale(.96)}
@@ -271,17 +273,37 @@ img{display:block}
 .sum-div{height:1px;background:var(--border2);margin:8px 0}
 .sum-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--gold2)}
 .co-foot{padding:0 16px 16px}
-.ocard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:14px;margin:0 14px 10px}
-.ocard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.o-id{font-size:12px;font-weight:700;color:var(--gold2)}
-.o-date{font-size:10px;color:var(--muted);margin-top:2px}
-.o-status{font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px}
-.sp{background:rgba(201,169,110,.1);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
-.sc2{background:rgba(76,175,125,.1);color:var(--green);border:1px solid rgba(76,175,125,.2)}
-.sd{background:rgba(76,175,125,.15);color:var(--green);border:1px solid rgba(76,175,125,.25)}
-.sx{background:rgba(224,85,85,.1);color:var(--red);border:1px solid rgba(224,85,85,.2)}
-.o-items{font-size:12px;color:var(--sub);line-height:1.75;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px}
-.o-total{font-size:14px;font-weight:700;color:var(--gold2);margin-top:6px}
+.ocard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);margin:0 14px 10px;overflow:hidden;border-left-width:3px;border-left-style:solid}
+.ocard.sp{border-left-color:rgba(201,169,110,.55)}
+.ocard.sc2{border-left-color:rgba(76,175,125,.55)}
+.ocard.sd{border-left-color:rgba(100,160,220,.55)}
+.ocard.sx{border-left-color:rgba(224,85,85,.45)}
+.ocard-inner{padding:0}
+/* top meta bar */
+.ocard-meta{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border2)}
+.o-id{font-size:12px;letter-spacing:.5px;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600}
+.o-date{font-size:10px;color:var(--muted);letter-spacing:.2px}
+/* items body */
+.o-rows{display:flex;flex-direction:column;padding:10px 14px 10px}
+.o-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0}
+.o-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,.03)}
+.o-row-name{font-size:13px;color:var(--text);font-weight:400;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.o-row-qty{font-size:12px;font-weight:600;color:var(--sub);flex-shrink:0;background:var(--bg3);border-radius:6px;padding:2px 7px}
+/* bottom bar: status left, total right */
+.ocard-foot{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-top:1px solid var(--border2)}
+.o-status{font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;letter-spacing:.2px}
+.o-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sp .o-status{color:var(--gold)}
+.sp .o-status-dot{background:var(--gold);box-shadow:0 0 5px rgba(201,169,110,.6)}
+.sc2 .o-status{color:var(--green)}
+.sc2 .o-status-dot{background:var(--green);box-shadow:0 0 5px rgba(76,175,125,.6)}
+.sd .o-status{color:#64a0dc}
+.sd .o-status-dot{background:#64a0dc;box-shadow:0 0 5px rgba(100,160,220,.5)}
+.sx .o-status{color:var(--red)}
+.sx .o-status-dot{background:var(--red);box-shadow:0 0 5px rgba(224,85,85,.5)}
+.o-total{display:flex;align-items:baseline;gap:3px}
+.o-total-num{font-size:18px;font-weight:700;color:var(--gold2);font-family:'DM Sans',sans-serif;line-height:1}
+.o-total-cur{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.8px}
 .profile-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin:14px}
 .profile-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;font-family:'DM Sans',sans-serif;color:#07070E;font-weight:700}
 .profile-name{text-align:center;font-family:'DM Sans',sans-serif;font-size:20px;color:var(--gold2)}
@@ -330,6 +352,9 @@ img{display:block}
 .toast.pdm-mode.show{transform:translateY(0)}
 .toast-icon{font-size:16px;flex-shrink:0;line-height:1}
 .toast-msg{flex:1;min-width:0}
+/* Refresh spin */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinning{animation:spin .65s linear infinite!important;opacity:.7}
 </style>
 </head>
 <body>
@@ -339,7 +364,7 @@ img{display:block}
   <div style="position:sticky;top:0;z-index:40;background:rgba(7,7,14,.96);backdrop-filter:blur(20px)">
     <!-- Row 1: Logo + address centered + controls -->
     <div style="display:flex;align-items:center;padding:10px 14px;gap:4px">
-      <div style="flex:1;min-width:0"><div class="logo">AMBAR</div><div class="logo-sub">Premium Spirits</div></div>
+      <div style="flex:1;min-width:0"><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub">Premium Spirits</div></div></div>
       <div style="flex:1;display:flex;justify-content:center;min-width:0;padding:0 6px">
         <div class="addr-pill" onclick="openAddrModal()" id="addr-pill">
           <span class="addr-pill-sub" id="addr-pill-label">АДРЕС</span>
@@ -378,7 +403,7 @@ img{display:block}
 <!-- ═══ CART ═══ -->
 <div id="pg-cart" class="page hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-cart">Premium Spirits</div></div>
+    <div><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub" id="ls-cart">ваша корзина</div></div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
   <!-- Cart top bar -->
@@ -424,7 +449,7 @@ img{display:block}
 <!-- ═══ ADDRESS PAGE ═══ -->
 <div id="pg-address" class="page hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-addr">Адреса</div></div>
+    <div><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub" id="ls-addr">ваши адреса</div></div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
   <div class="addr-page-body">
@@ -494,19 +519,28 @@ img{display:block}
 </div>
 
 <!-- ═══ ORDERS ═══ -->
-<div id="pg-orders" class="page hidden">
+<div id="pg-orders" class="page hidden" style="overflow:hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-ord">История</div></div>
+    <div><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub" id="ls-ord">ваша история</div></div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
-  <div class="sec-h" id="sh-orders">Мои заказы</div>
-  <div id="orders-list"></div>
+  <div style="display:flex;align-items:center;padding:10px 14px 8px;gap:10px;flex-shrink:0">
+    <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase" id="sh-orders">История</span>
+    <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(201,169,110,.3),transparent)"></div>
+    <button id="refresh-btn" onclick="syncOrders(true)" title="Обновить" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:opacity .15s" onpointerdown="this.style.opacity='.5'" onpointerup="this.style.opacity='1'" onpointercancel="this.style.opacity='1'">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+    </button>
+  </div>
+  <div id="orders-list" style="flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none"></div>
+  <div id="clear-history-wrap" style="display:none;flex-shrink:0;padding:10px 14px 16px;background:linear-gradient(to bottom,transparent,var(--bg) 35%)">
+    <button id="clear-history-btn" onclick="confirmClearHistory()" style="width:100%;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.3);color:var(--gold);font-size:13px;font-weight:600;padding:14px;border-radius:14px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.3px;transition:.15s" onpointerdown="this.style.opacity='.6'" onpointerup="this.style.opacity='1'" onpointercancel="this.style.opacity='1'">Очистить историю</button>
+  </div>
 </div>
 
 <!-- ═══ PROFILE ═══ -->
 <div id="pg-profile" class="page hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-prof">Профиль</div></div>
+    <div><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub" id="ls-prof">ваш профиль</div></div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
   <div class="profile-card">
@@ -519,7 +553,7 @@ img{display:block}
     </div>
   </div>
   <div style="padding:0 14px 14px">
-    <div class="sec-h" id="sh-active">Активные заказы</div>
+    <div class="cat-section-hdr" id="sh-active" style="padding:0 0 10px">Активные заказы</div>
     <div id="active-list"></div>
   </div>
 </div>
@@ -527,7 +561,7 @@ img{display:block}
 <!-- CHECKOUT (hidden, used by placeOrder) -->
 <div id="pg-checkout" class="page hidden">
   <div class="hdr">
-    <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-co">Оформление</div></div>
+    <div><div class="logo-grp"><div class="logo-line"></div><div class="logo">AMBAR</div><div class="logo-line"></div><div class="logo-sub" id="ls-co">Оформление</div></div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
   <div class="co-body">
@@ -725,6 +759,7 @@ const TIP_OPTS=[0,50,100,200,500];
 const TX={
 ru:{
   catalog:'Каталог',favs:'Избранное',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
+  cartSub:'ваша корзина',addrSub:'ваши адреса',ordersSub:'ваша история',profileSub:'ваш профиль',
   all:'Все',total:'ИТОГО',tip:'ЧАЕВЫЕ',noTip:'Без чаевых',customTip:'✏️ Своя',
   coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',backCatalog:'← В каталог',
   addrPill:'Добавьте адрес',addrPillChange:'Изменить',
@@ -757,6 +792,7 @@ ru:{
 },
 en:{
   catalog:'Catalog',favs:'Favourites',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
+  cartSub:'your cart',addrSub:'your addresses',ordersSub:'your history',profileSub:'your profile',
   all:'All',total:'TOTAL',tip:'TIP',noTip:'No tip',customTip:'✏️ Custom',
   coBtn:'Checkout →',clearCart:'🗑 Clear cart',backCatalog:'← Back to catalog',
   addrPill:'Add address',addrPillChange:'Change',
@@ -800,9 +836,35 @@ let locInfo=null,editingAddrIdx=null;
 let activeAddrIdx=null;
 let fromCart=false; // flag: user was redirected here from cart
 let orders=JSON.parse(localStorage.getItem('ambar_orders')||'[]');
+// API base URL — override by setting window.AMBAR_API_URL before this script,
+// or via localStorage key 'ambar_api_url' (handy for ngrok/VPS testing).
+// Falls back to same origin when api_server.py serves both static + API.
+const AMBAR_API=(()=>{
+  try{const s=localStorage.getItem('ambar_api_url');if(s)return s.replace(/\/$/,'');}catch(e){}
+  return window.AMBAR_API_URL||window.location.origin;
+})();
 let curPg='catalog';
 let pendingOrderConfirmed=false; // for location mismatch flow
 const tg=window.Telegram?.WebApp||null;
+
+// ── LOGO SUB ALIGN ────────────────────────────────────────────────────────────
+function alignLogoSubs(){
+  document.querySelectorAll('.logo-grp').forEach(g=>{
+    const logo=g.querySelector('.logo');
+    const sub=g.querySelector('.logo-sub');
+    if(!logo)return;
+    const lw=logo.offsetWidth;
+    if(!lw)return;
+    g.querySelectorAll('.logo-line').forEach(l=>l.style.width=lw+'px');
+    if(!sub)return;
+    sub.style.letterSpacing='0px';
+    const sw=sub.scrollWidth;
+    if(!sw)return;
+    const n=sub.textContent.trim().length;
+    if(n<1)return;
+    sub.style.letterSpacing=((lw-sw-10)/n)+'px';
+  });
+}
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
@@ -812,7 +874,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(saved!==null) activeAddrIdx=parseInt(saved);
   // Validate it still exists
   if(activeAddrIdx!==null&&!getSaved()[activeAddrIdx]) activeAddrIdx=null;
-  buildTips();renderOrders();applyLang();loadCatalog();updateFavBtn();updateSortBtn();
+  buildTips();syncOrders();applyLang();loadCatalog();updateFavBtn();updateSortBtn();
+  alignLogoSubs();
+  document.fonts?.ready?.then(alignLogoSubs);
   // Pre-fill saved phone
   const savedPhone=localStorage.getItem('ambar_phone');
   if(savedPhone)el('phone-in').value=savedPhone;
@@ -863,8 +927,9 @@ function flipLang(){
 function applyLang(){
   const f=lang==='ru'?'🇷🇺':'🇬🇧';
   document.querySelectorAll('.lang-btn').forEach(b=>b.textContent=f);
-  set('catalog-page-title',showFavOnly?t('favs'):t('catalog'));set('ls-cart',t('cart'));set('ls-addr',t('addrPage'));
-  set('ls-ord',t('orders'));set('ls-prof',t('profile'));
+  set('catalog-page-title',showFavOnly?t('favs'):t('catalog'));set('ls-cart',t('cartSub'));set('ls-addr',t('addrSub'));
+  set('ls-ord',t('ordersSub'));set('ls-prof',t('profileSub'));
+  alignLogoSubs();
   set('sh-orders',t('orders'));set('sh-active',t('activeOrders'));
   set('nbl-cat',t('catalog'));set('nbl-cart',t('cart'));set('nbl-addr',t('addrPage'));
   set('nbl-ord',t('orders'));set('nbl-prof',t('profile'));
@@ -902,9 +967,9 @@ function go(p){
   });
   curPg=p;
   if(p==='cart'){renderCart();updateCartAddrBar();}
-  if(p==='orders')renderOrders();
+  if(p==='orders')syncOrders();  // fetch latest from API, fall back to localStorage
   if(p==='address'){renderSavedCards();buildAreaChips();buildTypeChips('man'); /* GPS uses label+comment only */}
-  if(p==='profile')buildProfile();
+  if(p==='profile'){syncOrders();}
   if(p==='checkout')buildSummary();
 }
 
@@ -1537,9 +1602,14 @@ function renderGrid(){
     const isFav=showFavOnly;
     let emoji,title,sub;
     if(isFav){
-      emoji='🤍';
-      title=lang==='ru'?'Избранное пусто':'No favourites yet';
-      sub=lang==='ru'?'Нажмите ♡ на товаре, чтобы добавить его сюда':'Tap ♡ on any product to save it here';
+      el('p-grid').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(var(--tg-h,100vh) - 210px);overflow:hidden;text-align:center">
+        <div class="ce-line"></div>
+        <div class="ce-brand-bg">AMBAR</div>
+        <div class="ce-line"></div>
+        <div style="margin-top:20px;font-size:14px;font-weight:500;color:var(--sub);font-family:'Space Grotesk',sans-serif;letter-spacing:-.1px">${lang==='ru'?'Oops, избранное пусто':'Oops, no favourites yet'}</div>
+        <div style="margin-top:6px;font-size:11px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:.4px;display:flex;align-items:center;justify-content:center;gap:4px">${lang==='ru'?'Нажмите':'Tap'} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:.7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> ${lang==='ru'?'на товаре, чтобы сохранить':'on any product to save it here'}</div>
+      </div>`;
+      initScrollSpy();return;
     } else if(isSearch){
       emoji='🔍';
       title=lang==='ru'?'Ничего не найдено':'Nothing found';
@@ -1834,14 +1904,101 @@ function placeOrder(){
 }
 
 // ── ORDERS ────────────────────────────────────────────────────────────────────
+function confirmClearHistory(){
+  const msg=lang==='ru'?'Удалить завершённые заказы?':'Remove completed orders?';
+  if(!confirm(msg))return;
+  // Persist delivered total so the profile stat survives the wipe
+  const removable=orders.filter(o=>o.status==='delivered'||o.status==='declined');
+  const spent=removable.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  const prev=parseInt(localStorage.getItem('ambar_spent_total')||'0');
+  localStorage.setItem('ambar_spent_total',prev+spent);
+  // Remember cleared IDs so syncOrders() won't pull them back from the API
+  const clearedIds=removable.map(o=>o.order_id);
+  const prevCleared=JSON.parse(localStorage.getItem('ambar_cleared_ids')||'[]');
+  localStorage.setItem('ambar_cleared_ids',JSON.stringify([...new Set([...prevCleared,...clearedIds])]));
+  orders=orders.filter(o=>o.status==='pending'||o.status==='confirmed');
+  localStorage.setItem('ambar_orders',JSON.stringify(orders));
+  renderOrders();
+  buildProfile();
+}
 function renderOrders(){
-  if(!orders.length){el('orders-list').innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div>${t('noOrders')}</div></div>`;return;}
+  const ordHdr=el('sh-orders');
+  const clearWrap=el('clear-history-wrap');
+  if(!orders.length){
+    if(ordHdr)ordHdr.style.display='none';
+    if(clearWrap)clearWrap.style.display='none';
+    el('orders-list').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(var(--tg-h,100vh) - 120px);overflow:hidden">
+      <div class="ce-line"></div>
+      <div class="ce-brand-bg">AMBAR</div>
+      <div class="ce-line"></div>
+      <div style="margin-top:20px;font-size:14px;font-weight:500;color:var(--sub);font-family:'Space Grotesk',sans-serif;letter-spacing:-.1px">${lang==='ru'?'Oops, заказов пока нет':'Oops, no orders yet'}</div>
+      <div style="margin-top:6px;font-size:11px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:.4px">${lang==='ru'?'Ваши заказы появятся здесь':'Your orders will appear here'}</div>
+    </div>`;
+    return;
+  }
+  if(ordHdr)ordHdr.style.display='';
+  const hasClearable=orders.some(o=>o.status==='delivered'||o.status==='declined');
+  if(clearWrap)clearWrap.style.display=hasClearable?'block':'none';
   const cls={pending:'sp',confirmed:'sc2',delivered:'sd',declined:'sx'};
   const lbl={pending:()=>t('stP'),confirmed:()=>t('stC'),delivered:()=>t('stD'),declined:()=>t('stX')};
+  const lbl2={pending:()=>lang==='ru'?'Ожидает':'Pending',confirmed:()=>lang==='ru'?'Принят':'Confirmed',delivered:()=>lang==='ru'?'Доставлен':'Delivered',declined:()=>lang==='ru'?'Отменён':'Cancelled'};
+  const months=lang==='ru'?['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(ts){if(!ts)return'';const d=new Date(ts);return`${d.getDate()} ${months[d.getMonth()]} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
   el('orders-list').innerHTML=orders.map(o=>{
-    const ts=o.timestamp?o.timestamp.slice(0,16).replace('T',' '):'';
-    return`<div class="ocard"><div class="ocard-top"><div><div class="o-id">#${o.order_id}</div><div class="o-date">${ts}</div></div><span class="o-status ${cls[o.status]||'sp'}">${(lbl[o.status]||lbl.pending)()}</span></div><div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(' · ')}</div><div class="o-total">${o.total} AED</div></div>`;
+    const st=cls[o.status]||'sp';
+    const rows=o.items.map(i=>`<div class="o-row"><span class="o-row-name">${i.name}</span><span class="o-row-qty">${i.qty} ${lang==='ru'?'шт':'pcs'}</span></div>`).join('');
+    return`<div class="ocard ${st}"><div class="ocard-inner"><div class="ocard-meta"><span class="o-id">#${o.order_id}</span><span class="o-date">${fmtDate(o.timestamp)}</span></div><div class="o-rows">${rows}</div><div class="ocard-foot"><span class="o-status"><span class="o-status-dot"></span>${(lbl2[o.status]||lbl2.pending)()}</span><div class="o-total"><span class="o-total-num">${o.total}</span><span class="o-total-cur">AED</span></div></div></div></div>`;
   }).join('');
+}
+
+// ── SYNC ORDERS FROM API ──────────────────────────────────────────────────────
+// Fetches real order statuses from the backend (api_server.py /api/orders).
+// Falls back silently to localStorage if Telegram initData is unavailable (dev)
+// or if the network call fails.
+async function syncOrders(spin=false){
+  const btn=el('refresh-btn');
+  if(spin&&btn) btn.querySelector('svg').classList.add('spinning');
+
+  const initData=tg?.initData;
+  if(!initData){
+    // Dev mode — no Telegram context, just render what's in localStorage
+    if(spin&&btn) btn.querySelector('svg').classList.remove('spinning');
+    renderOrders();buildProfile();return;
+  }
+
+  try{
+    const resp=await fetch(`${AMBAR_API}/api/orders`,{
+      headers:{'Authorization':'tma '+initData},
+    });
+    if(!resp.ok) throw new Error(resp.status);
+    const {orders:apiOrders=[]}=await resp.json();
+
+    // Backend uses "approved", mini app uses "confirmed" — normalise
+    apiOrders.forEach(o=>{if(o.status==='approved')o.status='confirmed';});
+
+    // IDs the user deliberately cleared locally (delivered/declined)
+    const cleared=new Set(JSON.parse(localStorage.getItem('ambar_cleared_ids')||'[]'));
+
+    // Keep API orders, but skip ones the user cleared (unless they're active again)
+    const fresh=apiOrders.filter(o=>{
+      if(!cleared.has(o.order_id))return true;
+      return o.status==='pending'||o.status==='confirmed'; // re-activate if status changed
+    });
+
+    // Keep any local orders not yet visible in the API (just placed, in-flight)
+    const apiIds=new Set(fresh.map(o=>o.order_id));
+    const localOnly=orders.filter(o=>!apiIds.has(o.order_id)&&!cleared.has(o.order_id));
+
+    orders=[...localOnly,...fresh];
+    orders.sort((a,b)=>new Date(b.timestamp||0)-new Date(a.timestamp||0));
+    localStorage.setItem('ambar_orders',JSON.stringify(orders.slice(0,50)));
+  }catch(e){
+    // Network error or no API — silently use cached data
+    console.log('[AMBAR] sync failed:',e.message);
+  }
+
+  if(spin&&btn) btn.querySelector('svg').classList.remove('spinning');
+  renderOrders();buildProfile();
 }
 
 // ── PROFILE ───────────────────────────────────────────────────────────────────
@@ -1849,11 +2006,20 @@ function buildProfile(){
   const name=tg?.initDataUnsafe?.user?.first_name||'Guest';
   el('prof-av').textContent=name[0]?.toUpperCase()||'A';el('prof-name').textContent=name;
   const active=orders.filter(o=>['pending','confirmed'].includes(o.status));
-  const spent=orders.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  const spentCurrent=orders.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  const spentPersisted=parseInt(localStorage.getItem('ambar_spent_total')||'0');
+  const spent=spentCurrent+spentPersisted;
   el('stat-total').textContent=orders.length;el('stat-active').textContent=active.length;el('stat-spent').textContent=spent;
   set('stat-lbl1',t('statOrders'));set('stat-lbl2',t('statActive'));set('stat-lbl3',t('statSpent'));
   if(!active.length){el('active-list').innerHTML=`<div class="empty" style="padding:20px 0"><div>${t('noActive')}</div></div>`;return;}
-  el('active-list').innerHTML=active.map(o=>`<div class="ocard"><div class="ocard-top"><div><div class="o-id">#${o.order_id}</div></div><span class="o-status ${o.status==='confirmed'?'sc2':'sp'}">${o.status==='confirmed'?t('stC'):t('stP')}</span></div><div class="o-items">${o.items.map(i=>`${i.name} ×${i.qty}`).join(' · ')}</div><div class="o-total">${o.total} AED</div></div>`).join('');
+  const months2=lang==='ru'?['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate2(ts){if(!ts)return'';const d=new Date(ts);return`${d.getDate()} ${months2[d.getMonth()]} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+  el('active-list').innerHTML=active.map(o=>{
+    const st=o.status==='confirmed'?'sc2':'sp';
+    const lbl=o.status==='confirmed'?(lang==='ru'?'Принят':'Confirmed'):(lang==='ru'?'Ожидает':'Pending');
+    const rows=o.items.map(i=>`<div class="o-row"><span class="o-row-name">${i.name}</span><span class="o-row-qty">${i.qty} ${lang==='ru'?'шт':'pcs'}</span></div>`).join('');
+    return`<div class="ocard ${st}"><div class="ocard-inner"><div class="ocard-meta"><span class="o-id">#${o.order_id}</span><span class="o-date">${fmtDate2(o.timestamp)}</span></div><div class="o-rows">${rows}</div><div class="ocard-foot"><span class="o-status"><span class="o-status-dot"></span>${lbl}</span><div class="o-total"><span class="o-total-num">${o.total}</span><span class="o-total-cur">AED</span></div></div></div></div>`;
+  }).join('');
 }
 
 // ── BEER PICKER ───────────────────────────────────────────────────────────────

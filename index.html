@@ -425,7 +425,7 @@ img{display:block}
           <label class="flabel" id="lbl-area">РАЙОН / ЗОНА</label>
           <div class="type-chips" id="area-chips" style="margin-bottom:12px"></div>
           <label class="flabel" id="lbl-street">УЛИЦА / ЗДАНИЕ</label>
-          <input class="finput" id="man-street" type="text" style="margin-bottom:12px" placeholder="JVC Bloom Tower / Jumeirah St">
+          <input class="finput" id="man-street" type="text" enterkeyhint="next" style="margin-bottom:12px" placeholder="JVC Bloom Tower / Jumeirah St">
           <label class="flabel" id="lbl-type-man">ТИП АДРЕСА</label>
           <div class="type-chips" id="tchips-man"></div>
           <div id="tfields-man"></div>
@@ -436,10 +436,11 @@ img{display:block}
 
         <!-- Name label -->
         <label class="flabel" style="margin-top:14px" id="lbl-addr-name">НАЗВАНИЕ АДРЕСА</label>
-        <input class="finput" id="addr-name-in" type="text" placeholder="Дом / Офис / JVC...">
+        <input class="finput" id="addr-name-in" type="text" enterkeyhint="next" placeholder="Дом / Офис / JVC...">
 
         <label class="flabel" style="margin-top:14px" id="lbl-addr-comment">КОММЕНТАРИЙ ДЛЯ КУРЬЕРА</label>
-        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="" style="resize:none;height:76px;padding-top:10px"></textarea>
+        <textarea class="finput" id="addr-comment-in" rows="3" placeholder="" enterkeyhint="done" style="resize:none;height:76px;padding-top:10px"></textarea>
+        <button class="tip-done-btn" id="addr-done-btn" style="display:none" onpointerdown="event.preventDefault()" onclick="el('addr-comment-in').blur()">Готово ✓</button>
 
         <button class="btn-main" style="margin-top:14px" onclick="saveNewAddress()" id="save-addr-btn">💾 Сохранить адрес</button>
       </div>
@@ -774,8 +775,22 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Tip input keyboard handling
   const ti=el('tip-input'),clw=document.querySelector('.cart-list-wrap');
   ti.addEventListener('focus',()=>{if(clw)clw.classList.add('tip-kbd');el('tip-done-btn').style.display='block';});
-  ti.addEventListener('blur',()=>{if(clw)clw.classList.remove('tip-kbd');el('tip-done-btn').style.display='none';});
+  ti.addEventListener('blur',()=>{if(clw)clw.classList.remove('tip-kbd');setTimeout(()=>el('tip-done-btn').style.display='none',150);});
   ti.addEventListener('keydown',e=>{if(e.key==='Enter'||e.keyCode===13)ti.blur();});
+  // Address form keyboard handling
+  const ac=el('addr-comment-in'),adb=el('addr-done-btn');
+  ac.addEventListener('focus',()=>{adb.style.display='block';setTimeout(()=>ac.scrollIntoView({behavior:'smooth',block:'center'}),300);});
+  ac.addEventListener('blur',()=>{setTimeout(()=>adb.style.display='none',150);});
+  // Scroll any focused input into view when keyboard opens/closes
+  el('pg-address').addEventListener('focusin',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')
+      setTimeout(()=>e.target.scrollIntoView({behavior:'smooth',block:'center'}),300);
+  });
+  if(tg) tg.onEvent('viewportChanged',()=>{
+    const ae=document.activeElement;
+    if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'))
+      setTimeout(()=>ae.scrollIntoView({behavior:'smooth',block:'center'}),100);
+  });
 });
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────

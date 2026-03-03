@@ -147,7 +147,8 @@ img{display:block}
 
 /* Cart layout — inner scrollable list + sticky bottom panel */
 #pg-cart{overflow:hidden}
-.cart-list-wrap{flex:1;min-height:0;position:relative;margin:0 12px 4px;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden}
+.cart-list-wrap{flex:1;min-height:0;position:relative;margin:0 12px 4px;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:flex-basis .2s,min-height .2s,margin-bottom .2s}
+.cart-list-wrap.tip-kbd{flex:0 0 0;min-height:0;margin-bottom:0;border-color:transparent}
 .cart-list-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--card));pointer-events:none}
 #cart-list{height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--card);scrollbar-width:thin;scrollbar-color:rgba(201,169,110,.35) transparent}
 #cart-list::-webkit-scrollbar{width:3px}
@@ -370,7 +371,7 @@ img{display:block}
     <div class="tip-wrap">
       <div class="tip-label" id="tip-lbl">ЧАЕВЫЕ</div>
       <div class="tip-row" id="tip-row"></div>
-      <input class="tip-input" id="tip-input" type="number" min="0">
+      <input class="tip-input" id="tip-input" type="text" inputmode="decimal" enterkeyhint="done" pattern="[0-9]*">
     </div>
   </div>
   <div id="cart-foot" style="display:none">
@@ -767,6 +768,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   const savedPhone=localStorage.getItem('ambar_phone');
   if(savedPhone)el('phone-in').value=savedPhone;
   updateAddrPill();updateCartAddrBar();
+  // Tip input keyboard handling
+  const ti=el('tip-input'),clw=document.querySelector('.cart-list-wrap');
+  ti.addEventListener('focus',()=>{if(clw)clw.classList.add('tip-kbd');});
+  ti.addEventListener('blur',()=>{if(clw)clw.classList.remove('tip-kbd');});
+  ti.addEventListener('keydown',e=>{if(e.key==='Enter'||e.keyCode===13)ti.blur();});
 });
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
@@ -1562,7 +1568,7 @@ function buildTips(){
 function pickTip(v,isCustom,btn){
   document.querySelectorAll('.tip-chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   const inp=el('tip-input');
-  if(isCustom){inp.style.display='block';inp.focus();inp.oninput=()=>{tip=Math.max(0,parseInt(inp.value)||0);updCartTot()};}
+  if(isCustom){inp.style.display='block';inp.focus();inp.oninput=()=>{tip=Math.max(0,parseFloat(inp.value)||0);updCartTot()};}
   else{inp.style.display='none';tip=v;updCartTot();}
 }
 function updCartTot(){el('tot-n').textContent=cartSub()+tip;buildSummary();}

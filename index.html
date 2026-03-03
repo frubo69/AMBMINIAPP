@@ -135,6 +135,8 @@ img{display:block}
 .tip-chip.on{background:rgba(201,169,110,.1);border-color:var(--gold);color:var(--gold);font-weight:700}
 .tip-input{width:100%;margin-top:10px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r3);padding:11px 14px;color:var(--text);font-size:14px;display:none;transition:.2s}
 .tip-input:focus{border-color:var(--gold)}
+.tip-done-btn{width:100%;margin-top:7px;height:38px;border-radius:var(--r3);border:1.5px solid var(--gold);background:rgba(201,169,110,.08);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:none;transition:.15s}
+.tip-done-btn:active{background:rgba(201,169,110,.22)}
 .cart-foot{padding:14px 16px;background:var(--bg2);border-top:1px solid var(--border)}
 .total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .total-lbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -372,6 +374,7 @@ img{display:block}
       <div class="tip-label" id="tip-lbl">ЧАЕВЫЕ</div>
       <div class="tip-row" id="tip-row"></div>
       <input class="tip-input" id="tip-input" type="text" inputmode="decimal" enterkeyhint="done" pattern="[0-9]*">
+      <button class="tip-done-btn" id="tip-done-btn" onclick="el('tip-input').blur()">Готово ✓</button>
     </div>
   </div>
   <div id="cart-foot" style="display:none">
@@ -770,8 +773,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   updateAddrPill();updateCartAddrBar();
   // Tip input keyboard handling
   const ti=el('tip-input'),clw=document.querySelector('.cart-list-wrap');
-  ti.addEventListener('focus',()=>{if(clw)clw.classList.add('tip-kbd');});
-  ti.addEventListener('blur',()=>{if(clw)clw.classList.remove('tip-kbd');});
+  ti.addEventListener('focus',()=>{if(clw)clw.classList.add('tip-kbd');el('tip-done-btn').style.display='block';});
+  ti.addEventListener('blur',()=>{if(clw)clw.classList.remove('tip-kbd');el('tip-done-btn').style.display='none';});
   ti.addEventListener('keydown',e=>{if(e.key==='Enter'||e.keyCode===13)ti.blur();});
 });
 
@@ -1569,7 +1572,7 @@ function pickTip(v,isCustom,btn){
   document.querySelectorAll('.tip-chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   const inp=el('tip-input');
   if(isCustom){inp.style.display='block';inp.focus();inp.oninput=()=>{tip=Math.max(0,parseFloat(inp.value)||0);updCartTot()};}
-  else{inp.style.display='none';tip=v;updCartTot();}
+  else{inp.style.display='none';el('tip-done-btn').style.display='none';tip=v;updCartTot();}
 }
 function updCartTot(){el('tot-n').textContent=cartSub()+tip;buildSummary();}
 

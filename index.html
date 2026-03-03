@@ -36,7 +36,7 @@ img{display:block}
 .fav-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
 .fav-btn:active{transform:scale(.85)}
 .fav-btn svg{width:16px;height:16px;transition:.15s}
-.fav-btn.has-favs svg{fill:#e05555;stroke:#e05555}
+.fav-btn.has-favs svg{fill:none;stroke:#e05555}
 .fav-dot{position:absolute;top:-4px;right:-4px;background:#e05555;color:#fff;border-radius:50%;width:16px;height:16px;font-size:8px;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
 .fav-dot.on{display:flex}
 .pfav{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;z-index:2}
@@ -102,8 +102,10 @@ img{display:block}
 .pcard:active{transform:scale(.97)}
 .pimg-box{height:148px;background:linear-gradient(155deg,#0E0E1E,#090916);display:flex;align-items:center;justify-content:center;padding:10px;position:relative;overflow:hidden}
 .pimg{max-height:128px;max-width:90%;object-fit:contain;filter:drop-shadow(0 6px 20px rgba(0,0,0,.7))}
-.pbadge{position:absolute;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:6px;font-weight:700}
+.pbadge{position:absolute;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:6px;font-weight:700;z-index:2}
 .pbadge.oos{left:8px;top:8px;background:rgba(0,0,0,.7);border:1px solid var(--border2);color:var(--muted)}
+.pimg-box.oos .pimg{filter:grayscale(1) opacity(.55) drop-shadow(0 6px 20px rgba(0,0,0,.7))}
+.oos-overlay{position:absolute;inset:0;z-index:1;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
 .pbadge.isnew{right:8px;top:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07070E}
 .pinfo{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:4px}
 .pcat{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600}
@@ -143,14 +145,28 @@ img{display:block}
 .btn-outline{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--sub);border-radius:14px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:.15s}
 .btn-outline:active{border-color:var(--gold);color:var(--gold)}
 
+/* Cart layout — inner scrollable list + sticky bottom panel */
+#pg-cart{overflow:hidden}
+.cart-list-wrap{flex:1;min-height:0;position:relative;margin:0 12px 4px;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden}
+.cart-list-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--card));pointer-events:none}
+#cart-list{height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--card);scrollbar-width:thin;scrollbar-color:rgba(201,169,110,.35) transparent}
+#cart-list::-webkit-scrollbar{width:3px}
+#cart-list::-webkit-scrollbar-track{background:transparent}
+#cart-list::-webkit-scrollbar-thumb{background:rgba(201,169,110,.35);border-radius:2px}
+#cart-list .ci:last-child{border-bottom:none}
+#tip-section,#cart-foot{flex-shrink:0}
+
 /* Cart active address banner */
-.cart-addr-bar{margin:12px 16px 0;background:var(--card);border:1px solid var(--border2);border-radius:var(--r2);padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.cart-addr-bar:active{border-color:var(--gold)}
-.cab-icon{font-size:18px;flex-shrink:0}
+.cart-topbar{display:flex;align-items:center;gap:8px;padding:10px 16px 8px}
+.cart-back-btn{flex-shrink:0;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--sub);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;transition:.15s;font-family:'Outfit',sans-serif}
+.cart-back-btn:active{border-color:var(--gold);color:var(--gold)}
+.cart-addr-bar{flex:1;min-width:0;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:0 12px;height:36px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:.15s}
+.cart-addr-bar:active{border-color:rgba(201,169,110,.5)}
+.cab-icon{font-size:13px;flex-shrink:0}
 .cab-info{flex:1;min-width:0}
-.cab-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.cab-addr{font-size:13px;font-weight:600;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cab-change{font-size:11px;color:var(--gold);font-weight:600;flex-shrink:0}
+.cab-label{display:none}
+.cab-addr{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cab-change{display:flex;align-items:center;color:var(--gold);flex-shrink:0}
 
 /* ADDRESS PAGE */
 .addr-page-body{padding:14px 16px}
@@ -280,11 +296,14 @@ img{display:block}
 .pdm-oos{height:44px;padding:0 20px;border-radius:12px;background:var(--card2);border:1px solid var(--border2);color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;cursor:not-allowed}
 
 /* Toast */
-.toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:50px;font-size:12px;white-space:nowrap;z-index:600;pointer-events:none;box-shadow:0 8px 28px rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
-.toast.show{opacity:1;visibility:visible}
-.toast.ok{border-color:var(--green);color:#90e8b8}
-.toast.err{border-color:var(--red);color:#f0a0a0}
-.toast.pdm-mode{bottom:auto;top:28px}
+.toast{position:fixed;bottom:calc(76px + var(--safe-bottom));left:16px;right:16px;transform:translateY(14px);background:var(--card2);border:1px solid var(--border2);border-left:3px solid var(--border2);color:var(--text);padding:13px 16px;border-radius:var(--r2);font-size:13px;font-weight:500;z-index:600;pointer-events:none;box-shadow:0 10px 36px rgba(0,0,0,.75);opacity:0;visibility:hidden;transition:opacity .2s,transform .28s cubic-bezier(.34,1,.64,1),visibility .2s;display:flex;align-items:center;gap:10px}
+.toast.show{opacity:1;visibility:visible;transform:translateY(0)}
+.toast.ok{border-left-color:var(--green)}
+.toast.err{border-left-color:var(--red)}
+.toast.pdm-mode{bottom:auto;top:20px;transform:translateY(-14px)}
+.toast.pdm-mode.show{transform:translateY(0)}
+.toast-icon{font-size:16px;flex-shrink:0;line-height:1}
+.toast-msg{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -332,16 +351,21 @@ img{display:block}
     <div><div class="logo">AMBAR</div><div class="logo-sub" id="ls-cart">Premium Spirits</div></div>
     <div class="hdr-right"><button class="lang-btn" onclick="flipLang()">🇷🇺</button></div>
   </div>
-  <!-- Active addr banner -->
-  <div class="cart-addr-bar" onclick="openAddrModal()" id="cab">
-    <span class="cab-icon">📍</span>
-    <div class="cab-info">
-      <div class="cab-label" id="cab-label">АДРЕС ДОСТАВКИ</div>
-      <div class="cab-addr" id="cab-addr">Не выбран — нажмите чтобы добавить</div>
+  <!-- Cart top bar -->
+  <div class="cart-topbar">
+    <button class="cart-back-btn" id="back-catalog-btn" onclick="go('catalog')">← В каталог</button>
+    <div class="cart-addr-bar" onclick="openAddrModal()" id="cab">
+      <span class="cab-icon">📍</span>
+      <div class="cab-info">
+        <div class="cab-label" id="cab-label">АДРЕС ДОСТАВКИ</div>
+        <div class="cab-addr" id="cab-addr">Не выбран — нажмите чтобы добавить</div>
+      </div>
+      <span class="cab-change"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     </div>
-    <span class="cab-change" id="cab-change">Изменить</span>
   </div>
-  <div id="cart-list"></div>
+  <div class="cart-list-wrap">
+    <div id="cart-list"></div>
+  </div>
   <div id="tip-section" style="display:none">
     <div class="tip-wrap">
       <div class="tip-label" id="tip-lbl">ЧАЕВЫЕ</div>
@@ -652,7 +676,7 @@ const TX={
 ru:{
   catalog:'Каталог',favs:'Избранное',cart:'Корзина',addrPage:'Адреса',orders:'История',profile:'Профиль',
   all:'Все',total:'ИТОГО',tip:'ЧАЕВЫЕ',noTip:'Без чаевых',customTip:'✏️ Своя',
-  coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',
+  coBtn:'Оформить заказ →',clearCart:'🗑 Очистить корзину',backCatalog:'← В каталог',
   addrPill:'Добавьте адрес',addrPillChange:'Изменить',
   modalTitle:'Адрес доставки',modalAdd:'Добавить новый адрес',
   cabLabel:'АДРЕС ДОСТАВКИ',cabNoAddr:'Не выбран — нажмите чтобы добавить',cabChange:'Изменить',
@@ -674,7 +698,7 @@ ru:{
   stP:'🟡 Ожидает',stC:'🟢 Принят',stD:'✅ Доставлен',stX:'❌ Отменён',
   added:'Добавлено',emptyCart:'Корзина пуста',
   placed:'✅ Заказ оформлен! Ожидайте звонка.',
-  activeOrders:'Активные заказы',oos:'НЕТ',
+  activeOrders:'Активные заказы',oos:'НЕТ',oosLabel:'Нет в наличии',
   statOrders:'ЗАКАЗОВ',statActive:'АКТИВНЫХ',statSpent:'ПОТРАЧЕНО',
   noAddrWarning:'Сначала добавьте адрес доставки',
   lcTitle:'Вы там?',
@@ -684,7 +708,7 @@ ru:{
 en:{
   catalog:'Catalog',favs:'Favourites',cart:'Cart',addrPage:'Addresses',orders:'History',profile:'Profile',
   all:'All',total:'TOTAL',tip:'TIP',noTip:'No tip',customTip:'✏️ Custom',
-  coBtn:'Checkout →',clearCart:'🗑 Clear cart',
+  coBtn:'Checkout →',clearCart:'🗑 Clear cart',backCatalog:'← Back to catalog',
   addrPill:'Add address',addrPillChange:'Change',
   modalTitle:'Delivery address',modalAdd:'Add new address',
   cabLabel:'DELIVERY ADDRESS',cabNoAddr:'Not set — tap to add',cabChange:'Change',
@@ -706,7 +730,7 @@ en:{
   stP:'🟡 Pending',stC:'🟢 Confirmed',stD:'✅ Delivered',stX:'❌ Cancelled',
   added:'Added',emptyCart:'Cart is empty',
   placed:'✅ Order placed! We\'ll call you.',
-  activeOrders:'Active orders',oos:'N/A',
+  activeOrders:'Active orders',oos:'N/A',oosLabel:'Out of stock',
   statOrders:'ORDERS',statActive:'ACTIVE',statSpent:'SPENT AED',
   noAddrWarning:'Please add a delivery address first',
   lcTitle:'Are you there?',
@@ -764,14 +788,14 @@ function applyLang(){
   set('sh-orders',t('orders'));set('sh-active',t('activeOrders'));
   set('nbl-cat',t('catalog'));set('nbl-cart',t('cart'));set('nbl-addr',t('addrPage'));
   set('nbl-ord',t('orders'));set('nbl-prof',t('profile'));
-  set('tot-lbl',t('total'));set('co-btn',t('coBtn'));set('clear-btn',t('clearCart'));
+  set('tot-lbl',t('total'));set('co-btn',t('coBtn'));set('clear-btn',t('clearCart'));set('back-catalog-btn',t('backCatalog'));
   set('modal-title',t('modalTitle'));set('modal-add-lbl',t('modalAdd'));
   set('sh-saved-addr',t('shSaved'));set('add-form-title',t('addFormTitle'));
   set('lbl-area',t('lblArea'));set('lbl-street',t('lblStreet'));
   set('lbl-type-gps',t('lblTypeGps'));set('lbl-type-man',t('lblTypeMan'));
   set('gps-lbl',t('gpsBtn'));
   set('lbl-addr-name',t('lblAddrName'));set('save-addr-btn',t('saveAddrBtn'));
-  set('cab-label',t('cabLabel'));set('cab-change',t('cabChange'));
+  set('cab-label',t('cabLabel'));
   set('ct2',t('ct2'));set('phone-lbl',t('phoneLbl'));
   el('phone-in').placeholder=lang==='ru'?'79001234567':'971501234567';
   const si=el('search-inp');if(si)si.placeholder=lang==='ru'?'Поиск...':'Search...';
@@ -832,7 +856,11 @@ function updateCartAddrBar(){
   const cab=el('cab-addr');if(!cab)return;
   if(activeAddrIdx!==null&&arr[activeAddrIdx]){
     const a=arr[activeAddrIdx];
-    cab.textContent=a.label?a.label+' — '+a.address:a.address;
+    let street=a.street||'';
+    if(!street&&!a.address.startsWith('📍 GPS:')&&!a.address.match(/^\d{2,3}\.\d/))
+      street=a.address.split('|')[0].split('—').pop().trim();
+    const display=a.label&&street?a.label+' · '+street:a.label||street||a.address;
+    cab.textContent=display;
     cab.style.color='var(--text)';
   } else {
     cab.textContent=t('cabNoAddr');
@@ -980,14 +1008,22 @@ function grabGPS(){
   navigator.geolocation.getCurrentPosition(pos=>{
     const{latitude:lat,longitude:lon}=pos.coords;
     const off=nearestOffice(lat,lon);
-    locInfo={lat,lon,office_id:off.id,office_name:off.name};
+    locInfo={lat,lon,office_id:off.id,office_name:off.name,street:''};
     btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));
     stat.className='gps-status ok';stat.textContent=t('gpsOk');
-    // GPS-simple flow: do NOT ask for type/street/extra fields.
-    // User only needs to enter a Label (mandatory) + optional Comment.
     selTypeGps=null;
     el('gps-extra').style.display='none';
     el('tfields-gps').innerHTML='';
+    // Reverse geocode to get street name
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`)
+      .then(r=>r.json())
+      .then(d=>{
+        const a=d.address||{};
+        const road=a.road||a.pedestrian||a.suburb||a.neighbourhood||'';
+        const num=a.house_number||'';
+        locInfo.street=(road+(num?' '+num:'')).trim();
+      })
+      .catch(()=>{});
   },()=>fail(),{timeout:10000,maximumAge:60000,enableHighAccuracy:true});
   function fail(){btn.style.opacity='1';set('gps-lbl',t('gpsBtn'));stat.className='gps-status fail';stat.textContent=t('gpsFail');}
 }
@@ -1033,21 +1069,28 @@ function saveNewAddress(){
   // Build address string
   let addrStr='';
   let typeIcon='📍';
+  let streetShort='';
   if(curMethod==='gps'){
     const lat=Number(locInfo?.lat||0);
     const lon=Number(locInfo?.lon||0);
-    addrStr=`📍 GPS: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+    streetShort=locInfo?.street||'';
+    addrStr=streetShort||`${lat.toFixed(5)}, ${lon.toFixed(5)}`;
   } else {
     addrStr=buildAddrStr('man');
     if(!addrStr){ae.textContent=t('addrFormErr');ae.classList.add('on');return;}
     const types=TYPES[lang];
     const tp=types.find(x=>x.id===selTypeMan);
     typeIcon=tp?.icon||'📍';
+    // Compose short street: area + manual street input
+    const areaPart=selArea!==null?(AREAS[lang][selArea]?.lbl||''):'';
+    const manPart=(el('man-street')?.value||'').trim();
+    streetShort=[areaPart,manPart].filter(Boolean).join(', ');
   }
 
   const newAddr={
     label:label,
     address:addrStr,
+    street:streetShort,
     typeIcon:typeIcon,
     lat:curMethod==='gps'?(locInfo?.lat||0):0,
     lon:curMethod==='gps'?(locInfo?.lon||0):0,
@@ -1403,10 +1446,10 @@ function renderCard(p){
   const desc=lang==='ru'?p.desc:p.descE;
   const catVal=lang==='ru'?p.cat:p.catE;
   return`<div class="pcard" onclick="openPDM('${p.id}')" style="cursor:pointer" data-cat="${p.cat}">
-    <div class="pimg-box">
-      ${!p.stock?`<span class="pbadge oos">${t('oos')}</span>`:''}
+    <div class="pimg-box${!p.stock?' oos':''}">
+      ${!p.stock?`<div class="oos-overlay">${t('oosLabel')}</div>`:''}
       ${p.isNew?`<span class="pbadge isnew">NEW</span>`:''}
-      <button class="pfav${favs.has(p.id)?' on':''}" id="pfav-${p.id}" onclick="event.stopPropagation();toggleFav('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      <button class="pfav${favs.has(p.id)?' on':''}" id="pfav-${p.id}" onclick="event.stopPropagation();toggleFav('${p.id}')" style="z-index:3"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
       <img class="pimg" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><text y=%2268%22 font-size=%2264%22>🍾</text></svg>'">
     </div>
     <div class="pinfo">
@@ -1784,7 +1827,7 @@ function updatePDMCtrl(p){
   const row=el('pdm-add-row');if(!row)return;
   const qty=cart[p.id]||0;
   if(!p.stock){
-    row.innerHTML=`<div style="text-align:center;padding:14px 0;color:var(--muted);font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${t('oos')}</div>`;
+    row.innerHTML=`<div style="text-align:center;padding:14px 0;color:var(--muted);font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${t('oosLabel')}</div>`;
   } else {
     const pendingQty=_pdmPendingQty||1;
     const totalPrice=p.price*pendingQty;
@@ -1894,12 +1937,14 @@ function showToast(msg,type=''){
   const cur=el('toast'+_ti),other=el('toast'+(1-_ti));
   if(other)other.className='toast';
   if(!cur)return;
-  const inPDM=el('pdm-overlay')?.classList.contains('show');
-  cur.className='toast'+(inPDM?' pdm-mode':'');
-  cur.textContent=msg;
-  setTimeout(()=>{cur.className='toast'+(inPDM?' pdm-mode':'')+(type?' '+type:'')+' show';},16);
+  cur.className='toast';
+  const icon=type==='ok'?'✓':type==='err'?'✕':'·';
+  const iconColor=type==='ok'?'var(--green)':type==='err'?'var(--red)':'var(--gold)';
+  cur.innerHTML=`<span class="toast-icon" style="color:${iconColor}">${icon}</span><span class="toast-msg">${msg}</span>`;
+  setTimeout(()=>{cur.className='toast'+(type?' '+type:'')+' show';},16);
   _tt=setTimeout(()=>cur.classList.remove('show'),2800);
 }
+
 </script>
 </body>
 </html>

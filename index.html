@@ -836,10 +836,9 @@ let locInfo=null,editingAddrIdx=null;
 let activeAddrIdx=null;
 let fromCart=false; // flag: user was redirected here from cart
 let orders=JSON.parse(localStorage.getItem('ambar_orders')||'[]');
-// API base URL — override by setting window.AMBAR_API_URL before this script,
-// or via localStorage key 'ambar_api_url' (handy for ngrok/VPS testing).
-// Falls back to same origin when api_server.py serves both static + API.
+// API base URL — resolved from: ?api= query param → localStorage → window global → same origin.
 const AMBAR_API=(()=>{
+  try{const u=new URLSearchParams(window.location.search).get('api');if(u)return u.replace(/\/$/,'');}catch(e){}
   try{const s=localStorage.getItem('ambar_api_url');if(s)return s.replace(/\/$/,'');}catch(e){}
   return window.AMBAR_API_URL||window.location.origin;
 })();
